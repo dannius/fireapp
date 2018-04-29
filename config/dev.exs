@@ -37,7 +37,7 @@ config :fireapp, FireappWeb.Endpoint,
       ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/fireapp_web/views/.*(ex)$},
-      ~r{lib/fireapp_web/templates/.*(eex)$}
+      ~r{lib/fireapp_web/templates/.*(eex|slim|slime)$}
     ]
   ]
 
