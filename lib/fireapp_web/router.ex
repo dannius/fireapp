@@ -41,8 +41,8 @@ defmodule FireappWeb.Router do
   scope "/api", FireappWeb do
     pipe_through [:api, :with_session]
 
-    resources "/users", RegistrationController, only: [:update]
-    put "/reset-password/:id", RegistrationController, :reset_password
+    resources "/users", UserController, only: [:update]
+    put "/reset-password/:id", UserController, :reset_password
     get "/session", SessionController, :setup
   end
 end

@@ -10,13 +10,12 @@ defmodule FireappWeb.SessionController do
   end
 
   def create(conn, %{"session" => %{"email" => email, "password" => password}}) do
-    case Fireapp.Auth.authenticate_user(email, password) do
-      {:ok, user} ->
-        {:ok, jwt, _claims} = Fireapp.Auth.Guardian.encode_and_sign(user)
+    with {:ok, user} <- Fireapp.Auth.authenticate_user(email, password),
+      {:ok, jwt, _claims} <- Fireapp.Auth.Guardian.encode_and_sign(user) do
         conn
         |> put_status(:created)
         |> render("create-session.json", %{user: user, token: jwt})
-
+    else
       {:error, _reason} ->
         conn
         |> put_status(:unauthorized)
