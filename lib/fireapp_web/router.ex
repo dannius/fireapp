@@ -19,8 +19,9 @@ defmodule FireappWeb.Router do
     get "/", LandingController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", FireappWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", Api do
+    pipe_through :api
+
+    resources "/users", RegistrationController, only: [:create]
+  end
 end
