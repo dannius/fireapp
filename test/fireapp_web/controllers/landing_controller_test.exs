@@ -1,4 +1,4 @@
-defmodule FireappWeb.PageControllerTest do
+defmodule FireappWeb.LandingControllerTest do
   use FireappWeb.ConnCase
 
   test "GET /", %{conn: conn} do

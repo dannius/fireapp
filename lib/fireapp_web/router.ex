@@ -16,7 +16,7 @@ defmodule FireappWeb.Router do
   scope "/", FireappWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", LandingController, :index
   end
 
   # Other scopes may use custom stacks.

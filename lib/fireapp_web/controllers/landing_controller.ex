@@ -1,4 +1,4 @@
-defmodule FireappWeb.PageController do
+defmodule FireappWeb.LandingController do
   use FireappWeb, :controller
 
   def index(conn, _params) do
