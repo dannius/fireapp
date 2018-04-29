@@ -1,7 +1,7 @@
-defmodule Api.Auth do
+defmodule Fireapp.Auth do
   import Ecto.Query, only: [from: 2]
 
-  alias Api.{User, Repo}
+  alias Fireapp.{User, Repo}
 
   def authenticate_user(email, given_password) do
     query = from(u in User, where: u.email == ^email)

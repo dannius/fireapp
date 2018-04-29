@@ -2,6 +2,7 @@ defmodule FireappWeb.RegistrationControllerTest do
   use FireappWeb.ConnCase
 
   alias Fireapp.{User, Repo}
+  alias Plug.Conn.Status
 
   @valid_create_params %{name: "test_name", email: "test_email@test.com", password: "test_password"}
   @invalid_create_params %{name: "invalid_name", email: "invalid_email@test.com", password: "short"}
@@ -15,17 +16,20 @@ defmodule FireappWeb.RegistrationControllerTest do
     test "Creates, and responds with a newly created user if attributes are valid", %{conn: conn} do
       response = post(conn, registration_path(conn, :create, user: @valid_create_params))
 
-      case Poison.decode!(response.resp_body) do
-        %{"token" => token} ->
-          assert true
-        _ ->
-          assert false
-      end
+      success =
+        with %{"token" => _} <- Poison.decode!(response.resp_body) do
+          true
+        else
+          _ ->
+            false
+        end
+
+      assert success
     end
 
     test "Unsuccess create action", %{conn: conn} do
       response = post(conn, registration_path(conn, :create, user: @invalid_create_params))
-      assert response.status == 409
+      assert response.status == Status.code(:conflict)
     end
   end
 
@@ -35,11 +39,11 @@ defmodule FireappWeb.RegistrationControllerTest do
 
       {:ok, token} = login_user_by_params(@login_params)
 
-      conn_with_token = build_conn()
+      conn_with_token = conn
       |> put_req_header("authorization", "bearer: " <> token)
 
       response = put(conn_with_token, registration_path(conn_with_token, :update, user.id, user: %{name: "updated_name"}))
-      assert response.status == 200
+      assert response.status == Status.code(:ok)
     end
   end
 
@@ -49,11 +53,11 @@ defmodule FireappWeb.RegistrationControllerTest do
 
       {:ok, token} = login_user_by_params(@login_params)
 
-      conn_with_token = build_conn()
+      conn_with_token = conn
       |> put_req_header("authorization", "bearer: " <> token)
 
       response = put(conn_with_token, registration_path(conn_with_token, :reset_password, user.id, password_params: @valid_reset_password_params))
-      assert response.status == 200
+      assert response.status == Status.code(:ok)
     end
 
     test "Creates then reset with invalid old password", %{conn: conn} do
@@ -61,11 +65,11 @@ defmodule FireappWeb.RegistrationControllerTest do
 
       {:ok, token} = login_user_by_params(@login_params)
 
-      conn_with_token = build_conn()
+      conn_with_token = conn
       |> put_req_header("authorization", "bearer: " <> token)
 
       response = put(conn_with_token, registration_path(conn_with_token, :reset_password, user.id, password_params: @invalid_reset_password_params))
-      assert response.status == 409
+      assert response.status == Status.code(:conflict)
     end
   end
 

@@ -1,7 +1,7 @@
-defmodule Api.RegistrationController do
+defmodule FireappWeb.RegistrationController do
   use FireappWeb, :controller
 
-  alias Fireapp.User
+  alias Fireapp.{User, Repo}
 
   plug :scrub_params, "user" when action in [:create, :update]
   plug :scrub_params, "password_params" when action in [:reset_password]
@@ -11,12 +11,13 @@ defmodule Api.RegistrationController do
 
     case Repo.insert(changeset) do
       {:ok, user} ->
-        {:ok, jwt, _claims} = Api.Auth.Guardian.encode_and_sign(user)
+        {:ok, jwt, _claims} = Fireapp.Auth.Guardian.encode_and_sign(user)
 
         conn
         |> put_status(:created)
         |> render("create-successful.json", %{user: user, token: jwt})
       {:error, _} ->
+
         conn
         |> put_status(:conflict)
         |> render("fail.json")
@@ -39,7 +40,7 @@ defmodule Api.RegistrationController do
 
     user = Repo.get(User, id)
 
-    with {:ok, user} <- Api.Auth.authenticate_user(user.email, old_password),
+    with {:ok, user} <- Fireapp.Auth.authenticate_user(user.email, old_password),
           true <- password == password_confirmation,
           changeset <- User.registration_changeset(user, %{password: password}),
           {:ok, user} <- Repo.update(changeset) do

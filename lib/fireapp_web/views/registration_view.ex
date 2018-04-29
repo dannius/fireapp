@@ -1,4 +1,4 @@
-defmodule Fireapp.RegistrationView do
+defmodule FireappWeb.RegistrationView do
   use FireappWeb, :view
   @user_attributes [:id, :name, :email]
 
