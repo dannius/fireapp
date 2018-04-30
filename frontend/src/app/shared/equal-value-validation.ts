@@ -1,6 +1,6 @@
 import { AbstractControl, FormGroup } from '@angular/forms';
 
-export class EqualValueValidation {
+export class EqualValuesValidation {
 
   public static equal(targetKey: string, toMatchKey: string) {
     return (group: FormGroup) => {

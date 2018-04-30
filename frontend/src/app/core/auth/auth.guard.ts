@@ -7,10 +7,14 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) { }
 
   public canActivate(): Observable<boolean> {
     // NOTE: we call this so that if we don't have user, we fetch it the first time
+
     return this
       .authService
       .findSession()

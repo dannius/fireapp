@@ -1,0 +1,73 @@
+<div class="container">
+  <div class="settings__content">
+    <mat-card class="settings__card">
+      <mat-progress-bar class="loader loader_absolute" *ngIf="!updateForm || isInfoLoading" mode="indeterminate"></mat-progress-bar>
+      <mat-card-title>Редактировать профиль</mat-card-title>
+      <mat-card-content>
+        <form *ngIf="updateForm" [formGroup]="updateForm" class="form" (ngSubmit)="updateInfo()">
+          <mat-form-field>
+            <input formControlName="name" matInput placeholder="Имя">
+          </mat-form-field>
+
+          <mat-error 
+            *ngIf="updateForm.touched && updateForm.controls.name.value === user.name"
+            class="form__error mat-text-warn text-center">
+            Нечего обновлять
+          </mat-error>
+
+          <div>
+            <button mat-raised-button class="form__submit-btn" color="primary" type="submit">Сохранить</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="settings__card">
+      <mat-progress-bar class="loader loader_absolute" *ngIf="!resetPasswordForm || isPasswordLoading" mode="indeterminate"></mat-progress-bar>
+      <mat-card-title>Обновить пароль</mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="resetPasswordForm" class="form" (ngSubmit)="resetPassword()">
+          <mat-form-field>
+            <input formControlName="oldPassword" matInput type="password" placeholder="Старый пароль">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input formControlName="password" matInput type="password" placeholder="Новый пароль">
+          </mat-form-field>
+
+          <mat-form-field>
+            <input formControlName="passwordConfirmation" matInput type="password" placeholder="Подтверждение пароля">
+          </mat-form-field>
+
+          <mat-error 
+            *ngIf="resetPasswordForm.controls.passwordConfirmation.errors?.MatchPassword && resetPasswordForm.controls.passwordConfirmation.touched"
+            class="form__error mat-text-warn text-center">
+            Пароли не совпадают
+          </mat-error>
+
+          <mat-error 
+            *ngIf="resetPasswordForm.controls.password.errors?.minlength && resetPasswordForm.controls.password.touched"
+            class="form__error mat-text-warn text-center">
+            Минимальная длина пароля 6 символов
+          </mat-error>
+
+          <mat-error 
+            *ngIf="isInvalidPassword"
+            class="form__error mat-text-warn text-center">
+            Неправильный старый пароль
+          </mat-error>
+
+          <mat-error 
+            *ngIf="resetPasswordForm.controls.oldPassword.errors?.equal && resetPasswordForm.controls.oldPassword.touched && resetPasswordForm.controls.password.touched"
+            class="form__error mat-text-warn text-center">
+            Новый пароль должен отличаться от старого
+          </mat-error>
+
+          <div>
+            <button mat-raised-button class="form__submit-btn" color="primary" type="submit">Сохранить</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

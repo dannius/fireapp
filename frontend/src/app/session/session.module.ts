@@ -4,7 +4,7 @@ import { NotFoundComponent } from '@app/session/not-found/not-found.component';
 import { SessionRoutes } from '@app/session/session.routing';
 import { SigninComponent } from '@app/session/signin/signin.component';
 import { SignupComponent } from '@app/session/signup/signup.component';
-import { SharedModule } from '@app/shared/shared.module';
+import { SharedModule } from '@app/shared';
 
 @NgModule({
   imports: [

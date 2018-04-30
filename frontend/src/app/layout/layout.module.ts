@@ -1,19 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '@app/shared/shared.module';
-
+import { AccountLayoutComponent } from '@app/layout/account-layout/account-layout.component';
 import { AuthLayoutComponent } from '@app/layout/auth-layout/auth-layout.component';
+import { HeaderComponent } from '@app/layout/header/header.component';
+import { SharedModule } from '@app/shared';
 
 @NgModule({
   declarations: [
-    AuthLayoutComponent
+    AuthLayoutComponent,
+    AccountLayoutComponent,
+    HeaderComponent
   ],
   imports: [
     SharedModule,
     RouterModule,
   ],
   exports: [
-    AuthLayoutComponent
+    AuthLayoutComponent,
+    AccountLayoutComponent,
+    HeaderComponent
   ]
 })
 export class LayoutModule { }

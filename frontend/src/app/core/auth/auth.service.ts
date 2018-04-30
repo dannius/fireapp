@@ -1,4 +1,9 @@
-import '@app/shared/rxjs-operators';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/take';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -32,7 +37,7 @@ export class AuthService {
 
   public findSession(): Observable<User> {
     return this.user.take(1).switchMap((user) => {
-      if (this.user !== null) {
+      if (user !== null) {
         return this.user;
       } else if (this.tokenService.token) {
         return this.session();

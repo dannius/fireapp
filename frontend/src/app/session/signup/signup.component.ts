@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/core/auth';
+import { PasswordValidation } from '@app/shared';
 
-import { PasswordValidation } from './../../shared/password-validation';
 
 @Component({
   selector: 'app-signup',
