@@ -45,6 +45,8 @@ defmodule Fireapp.Mixfile do
       {:comeonin, "~> 4.0"},
       {:bcrypt_elixir, "~> 1.0"},
       {:guardian, "~> 1.0"},
+      #for CORS guard, see my setup in endpoint.ex
+      {:corsica, "~> 1.0"}
     ]
   end
 

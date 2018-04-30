@@ -1,0 +1,39 @@
+///////////////////////
+//COLORS
+///////////////////////
+$mine-shaft: #212121;
+$material-primary: #3E54AF;
+$indigo: #5568d0;
+
+///////////////////////
+// Effects
+///////////////////////
+$base-animation-duration: 0.2s;
+
+///////////////////////
+// Media queries
+///////////////////////
+$mobile-screen-xs-min: "(min-width: 401px)";
+$mobile-screen-xs-max: "(max-width: 400px)";
+$mobile-screen-sm-min: "(min-width: 451px)";
+$mobile-screen-sm-max: "(max-width: 450px)";
+$mobile-screen-md-min: "(min-width: 551px)";
+$mobile-screen-md-max: "(max-width: 550px)";
+$mobile-screen-lg-min: "(min-width: 651px)";
+$mobile-screen-lg-max: "(max-width: 650px)";
+
+$tablet-screen-sm-min: "(min-width: 769px)";
+$tablet-screen-sm-max: "(max-width: 768px)";
+$tablet-screen-md-min: "(min-width: 851px)";
+$tablet-screen-md-max: "(max-width: 850px)";
+$tablet-screen-lg-min: "(min-width: 901px)";
+$tablet-screen-lg-max: "(max-width: 900px)";
+
+$desktop-screen-xs-min: "(min-width: 1025px)";
+$desktop-screen-xs-max: "(max-width: 1024px)";
+$desktop-screen-sm-min: "(min-width: 1201px)";
+$desktop-screen-sm-max: "(max-width: 1200px)";
+$desktop-screen-md-min: "(min-width: 1367px)";
+$desktop-screen-md-max: "(max-width: 1366px)";
+$desktop-screen-lg-min: "(min-width: 1441px)";
+$desktop-screen-lg-max: "(max-width: 1440px)";
