@@ -1,16 +1,16 @@
 import { Routes } from '@angular/router';
-import { EventListComponent } from '@app/account/event/event-list/event-list.component';
 import { ProfileSettingsComponent } from '@app/account/profile-settings/profile-settings.component';
+import { ProjectListComponent } from '@app/account/projects/list/list.component';
 
 export const AccountRoutes: Routes = [
   {
     path: '',
     children: [{
       path: '',
-      redirectTo: 'events'
+      redirectTo: 'projects'
     }, {
-      path: 'events',
-      component: EventListComponent
+      path: 'projects',
+      component: ProjectListComponent
     }, {
       path: 'settings',
       component: ProfileSettingsComponent

@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AccountRoutes } from '@app/account/account.routing';
-import { EventListComponent } from '@app/account/event/event-list/event-list.component';
 import { InfoUpdateComponent, PasswordResetComponent, ProfileSettingsComponent } from '@app/account/profile-settings';
+import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
+import { SearchFormComponent } from '@app/shared';
 
 @NgModule({
   declarations: [
-    EventListComponent,
+    ProjectListComponent,
     ProfileSettingsComponent,
     InfoUpdateComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    SearchFormComponent
   ],
   imports: [
     RouterModule.forChild(AccountRoutes),
@@ -19,10 +21,11 @@ import { SharedModule } from '@app/shared';
     RouterModule,
   ],
   exports: [
-    EventListComponent,
+    ProjectListComponent,
     ProfileSettingsComponent,
     InfoUpdateComponent,
-    PasswordResetComponent
+    PasswordResetComponent,
+    SearchFormComponent
   ],
   providers: [
     UserService
