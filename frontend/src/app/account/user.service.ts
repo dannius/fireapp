@@ -1,4 +1,4 @@
-import 'rxjs/add/operator/catch';
+import '@app/shared/rxjs-operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';

@@ -1,9 +1,4 @@
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/take';
+import '@app/shared/rxjs-operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';

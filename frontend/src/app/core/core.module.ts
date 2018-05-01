@@ -1,7 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthGuard, AuthService, TokenInterceptor, TokenService } from '@app/core/auth';
-import { FormHelperService } from '@app/core/form-helper/form-helper.service';
+import { FormHelperService } from '@app/shared';
 
 @NgModule({
   providers: [

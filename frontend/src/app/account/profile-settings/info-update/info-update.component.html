@@ -1,0 +1,21 @@
+<mat-card class="settings__card">
+  <mat-progress-bar class="loader loader_absolute" *ngIf="!form || isLoading" mode="indeterminate"></mat-progress-bar>
+  <mat-card-title>Редактировать профиль</mat-card-title>
+  <mat-card-content>
+    <form *ngIf="form" [formGroup]="form" class="form" (ngSubmit)="updateInfo()">
+      <mat-form-field>
+        <input formControlName="name" matInput placeholder="Имя">
+      </mat-form-field>
+
+      <mat-error 
+        *ngIf="form.touched && form.controls.name.value === user.name"
+        class="form__error mat-text-warn text-center">
+        Нечего обновлять
+      </mat-error>
+
+      <div>
+        <button mat-raised-button class="form__submit-btn" color="primary" type="submit">Сохранить</button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
