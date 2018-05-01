@@ -99,7 +99,7 @@ defmodule Fireapp.ProjectControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :bind, bind: %{project_id: project.id, user_id: guest.id}))
+      |> post(project_path(conn_with_token, :bind, project.id, user_id: guest.id))
 
       assert response.status == Status.code(:created)
     end
@@ -110,7 +110,7 @@ defmodule Fireapp.ProjectControllerTest do
       UserProject.add_user_to_project(guest, project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :bind, bind: %{project_id: project.id, user_id: guest.id}))
+      |> post(project_path(conn_with_token, :bind, project.id, user_id: guest.id))
 
       assert response.status == Status.code(:conflict)
     end
@@ -119,7 +119,7 @@ defmodule Fireapp.ProjectControllerTest do
       %{project: project} = create_project_with_owner(guest)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :bind, bind: %{project_id: project.id, user_id: current_user.id}))
+      |> post(project_path(conn_with_token, :bind, project.id, user_id: current_user.id))
 
       assert response.status == Status.code(:unauthorized)
     end
@@ -135,7 +135,7 @@ defmodule Fireapp.ProjectControllerTest do
       UserProject.add_user_to_project(current_user, project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unbind, bind: %{project_id: project.id, user_id: current_user.id}))
+      |> post(project_path(conn_with_token, :unbind, project.id, user_id: current_user.id))
 
       assert response.status == Status.code(:ok)
     end
@@ -145,7 +145,7 @@ defmodule Fireapp.ProjectControllerTest do
       project = archive_project(project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unbind, bind: %{project_id: project.id, user_id: guest.id}))
+      |> post(project_path(conn_with_token, :unbind, project.id, user_id: guest.id))
 
       assert response.status == Status.code(:unprocessable_entity)
     end

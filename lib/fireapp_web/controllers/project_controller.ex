@@ -5,7 +5,7 @@ defmodule FireappWeb.ProjectController do
 
   plug :scrub_params, "project" when action in [:create]
   plug :scrub_params, "project_params" when action in [:update]
-  plug :scrub_params, "bind" when action in [:bind, :unbind]
+  plug :scrub_params, "user_id" when action in [:bind, :unbind]
 
   def action(conn, _) do
     args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
@@ -68,7 +68,7 @@ defmodule FireappWeb.ProjectController do
     end
   end
 
-  def bind(conn, %{"bind" => %{"user_id" => user_id, "project_id" => project_id}}, current_user) do
+  def bind(conn, %{"id" => project_id, "user_id" => user_id}, current_user) do
     case ProjectContext.bind_user_to_project(user_id, project_id, current_user.id) do
       :conflict ->
         conn
@@ -87,7 +87,7 @@ defmodule FireappWeb.ProjectController do
     end
   end
 
-  def unbind(conn, %{"bind" => %{"user_id" => user_id, "project_id" => project_id}}, _) do
+  def unbind(conn, %{"id" => project_id, "user_id" => user_id}, _) do
     case ProjectContext.unbind_user_from_project(user_id, project_id) do
       :ok ->
         conn
