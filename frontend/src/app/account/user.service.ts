@@ -24,7 +24,7 @@ export class UserService {
 
     return this
       .http
-      .put<any>(`${environment.apiUrl}/api/reset-password/${id}`, params)
+      .put<any>(`${environment.apiUrl}/api/users/${id}/reset-password`, params)
       .map(({ user }) => User.fromJson(user))
       .catch((_error) => Observable.of(null));
   }
