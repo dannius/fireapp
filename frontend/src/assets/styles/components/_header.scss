@@ -1,0 +1,20 @@
+.header {
+  display: flex;
+  align-items: center;
+
+  &__profile {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    height: 100%;
+  }
+
+  &__profile-name {
+    display: inline-flex;
+    padding: 0 25px;
+    margin-right: 10px;
+    height: 100%;
+    align-items: center;
+    border-right: 1px solid $indigo;
+  }
+}

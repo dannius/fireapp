@@ -1,0 +1,20 @@
+.session {
+  margin: 30px 0;
+  width: 100%;
+
+  &__content {
+    max-width: 350px;
+    margin: auto;
+  }
+
+  &__redirect-link {
+    color: $material-primary;
+    margin-top: 10px;
+    text-decoration: none;
+    text-align: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

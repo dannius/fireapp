@@ -37,6 +37,9 @@ defmodule FireappWeb.Endpoint do
     key: "_fireapp_key",
     signing_salt: "ScJNF6AE"
 
+  #for cors guard
+  plug Corsica, origins: "*", allow_headers: ["accept", "content-type", "Authorization"]
+  
   plug FireappWeb.Router
 
   @doc """

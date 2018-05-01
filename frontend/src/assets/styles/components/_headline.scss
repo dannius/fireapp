@@ -1,0 +1,13 @@
+.headline {
+  font-size: 32px;
+  color: $mine-shaft;
+  text-align: center;
+
+  &_white {
+    color: #fff;
+  }
+}
+
+mat-card-title {
+  color: $mine-shaft;
+}

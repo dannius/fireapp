@@ -20,7 +20,7 @@ defmodule Fireapp.Mixfile do
   def application do
     [
       mod: {Fireapp.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :comeonin]
     ]
   end
 
@@ -41,7 +41,12 @@ defmodule Fireapp.Mixfile do
       {:phoenix_live_reload, "~> 1.0", only: :dev},
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
-      {:phoenix_slime, "~> 0.9.0"}
+      {:phoenix_slime, "~> 0.9.0"},
+      {:comeonin, "~> 4.0"},
+      {:bcrypt_elixir, "~> 1.0"},
+      {:guardian, "~> 1.0"},
+      #for CORS guard, see my setup in endpoint.ex
+      {:corsica, "~> 1.0"}
     ]
   end
 

@@ -1,8 +1,13 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule } from '@angular/router';
 
-
-import { AppComponent } from './app.component';
+import { AppComponent } from '@app/app.component';
+import { AppRoutes } from '@app/app.routing';
+import { CoreModule } from '@app/core/core.module';
+import { LayoutModule } from '@app/layout';
 
 
 @NgModule({
@@ -10,7 +15,12 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    BrowserAnimationsModule,
+    RouterModule.forRoot(AppRoutes),
+    CoreModule,
+    LayoutModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

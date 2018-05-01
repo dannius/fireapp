@@ -1,0 +1,16 @@
+.form {
+  display: flex;
+  flex-direction: column;
+
+  &__error {
+    margin-bottom: 5px;
+  
+    &:first-child {
+      margin-top: 10px;
+    }
+  }
+
+  &__submit-btn {
+    margin-top: 10px !important;
+  }
+}
