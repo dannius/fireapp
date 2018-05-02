@@ -66,7 +66,7 @@ defmodule Fireapp.ProjectTest do
 
       assert project
       |> Repo.preload(:users)
-      |> Project.changeset(%{name: updated_name})
+      |> Project.update_changeset(%{name: updated_name})
       |> Repo.update()
       |> repo_condition()
     end

@@ -17,11 +17,11 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         conn
         |> put_status(:created)
-        |> render("success.json", %{project: project})
+        |> render("successfull_create_update.json", %{project: project})
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error.json", data: changeset)
+        |> render("error_changeset.json", data: changeset)
     end
   end
 
@@ -30,22 +30,22 @@ defmodule FireappWeb.ProjectController do
       :conflict ->
         conn
         |> put_status(:conflict)
-        |> render("error_bind.json")
+        |> render("error.json")
 
       :unauthorized ->
         conn
         |> put_status(:unauthorized)
-        |> render("error_bind.json")
+        |> render("error.json")
 
-      {:ok, _} ->
+      {:ok, project} ->
         conn
         |> put_status(:ok)
-        |> render("error_bind.json")
+        |> render("successfull_create_update.json", %{project: project})
 
-      {:unprocessable_entity, _} ->
+      {:unprocessable_entity, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error_bind.json")
+        |> render("error_changeset.json", data: changeset)
     end
   end
 
@@ -54,12 +54,12 @@ defmodule FireappWeb.ProjectController do
       :conflict ->
         conn
         |> put_status(:conflict)
-        |> render("error_bind.json")
+        |> render("error.json")
 
       :unauthorized ->
         conn
         |> put_status(:unauthorized)
-        |> render("error_bind.json")
+        |> render("error.json")
 
       {:ok, _} ->
         conn
@@ -73,12 +73,12 @@ defmodule FireappWeb.ProjectController do
       :conflict ->
         conn
         |> put_status(:conflict)
-        |> render("error_bind.json")
+        |> render("error.json")
 
       :unauthorized ->
         conn
         |> put_status(:unauthorized)
-        |> render("error_bind.json")
+        |> render("error.json")
 
       :ok ->
         conn
@@ -97,7 +97,7 @@ defmodule FireappWeb.ProjectController do
       :unprocessable_entity ->
         conn
         |> put_status(:unprocessable_entity)
-        |> render("error_bind.json")
+        |> render("error.json")
     end
   end
 end

@@ -16,9 +16,19 @@ defmodule Fireapp.ProjectControllerTest do
       assert response.status == Status.code(:created)
     end
 
-    test "Unsuccessful project creation", %{conn_with_token: conn_with_token} do
+    test "Unsuccessful project creation with empty name", %{conn_with_token: conn_with_token} do
       response = conn_with_token
       |> post(project_path(conn_with_token, :create, project: %{name: ""}))
+
+      assert response.status == Status.code(:unprocessable_entity)
+    end
+
+    test "Unsuccessful project creation with exist name", %{conn_with_token: conn_with_token, current_user: current_user} do
+      params = %{name: "awesome_name"}
+      create_project_with_owner(current_user, params.name)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :create, project: params))
 
       assert response.status == Status.code(:unprocessable_entity)
     end
@@ -36,6 +46,18 @@ defmodule Fireapp.ProjectControllerTest do
       |> patch(project_path(conn_with_token, :update, project.id, project_params: params))
 
       assert response.status == Status.code(:ok)
+    end
+
+    test "Unsuccessful update project with exist name", %{conn_with_token: conn_with_token, current_user: current_user} do
+      params = %{name: "update_name"}
+
+      %{project: project} = create_project_with_owner(current_user)
+      create_project_with_owner(current_user, params.name)
+
+      response = conn_with_token
+      |> patch(project_path(conn_with_token, :update, project.id, project_params: params))
+
+      assert response.status == Status.code(:unprocessable_entity)
     end
 
     test "Create project as guest and unsuccessful update as user", %{conn_with_token: conn_with_token, guest: guest} do
@@ -158,8 +180,10 @@ defmodule Fireapp.ProjectControllerTest do
     |> Repo.update!()
   end
 
-  defp create_project_with_owner(owner) do
-    project = Project.create_changeset(%Project{}, %{name: "test_project", owner_id: owner.id, users: [owner]})
+  defp create_project_with_owner(owner, project_name \\ "") do
+    project_name = if project_name == "", do: "test_project", else: project_name
+
+    project = Project.create_changeset(%Project{}, %{name: project_name, owner_id: owner.id, users: [owner]})
     |> Repo.insert!()
 
     %{project: project}

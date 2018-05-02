@@ -23,7 +23,7 @@ defmodule Fireapp.ProjectContext do
       project.owner_id == current_user_id && !project.archived ->
         changeset = project
         |> Repo.preload(:users)
-        |> Project.changeset(project_params)
+        |> Project.update_changeset(project_params)
 
         case Repo.update(changeset) do
           {:ok, project} ->

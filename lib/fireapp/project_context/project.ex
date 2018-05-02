@@ -14,17 +14,17 @@ defmodule Fireapp.Project do
     timestamps()
   end
 
-  def changeset(model, params \\ %{}) do
-    model
-    |> cast(params, ~w(name owner_id archived))
-    |> validate_required([:owner_id, :name])
-  end
-
   def create_changeset(model, params \\ %{}) do
     model
     |> cast(params, ~w(name owner_id))
     |> validate_required([:owner_id, :name])
     |> put_owner_to_users
+    |> uniq_project_name_for_user(:name)
+  end
+
+  def update_changeset(model, params \\ %{}) do
+    model
+    |> cast(params, ~w(name))
     |> uniq_project_name_for_user(:name)
   end
 
@@ -55,25 +55,22 @@ defmodule Fireapp.Project do
   end
 
   def uniq_project_name_for_user(changeset, field, options \\ []) do
-    case Map.has_key?(changeset.changes, :owner_id) do
-      true ->
-        validate_change(changeset, field, fn _, name ->
-          user = Repo.get(User, changeset.changes.owner_id)
-          |> Repo.preload(:projects)
+    owner_id = if changeset.data.owner_id,
+                    do: changeset.data.owner_id, else: changeset.changes.owner_id
 
-          ununiq_project = Enum.filter(user.projects, fn(project) ->
-            project.name == name
-          end)
+    validate_change(changeset, field, fn _, name ->
+      user = Repo.get(User, owner_id)
+      |> Repo.preload(:projects)
 
-          case Enum.empty?(ununiq_project) do
-            true -> []
-            false -> [name: "mast have unique name"]
-          end
-        end)
+      ununiq_project = Enum.filter(user.projects, fn(project) ->
+        project.name == name
+      end)
 
-      false ->
-        changeset
-    end
+      case Enum.empty?(ununiq_project) do
+        true -> []
+        false -> [name: "mast have unique name"]
+      end
+    end)
   end
 
 end
