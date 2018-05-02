@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material';
+import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
 
 @Component({
   selector: 'app-project-list',
@@ -6,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProjectListComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit() { }
 
@@ -14,4 +18,7 @@ export class ProjectListComponent implements OnInit {
     console.log(substring);
   }
 
+  public toggleCreateProjectModal() {
+    this.dialog.open(CreateProjectDialogComponent);
+  }
 }

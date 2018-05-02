@@ -1,0 +1,17 @@
+.project-create-dialog {
+  &__form {
+    width: 300px;
+  }
+
+  &__field {
+    width: 100%;
+  }
+
+  &__controls {
+    display: flex;
+  }
+
+  &__btn-avoid {
+    margin: 0 5px 0 auto !important;
+  }
+}

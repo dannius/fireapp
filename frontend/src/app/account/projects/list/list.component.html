@@ -1,3 +1,8 @@
 <div class="container">
-  <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по проектам"></app-search>
+  <div class="project__list-controls">
+    <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по проектам"></app-search>
+    <button (click)="toggleCreateProjectModal()" mat-fab class="project__btn-add">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>

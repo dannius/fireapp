@@ -5,7 +5,7 @@ import { InfoUpdateComponent, PasswordResetComponent, ProfileSettingsComponent }
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
-import { SearchFormComponent } from '@app/shared';
+import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -13,7 +13,7 @@ import { SearchFormComponent } from '@app/shared';
     ProfileSettingsComponent,
     InfoUpdateComponent,
     PasswordResetComponent,
-    SearchFormComponent
+    CreateProjectDialogComponent
   ],
   imports: [
     RouterModule.forChild(AccountRoutes),
@@ -25,10 +25,13 @@ import { SearchFormComponent } from '@app/shared';
     ProfileSettingsComponent,
     InfoUpdateComponent,
     PasswordResetComponent,
-    SearchFormComponent
+    CreateProjectDialogComponent
   ],
   providers: [
     UserService
+  ],
+  entryComponents: [
+    CreateProjectDialogComponent
   ]
 })
 export class AccountModule { }
