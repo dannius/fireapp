@@ -2,7 +2,7 @@ import '@app/shared/rxjs-operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '@app/core/models/user';
+import { User } from '@app/core/models';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs/Observable';
 

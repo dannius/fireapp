@@ -1,8 +1,25 @@
-<div class="container">
-  <div class="project__list-controls">
+<div class="container container__column">
+  <div class="project-list__controls">
     <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по проектам"></app-search>
-    <button (click)="toggleCreateProjectModal()" mat-fab class="project__btn-add">
+    <button (click)="toggleCreateProjectModal()" mat-fab class="project-list__btn-add">
       <mat-icon>add</mat-icon>
     </button>
   </div>
+
+  <div class="project-list">
+    <a *ngFor="let project of projects" class="project-list__item">
+      <mat-card class="project-list__item-content">
+        <mat-card-title class="text-center">{{project.name}}</mat-card-title>
+        <mat-card-content>
+          <mat-card-subtitle>Участники:</mat-card-subtitle>
+          <ul class="project-list__user-list">
+            <li *ngFor="let user of project.users" class="project-list__user-item">
+              {{user.name}}
+            </li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </a>
+  </div>
 </div>
+

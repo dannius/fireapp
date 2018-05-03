@@ -6,6 +6,8 @@ import { ProjectListComponent } from '@app/account/projects/list/list.component'
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
 import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
+import { ProjectService } from '@app/account/projects/project.service';
+import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { CreateProjectDialogComponent } from '@app/account/projects/create-dialo
     CreateProjectDialogComponent
   ],
   providers: [
-    UserService
+    UserService,
+    ProjectService,
+    ProjectListResolver
   ],
   entryComponents: [
     CreateProjectDialogComponent

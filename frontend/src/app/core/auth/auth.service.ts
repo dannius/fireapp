@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { TokenService } from '@app/core/auth/token.service';
-import { User } from '@app/core/models/user';
+import { User } from '@app/core/models';
 import { environment } from '@env/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';

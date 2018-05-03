@@ -1,7 +1,6 @@
 defmodule FireappWeb.ProjectController do
   use FireappWeb, :controller
-
-  alias Fireapp.ProjectContext
+  alias Fireapp.{UserProject, ProjectContext, Repo}
 
   plug :scrub_params, "project" when action in [:create]
   plug :scrub_params, "project_params" when action in [:update]
@@ -10,6 +9,16 @@ defmodule FireappWeb.ProjectController do
   def action(conn, _) do
     args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
     apply(__MODULE__, action_name(conn), args)
+  end
+
+  def index(conn, _params, current_user) do
+    current_user = Repo.preload(current_user, :projects)
+    projects = Enum.map(current_user.projects, fn (project) ->
+      Repo.preload(project, :users)
+    end)
+
+    conn
+    |> render("list.json", projects: projects)
   end
 
   def create(conn, %{"project" => project_params}, current_user) do

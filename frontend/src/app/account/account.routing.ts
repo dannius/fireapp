@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { ProfileSettingsComponent } from '@app/account/profile-settings/profile-settings.component';
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
+import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 
 export const AccountRoutes: Routes = [
   {
@@ -10,7 +11,8 @@ export const AccountRoutes: Routes = [
       redirectTo: 'projects'
     }, {
       path: 'projects',
-      component: ProjectListComponent
+      component: ProjectListComponent,
+      resolve: { projects: ProjectListResolver }
     }, {
       path: 'settings',
       component: ProfileSettingsComponent

@@ -45,7 +45,7 @@ defmodule FireappWeb.Router do
     put "/users/:id/reset-password", UserController, :reset_password
     get "/session", SessionController, :setup
 
-    resources "/projects", ProjectController, only: [:create, :update]
+    resources "/projects", ProjectController, only: [:create, :update, :index]
     post "/projects/:id/archive", ProjectController, :archive
     post "/projects/:id/bind", ProjectController, :bind
     post "/projects/:id/unbind", ProjectController, :unbind

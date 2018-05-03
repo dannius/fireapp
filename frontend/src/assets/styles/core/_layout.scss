@@ -9,6 +9,10 @@ body {
   max-width: 1000px;
   margin: 0 auto;
   display: flex;
+
+  &__column {
+    flex-direction: column;
+  }
 }
 
 .app-inner {
