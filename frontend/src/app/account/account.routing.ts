@@ -1,18 +1,16 @@
 import { Routes } from '@angular/router';
 import { ProfileSettingsComponent } from '@app/account/profile-settings/profile-settings.component';
-import { ProjectListComponent } from '@app/account/projects/list/list.component';
-import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 
 export const AccountRoutes: Routes = [
   {
     path: '',
     children: [{
       path: '',
+      pathMatch: 'full',
       redirectTo: 'projects'
     }, {
       path: 'projects',
-      component: ProjectListComponent,
-      resolve: { projects: ProjectListResolver }
+      loadChildren: './projects/project.module#ProjectModule'
     }, {
       path: 'settings',
       component: ProfileSettingsComponent

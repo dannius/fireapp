@@ -12,6 +12,7 @@
     margin: 10px;
     display: flex;
     cursor: pointer;
+    text-decoration: none;
     transition: $base-animation-duration;
 
     &:hover {
