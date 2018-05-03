@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
-import { Project, ProjectWithUsers } from '@app/core/models';
 import { ProjectService } from '@app/account/projects/project.service';
-import { ActivatedRoute } from '@angular/router';
+import { ProjectWithUsers } from '@app/core/models';
 
 @Component({
   selector: 'app-project-list',
@@ -16,7 +16,8 @@ export class ProjectListComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private projectService: ProjectService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -33,6 +34,13 @@ export class ProjectListComponent implements OnInit {
   }
 
   public toggleCreateProjectModal() {
-    this.dialog.open(CreateProjectDialogComponent);
+    this.dialog
+      .open(CreateProjectDialogComponent)
+      .afterClosed()
+      .subscribe((id: number) => {
+        if (id) {
+          this.router.navigate([id, 'management'], { relativeTo: this.route });
+        }
+      });
   }
 }

@@ -43,13 +43,13 @@ export class CreateProjectDialogComponent implements OnInit {
 
     this.projectService
     .create(this.form.value.name)
-    .subscribe((project: Project | number) => {
+    .subscribe(({ id }) => {
       this.isLoading = false;
 
-      if (project === 422) {
-        this.form.get('name').setErrors({ alreadyExist: true });
+      if (id) {
+        this.dialogRef.close(id);
       } else {
-        this.dialogRef.close();
+        this.form.get('name').setErrors({ alreadyExist: true });
       }
     });
   }
