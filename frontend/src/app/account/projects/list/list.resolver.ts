@@ -2,9 +2,9 @@ import '@app/shared/rxjs-operators';
 
 import { Injectable } from '@angular/core';
 import { Resolve } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 import { ProjectService } from '@app/account/projects/project.service';
 import { ProjectWithUsers } from '@app/core/models';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ProjectListResolver implements Resolve<Observable<ProjectWithUsers[]>> {
@@ -14,6 +14,6 @@ export class ProjectListResolver implements Resolve<Observable<ProjectWithUsers[
   ) { }
 
   resolve() {
-    return this.projectService.list();
+    return this.projectService.filter('');
   }
 }

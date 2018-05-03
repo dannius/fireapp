@@ -1,6 +1,6 @@
 import '@app/shared/rxjs-operators';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Project, ProjectWithUsers } from '@app/core/models';
 import { environment } from '@env/environment';
@@ -13,10 +13,13 @@ export class ProjectService {
     private http: HttpClient
   ) { }
 
-  public list(): Observable<ProjectWithUsers[]> {
+  public filter(substring: string): Observable<ProjectWithUsers[]> {
+    const params: HttpParams = new HttpParams()
+      .set('substring', substring);
+
     return this
       .http
-      .get<any>(`${environment.apiUrl}/api/projects`)
+      .get<any>(`${environment.apiUrl}/api/projects`, { params })
       .map(({ projects }: any) => projects.map((project) => ProjectWithUsers.fromJson(project)));
   }
 

@@ -8,5 +8,5 @@ defmodule FireappWeb.SessionView do
   def render("create-session.json", %{user: user, token: jwt}),
     do: %{user: Map.take(user, @user_attributes), token: jwt}
 
-  def render("unauthorized.json", _), do: ''
+  def render("unauthorized.json", _), do: ""
 end

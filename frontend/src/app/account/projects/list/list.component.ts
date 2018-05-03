@@ -24,7 +24,12 @@ export class ProjectListComponent implements OnInit {
   }
 
   public filterProjects(substring: string) {
-    console.log(substring);
+    this.projectService
+      .filter(substring)
+      .subscribe((projects) => {
+        this.projects = projects;
+      });
+
   }
 
   public toggleCreateProjectModal() {

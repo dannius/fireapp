@@ -11,11 +11,12 @@ defmodule FireappWeb.ProjectController do
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def index(conn, _params, current_user) do
+  def index(conn, %{"substring" => substring}, current_user) do
     current_user = Repo.preload(current_user, :projects)
-    projects = Enum.map(current_user.projects, fn (project) ->
-      Repo.preload(project, :users)
-    end)
+
+    projects = current_user.projects
+    |> Enum.filter(fn (project) -> project.name =~ substring end)
+    |> Enum.map(fn (project) -> Repo.preload(project, :users) end)
 
     conn
     |> render("list.json", projects: projects)
