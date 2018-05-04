@@ -6,6 +6,26 @@ defmodule Fireapp.ProjectControllerTest do
 
   @login_params %{email: "owner_email@test.com", password: "test_password"}
 
+  describe "show" do
+    setup [:create_user, :login_user]
+
+    test "Successful show project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+
+      response = conn_with_token
+      |> get(project_path(conn_with_token, :show, project.id))
+
+      assert response.status == Status.code(:ok)
+    end
+
+    test "Unuccessful show project", %{conn_with_token: conn_with_token} do
+      response = conn_with_token
+      |> get(project_path(conn_with_token, :show, -1))
+
+      assert response.status == Status.code(:not_found)
+    end
+  end
+
   describe "create" do
     setup [:create_user, :login_user]
 

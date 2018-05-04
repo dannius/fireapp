@@ -1,6 +1,7 @@
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { AuthGuard, AuthService, TokenInterceptor, TokenService } from '@app/core/auth';
+import { PubSubService } from '@app/core/pub-sub.service';
 import { FormHelperService } from '@app/shared';
 
 @NgModule({
@@ -9,6 +10,7 @@ import { FormHelperService } from '@app/shared';
     FormHelperService,
     AuthGuard,
     TokenService,
+    PubSubService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

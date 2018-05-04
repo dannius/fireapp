@@ -20,6 +20,18 @@ defmodule FireappWeb.ProjectView do
     %{project: Map.take(project, @project_attributes)}
   end
 
+  def render("show.json", %{project: project}) do
+    users = Enum.map(project.users, fn (user) ->
+      Map.take(user, @user_attributes)
+    end)
+
+    project = project
+    |> Map.replace!(:users, users)
+    |> Map.take(@project_with_users_attributes)
+
+    %{project: project}
+  end
+
   def render("success_bind.json", _), do: ""
 
   def render("error_changeset.json", %{data: data}), do: ""

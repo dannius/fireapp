@@ -23,6 +23,14 @@ export class ProjectService {
       .map(({ projects }: any) => projects.map((project) => ProjectWithUsers.fromJson(project)));
   }
 
+  public get(id: number): Observable<ProjectWithUsers> {
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects/${id}`)
+      .map(({ project }: any) => ProjectWithUsers.fromJson(project))
+      .catch((err) => Observable.of(err.status));
+  }
+
   public create(name: string): Observable<Project> {
     const params = {
       project: { name }
@@ -30,7 +38,7 @@ export class ProjectService {
 
     return this
       .http
-      .post<Project>(`${environment.apiUrl}/api/projects`, params)
+      .post<any>(`${environment.apiUrl}/api/projects`, params)
       .map(({ project }: any) => Project.fromJson(project))
       .catch((err) => Observable.of(err.status));
   }

@@ -1,12 +1,12 @@
-<app-header (toggleSidenav)="sidenav.toggle()"></app-header>
-<router-outlet></router-outlet>
-<!-- <mat-sidenav-container class="app-inner">
-  <mat-sidenav #sidenav mode="side" [opened]="true">
+<app-header (toggleSidenav)="toggleSidenav()"></app-header>
 
+<mat-sidenav-container class="app-inner">
+  <mat-sidenav #sidenav *ngIf="!!project" mode="side" [opened]="true">
+    sidenav
   </mat-sidenav>
 
   <mat-sidenav-content>
-
+      <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
- -->
+

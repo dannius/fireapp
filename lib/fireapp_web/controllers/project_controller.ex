@@ -22,6 +22,26 @@ defmodule FireappWeb.ProjectController do
     |> render("list.json", projects: projects)
   end
 
+  def show(conn, %{"id" => id}, current_user) do
+    id = String.to_integer(id)
+    current_user = Repo.preload(current_user, :projects)
+
+    project = current_user.projects
+    |> Enum.filter(fn (project) -> project.id == id end)
+    |> List.first()
+
+    case project do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json")
+      project ->
+        project = Repo.preload(project, :users)
+        conn
+        |> render("show.json", project: project)
+    end
+  end
+
   def create(conn, %{"project" => project_params}, current_user) do
     case ProjectContext.create_project(project_params, current_user.id) do
       {:ok, project} ->
