@@ -1,13 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Project } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-project-management',
   templateUrl: './management.component.html'
 })
-export class ManagementComponent implements OnInit, OnDestroy {
+export class ManagementComponent implements OnInit {
 
   public project: Project;
 
@@ -17,14 +18,18 @@ export class ManagementComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.project = this.route.snapshot.data.project;
+    this.route.data
+    .switchMap(({ project }) => {
+      if (!this.project || this.project.id !== project.id) {
+        this.project = project;
+      }
 
-    this.pubSubService
-      .setProject(Project.fromJson(this.project));
-  }
-
-  ngOnDestroy() {
-    this.pubSubService.setProject(null);
+      return Observable.of(project);
+    })
+    .subscribe((project) => {
+      this.pubSubService
+        .setProject(Project.fromJson(this.project));
+    });
   }
 
 }

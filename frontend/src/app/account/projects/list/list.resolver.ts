@@ -14,6 +14,6 @@ export class ProjectListResolver implements Resolve<Observable<ProjectWithUsers[
   ) { }
 
   resolve() {
-    return this.projectService.filter('');
+    return this.projectService.filteredListWithUsers('');
   }
 }

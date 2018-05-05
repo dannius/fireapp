@@ -5,11 +5,13 @@ import {
   MatButtonModule,
   MatCardModule,
   MatDialogModule,
+  MatDividerModule,
   MatIconModule,
   MatInputModule,
   MatMenuModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
@@ -32,7 +34,9 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule,
+    MatSelectModule,
   ],
   exports: [
     CommonModule,
@@ -49,6 +53,8 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatMenuModule,
     MatSnackBarModule,
     MatDialogModule,
+    MatDividerModule,
+    MatSelectModule,
 
     /////////////
     // Components
@@ -64,4 +70,4 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
   ]
 })
 
-export class SharedModule {}
+export class SharedModule { }

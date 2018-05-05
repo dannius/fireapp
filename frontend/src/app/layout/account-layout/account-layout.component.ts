@@ -10,7 +10,7 @@ import { PubSubService } from '@app/core/pub-sub.service';
 export class AccountLayoutComponent implements OnInit {
 
   @ViewChild('sidenav')
-  public myNav: MatSidenav;
+  public sidenav: MatSidenav;
 
   public project: Project;
 
@@ -27,6 +27,6 @@ export class AccountLayoutComponent implements OnInit {
   }
 
   public toggleSidenav() {
-    this.myNav.toggle();
+    this.sidenav.toggle();
   }
 }

@@ -13,14 +13,26 @@ export class ProjectService {
     private http: HttpClient
   ) { }
 
-  public filter(substring: string): Observable<ProjectWithUsers[]> {
+  public filteredListWithUsers(substring: string): Observable<ProjectWithUsers[]> {
     const params: HttpParams = new HttpParams()
-      .set('substring', substring);
+      .set('substring', substring)
+      .set('users', 'true');
 
     return this
       .http
       .get<any>(`${environment.apiUrl}/api/projects`, { params })
       .map(({ projects }: any) => projects.map((project) => ProjectWithUsers.fromJson(project)));
+  }
+
+  public list(): Observable<Project[]> {
+    const params: HttpParams = new HttpParams()
+      .set('substring', '')
+      .set('users', '');
+
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects`, { params })
+      .map(({ projects }: any) => projects.map((project) => Project.fromJson(project)));
   }
 
   public get(id: number): Observable<ProjectWithUsers> {

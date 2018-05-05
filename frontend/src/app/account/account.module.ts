@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AccountRoutes } from '@app/account/account.routing';
 import { InfoUpdateComponent, PasswordResetComponent, ProfileSettingsComponent } from '@app/account/profile-settings';
-import { ProjectService } from '@app/account/projects/project.service';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
 
@@ -23,7 +22,6 @@ import { SharedModule } from '@app/shared';
   ],
   providers: [
     UserService,
-    ProjectService,
   ]
 })
 export class AccountModule { }
