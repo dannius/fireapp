@@ -1,3 +1,30 @@
-<p>
-  management works!
-</p>
+<!-- <button *ngIf="!!project; else homeIcon" mat-icon-button (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <ng-template #homeIcon>
+    <i class="header__home-icon"><mat-icon>home</mat-icon></i>
+  </ng-template> -->
+
+<div *ngIf="project" class="project__management-content">
+  <mat-card class="project__participant">
+    <mat-card-title>Участники</mat-card-title>
+    <mat-card-content>
+      <div *ngIf="project.users.length; else withoutUsers">
+        <span *ngFor="let user of project.users">{{user.name || user.email}}</span>
+      </div>
+
+      <ng-template #withoutUsers>
+        <div>
+            Только вы участник проекта
+        </div>
+      </ng-template>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="isOwnership" class="project__settings">
+    <mat-card-title>Управление</mat-card-title>
+    <mat-card-content>
+      удолить
+    </mat-card-content>
+  </mat-card>
+</div>
