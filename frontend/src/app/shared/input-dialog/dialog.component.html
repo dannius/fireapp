@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="dialog__form">
+  <mat-form-field class="dialog__field">
+    <input matInput formControlName="name" [placeholder]="data.inputPlaceholder">
+    <mat-error 
+      *ngIf="form.controls.name.touched && form.controls.name.errors?.required"
+      class="form__error mat-text-warn">
+      Заполните поле
+    </mat-error>
+    <mat-error 
+      *ngIf="data.errorMessage && form.controls.name.errors && !form.controls.name.errors?.required"
+      class="form__error mat-text-warn">
+      {{data.errorMessage}}
+    </mat-error>
+  </mat-form-field>
+
+  <div class="dialog__controls">
+    <button mat-raised-button
+      color="warn"
+      type="button"
+      class="dialog__btn-close"
+      (click)="close()">
+      {{btnTitle.close}}
+    </button>
+    <button mat-raised-button
+      color="primary"
+      type="submit"
+      class="dialog__btn-create"
+      [disabled]="isLoading">
+      {{btnTitle.confirm}}
+    </button>
+  </div>
+</form>

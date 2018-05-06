@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 import { ManagementComponent } from '@app/account/projects/management/management.component';
@@ -14,7 +13,6 @@ import { SharedModule } from '@app/shared';
 @NgModule({
   declarations: [
     ProjectListComponent,
-    CreateProjectDialogComponent,
     ProjectShowComponent,
     ManagementComponent
 ],
@@ -25,7 +23,6 @@ import { SharedModule } from '@app/shared';
   ],
   exports: [
     ProjectListComponent,
-    CreateProjectDialogComponent,
     ProjectShowComponent,
     ManagementComponent
   ],
@@ -38,9 +35,6 @@ import { SharedModule } from '@app/shared';
     /////////////
     ProjectListResolver,
     ProjectShowResolver
-  ],
-  entryComponents: [
-    CreateProjectDialogComponent
   ]
 })
 export class ProjectModule { }

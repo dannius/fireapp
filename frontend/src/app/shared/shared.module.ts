@@ -17,6 +17,7 @@ import {
   MatToolbarModule,
 } from '@angular/material';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
+import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { SearchFormComponent } from '@app/shared/search/search.component';
 
 @NgModule({
@@ -59,14 +60,17 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     /////////////
     // Components
     /////////////
-    SearchFormComponent
+    SearchFormComponent,
+    InputDialogComponent
   ],
   declarations: [
     ConfirmationDialogComponent,
-    SearchFormComponent
+    SearchFormComponent,
+    InputDialogComponent
   ],
   entryComponents: [
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    InputDialogComponent
   ]
 })
 

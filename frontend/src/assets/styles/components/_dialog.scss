@@ -1,4 +1,4 @@
-.project-create-dialog {
+.dialog {
   &__form {
     width: 350px;
   }
@@ -11,7 +11,7 @@
     display: flex;
   }
 
-  &__btn-avoid {
+  &__btn-close {
     margin: 0 5px 0 auto !important;
   }
 }

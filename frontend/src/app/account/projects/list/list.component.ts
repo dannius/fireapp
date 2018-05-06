@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CreateProjectDialogComponent } from '@app/account/projects/create-dialog/dialog.component';
 import { ProjectService } from '@app/account/projects/project.service';
 import { ProjectWithUsers } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 
 @Component({
   selector: 'app-project-list',
@@ -37,8 +37,28 @@ export class ProjectListComponent implements OnInit {
   }
 
   public toggleCreateProjectModal() {
+    const data = {
+      onSubmit: (self) => {
+        this.projectService
+        .create(self.form.value.name)
+        .subscribe(({ id }) => {
+          self.isLoading = false;
+
+          if (id) {
+            self.dialogRef.close(id);
+          } else {
+            self.form.get('name').setErrors({ alreadyExist: true });
+          }
+        });
+      },
+      btnConfirm: 'Создать',
+      btnClose: 'Отмена',
+      inputPlaceholder: 'Название проекта',
+      errorMessage: 'Такое название уже занято'
+    };
+
     this.dialog
-      .open(CreateProjectDialogComponent)
+      .open(InputDialogComponent, { data })
       .afterClosed()
       .subscribe((id: number) => {
         if (id) {
