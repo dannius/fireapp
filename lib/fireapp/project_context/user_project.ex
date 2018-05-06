@@ -19,21 +19,20 @@ defmodule Fireapp.UserProject do
 
   def delete_user_from_project(user, project) do
     case check_user_in_project(user, project) do
-      {:ok, _} ->
-        :ok
+      {:ok, relationship} ->
+        Repo.delete(relationship)
       nil ->
-        :error
+        :not_exist
     end
   end
 
   def add_user_to_project(user, project) do
     case check_user_in_project(user, project) do
       {:ok, _} ->
-        :error
+        :already_exist
       nil ->
         __MODULE__.changeset(%__MODULE__{user_id: user.id, project_id: project.id})
-        |> Repo.insert!()
-        :ok
+        |> Repo.insert()
     end
   end
 

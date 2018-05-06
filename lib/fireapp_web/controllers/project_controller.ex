@@ -1,6 +1,6 @@
 defmodule FireappWeb.ProjectController do
   use FireappWeb, :controller
-  alias Fireapp.{UserProject, ProjectContext, Repo}
+  alias Fireapp.{ProjectContext, Repo}
 
   plug :scrub_params, "project" when action in [:create]
   plug :scrub_params, "project_params" when action in [:update]
@@ -17,28 +17,25 @@ defmodule FireappWeb.ProjectController do
     projects = current_user.projects
     |> Enum.filter(fn (project) -> project.name =~ substring end)
 
-    if (users == "true") do
-      projects = projects
-      |> Enum.map(fn (project) -> Repo.preload(project, :users) end)
-    end
+    projects = 
+      case users do
+        "true" ->
+          Enum.map(projects, fn (project) -> Repo.preload(project, :users) end)
+        _ ->
+          projects
+      end
 
     conn
     |> render("list.json", %{projects: projects})
   end
 
   def show(conn, %{"id" => id}, current_user) do
-    id = String.to_integer(id)
-    current_user = Repo.preload(current_user, :projects)
-
-    project = current_user.projects
-    |> Enum.filter(fn (project) -> project.id == id end)
-    |> List.first()
-
-    case project do
+    case ProjectContext.getOneIfOwner(id, current_user) do
       nil ->
         conn
         |> put_status(:not_found)
         |> render("error.json")
+
       project ->
         project = Repo.preload(project, :users)
         conn
@@ -51,7 +48,7 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         conn
         |> put_status(:created)
-        |> render("successfull_create_update.json", %{project: project})
+        |> render("successfull_with_project.json", %{project: project})
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -60,7 +57,7 @@ defmodule FireappWeb.ProjectController do
   end
 
   def update(conn, %{"id" => id, "project_params" => params}, current_user) do
-    case ProjectContext.update_project(id, params, current_user.id) do
+    case ProjectContext.update_project(id, params, current_user) do
       :conflict ->
         conn
         |> put_status(:conflict)
@@ -74,7 +71,7 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         conn
         |> put_status(:ok)
-        |> render("successfull_create_update.json", %{project: project})
+        |> render("successfull_with_project.json", %{project: project})
 
       {:unprocessable_entity, changeset} ->
         conn
@@ -83,8 +80,21 @@ defmodule FireappWeb.ProjectController do
     end
   end
 
+  def delete(conn, %{"id" => id}, current_user) do
+    case ProjectContext.getOneIfOwner(id, current_user) do
+      nil ->
+        conn
+        |> put_status(:not_found)
+        |> render("error.json")
+      project ->
+        conn
+        |> put_status(:ok)
+        |> render("successfull_with_project.json", %{project: project})
+    end
+  end
+
   def archive(conn, %{"id" => id}, current_user) do
-    case ProjectContext.archive_project(id, current_user.id) do
+    case ProjectContext.archive_project(id, current_user) do
       :conflict ->
         conn
         |> put_status(:conflict)
@@ -95,15 +105,34 @@ defmodule FireappWeb.ProjectController do
         |> put_status(:unauthorized)
         |> render("error.json")
 
-      {:ok, _} ->
+      {:ok, project} ->
         conn
         |> put_status(:ok)
-        |> render("success_bind.json")
+        |> render("successfull_with_project.json", %{project: project})
+    end
+  end
+
+  def unarchive(conn, %{"id" => id}, current_user) do
+    case ProjectContext.unarchive_project(id, current_user) do
+      :conflict ->
+        conn
+        |> put_status(:conflict)
+        |> render("error.json")
+
+      :unauthorized ->
+        conn
+        |> put_status(:unauthorized)
+        |> render("error.json")
+
+      {:ok, project} ->
+        conn
+        |> put_status(:ok)
+        |> render("successfull_with_project.json", %{project: project})
     end
   end
 
   def bind(conn, %{"id" => project_id, "user_id" => user_id}, current_user) do
-    case ProjectContext.bind_user_to_project(user_id, project_id, current_user.id) do
+    case ProjectContext.bind_user_to_project(user_id, project_id, current_user) do
       :conflict ->
         conn
         |> put_status(:conflict)
@@ -121,8 +150,8 @@ defmodule FireappWeb.ProjectController do
     end
   end
 
-  def unbind(conn, %{"id" => project_id, "user_id" => user_id}, _) do
-    case ProjectContext.unbind_user_from_project(user_id, project_id) do
+  def unbind(conn, %{"id" => project_id, "user_id" => user_id}, current_user) do
+    case ProjectContext.unbind_user_from_project(user_id, project_id, current_user) do
       :ok ->
         conn
         |> put_status(:ok)

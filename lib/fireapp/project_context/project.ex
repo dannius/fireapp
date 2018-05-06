@@ -8,7 +8,7 @@ defmodule Fireapp.Project do
     field :name, :string
     field :archived, :boolean, default: false
 
-    many_to_many :users, User, join_through: "users_projects", on_replace: :delete
+    many_to_many :users, User, join_through: "users_projects", on_replace: :delete, on_delete: :delete_all
     belongs_to :owner, User, foreign_key: :owner_id
 
     timestamps()
@@ -19,6 +19,7 @@ defmodule Fireapp.Project do
     |> cast(params, ~w(name owner_id))
     |> validate_required([:owner_id, :name])
     |> put_owner_to_users
+    |> foreign_key_constraint(:users, name: :users_projects_project_id_fkey)
     |> uniq_project_name_for_user(:name)
   end
 
@@ -34,10 +35,25 @@ defmodule Fireapp.Project do
     |> archive
   end
 
+  def unarchive_changeset(model, params \\ %{}) do
+    model
+    |> cast(params, [])
+    |> unarchive
+  end
+
   defp archive(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         put_change(changeset, :archived, true)
+      _ ->
+        changeset
+    end
+  end
+
+  defp unarchive(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        put_change(changeset, :archived, false)
       _ ->
         changeset
     end

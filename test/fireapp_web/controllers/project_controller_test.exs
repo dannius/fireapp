@@ -5,6 +5,7 @@ defmodule Fireapp.ProjectControllerTest do
   alias Plug.Conn.Status
 
   @login_params %{email: "owner_email@test.com", password: "test_password"}
+  @undefined_id -1
 
   describe "show" do
     setup [:create_user, :login_user]
@@ -18,9 +19,10 @@ defmodule Fireapp.ProjectControllerTest do
       assert response.status == Status.code(:ok)
     end
 
-    test "Unuccessful show project", %{conn_with_token: conn_with_token} do
+    test "Unuccessful show project with wrong id", %{conn_with_token: conn_with_token} do
+
       response = conn_with_token
-      |> get(project_path(conn_with_token, :show, -1))
+      |> get(project_path(conn_with_token, :show, @undefined_id))
 
       assert response.status == Status.code(:not_found)
     end
@@ -102,6 +104,27 @@ defmodule Fireapp.ProjectControllerTest do
     end
   end
 
+  describe "delete" do
+    setup [:create_user, :login_user, :create_guest_user]
+
+    test "Successful delete project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+
+      response = conn_with_token
+      |> delete(project_path(conn_with_token, :delete, project.id))
+
+      assert response.status == Status.code(:ok)
+    end
+
+    test "Unuccessful try to delete project with wrong id", %{conn_with_token: conn_with_token} do
+
+      response = conn_with_token
+      |> delete(project_path(conn_with_token, :delete, @undefined_id))
+
+      assert response.status == Status.code(:not_found)
+    end
+  end
+
   describe "archive" do
     setup [:create_user, :login_user, :create_guest_user]
 
@@ -129,6 +152,39 @@ defmodule Fireapp.ProjectControllerTest do
 
       response = conn_with_token
       |> post(project_path(conn_with_token, :archive, project.id))
+
+      assert response.status == Status.code(:conflict)
+    end
+  end
+
+  describe "unarchive" do
+    setup [:create_user, :login_user, :create_guest_user]
+
+    test "Successful unarchive project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+      project = archive_project(project)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unarchive, project.id))
+
+      assert response.status == Status.code(:ok)
+    end
+
+    test "Unsuccessful unarchive project as not owner", %{conn_with_token: conn_with_token, guest: guest} do
+      %{project: project} = create_project_with_owner(guest)
+      project = archive_project(project)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unarchive, project.id))
+
+      assert response.status == Status.code(:unauthorized)
+    end
+
+    test "Create and unsuccessful unarchive already unarchived project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unarchive, project.id))
 
       assert response.status == Status.code(:conflict)
     end
@@ -172,18 +228,19 @@ defmodule Fireapp.ProjectControllerTest do
   describe "unbind" do
     setup [:create_user, :login_user, :create_guest_user]
 
-    test "Successful bind then unbind user-project relationship", %{conn_with_token: conn_with_token, current_user: current_user} do
+    test "Successful bind then unbind user-project relationship", %{conn_with_token: conn_with_token, current_user: current_user, guest: guest} do
       %{project: project} = create_project_with_owner(current_user)
-      UserProject.add_user_to_project(current_user, project)
+      UserProject.add_user_to_project(guest, project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unbind, project.id, user_id: current_user.id))
+      |> post(project_path(conn_with_token, :unbind, project.id, user_id: guest.id))
 
       assert response.status == Status.code(:ok)
     end
 
     test "Unsuccessful unbind, archived", %{conn_with_token: conn_with_token, current_user: current_user, guest: guest} do
       %{project: project} = create_project_with_owner(current_user)
+      UserProject.add_user_to_project(guest, project)
       project = archive_project(project)
 
       response = conn_with_token
@@ -192,6 +249,35 @@ defmodule Fireapp.ProjectControllerTest do
       assert response.status == Status.code(:unprocessable_entity)
     end
 
+    test "Unsuccessful unbind, from not exist project", %{conn_with_token: conn_with_token, guest: guest} do
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unbind, @undefined_id, user_id: guest.id))
+
+      assert response.status == Status.code(:unprocessable_entity)
+    end
+
+    test "Can not unbind owner", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unbind, project.id, user_id: current_user.id))
+
+      assert response.status == Status.code(:unprocessable_entity)
+    end
+
+    test "Guest can not unbind another guest", 
+      %{conn_with_token: conn_with_token, current_user: current_user, guest: guest, another_guest: another_guest} do
+
+      %{project: project} = create_project_with_owner(guest)
+      UserProject.add_user_to_project(current_user, project)
+      UserProject.add_user_to_project(another_guest, project)
+
+      response = conn_with_token
+      |> post(project_path(conn_with_token, :unbind, project.id, user_id: another_guest.id))
+
+      assert response.status == Status.code(:unprocessable_entity)
+    end
   end
 
   defp archive_project(project) do
@@ -211,11 +297,15 @@ defmodule Fireapp.ProjectControllerTest do
 
   defp create_guest_user(_) do
     guest_params = %{email: "guest_email@test.com", password: "test_password"}
+    another_guest_params = %{email: "another_guest_email@test.com", password: "test_password"}
 
     guest = User.registration_changeset(%User{}, guest_params)
     |> Repo.insert!()
 
-    {:ok, guest: guest}
+    another_guest = User.registration_changeset(%User{}, another_guest_params)
+    |> Repo.insert!()
+
+    {:ok, guest: guest, another_guest: another_guest}
   end
 
   defp create_user(_) do

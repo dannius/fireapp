@@ -21,7 +21,7 @@ defmodule FireappWeb.ProjectView do
     %{projects: projects}
   end
 
-  def render("successfull_create_update.json", %{project: project}) do
+  def render("successfull_with_project.json", %{project: project}) do
     %{project: Map.take(project, @project_attributes)}
   end
 

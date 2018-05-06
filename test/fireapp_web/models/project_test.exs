@@ -72,6 +72,17 @@ defmodule Fireapp.ProjectTest do
     end
   end
 
+  describe "delete" do
+    setup [:valid_project_params]
+
+    test "Insert then delete project", %{valid_project_params: valid_project_params} do
+      assert Project.create_changeset(%Project{}, valid_project_params)
+      |> Repo.insert!()
+      |> Repo.delete()
+      |> repo_condition()
+    end
+  end
+
   describe "archive" do
     setup [:valid_project_params]
 
@@ -84,6 +95,25 @@ defmodule Fireapp.ProjectTest do
       assert project
       |> Repo.preload(:users)
       |> Project.archive_changeset()
+      |> Repo.update()
+      |> repo_condition()
+    end
+  end
+
+  describe "unarchive" do
+    setup [:valid_project_params]
+
+    test "Insert, archive and unarchive project", %{valid_project_params: valid_project_params} do
+      project = Project.create_changeset(%Project{}, valid_project_params)
+      |> Repo.insert!()
+
+      project = Repo.get!(Project, project.id)
+
+      assert project
+      |> Repo.preload(:users)
+      |> Project.archive_changeset()
+      |> Repo.update!()
+      |> Project.unarchive_changeset()
       |> Repo.update()
       |> repo_condition()
     end
