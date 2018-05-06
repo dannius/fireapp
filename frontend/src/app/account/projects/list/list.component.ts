@@ -13,6 +13,7 @@ import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component'
 export class ProjectListComponent implements OnInit {
 
   public projects: ProjectWithUsers[];
+  public archivedProjects: ProjectWithUsers[];
 
   constructor(
     private dialog: MatDialog,
@@ -23,7 +24,10 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projects = this.route.snapshot.data.projects;
+    this.route.data.subscribe(({ projects }) => {
+      this.sortProjects(projects);
+    });
+
     this.pubSubService.setProject(null);
   }
 
@@ -31,14 +35,28 @@ export class ProjectListComponent implements OnInit {
     this.projectService
       .filteredListWithUsers(substring)
       .subscribe((projects) => {
-        this.projects = projects;
+        this.sortProjects(projects);
       });
-
   }
 
-  public toggleCreateProjectModal() {
+  private sortProjects(projects) {
+    this.projects = [];
+    this.archivedProjects = [];
+
+    projects.forEach((project) => {
+      if (project.archived) {
+        this.archivedProjects.push(project);
+      } else {
+        this.projects.push(project);
+      }
+    });
+  }
+
+  public showCreateProjectModal() {
     const data = {
       onSubmit: (self) => {
+        self.isLoading = true;
+
         this.projectService
         .create(self.form.value.name)
         .subscribe(({ id }) => {
@@ -51,6 +69,7 @@ export class ProjectListComponent implements OnInit {
           }
         });
       },
+      title: 'Введите название проекта',
       btnConfirm: 'Создать',
       btnClose: 'Отмена',
       inputPlaceholder: 'Название проекта',

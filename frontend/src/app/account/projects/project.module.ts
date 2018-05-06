@@ -9,12 +9,14 @@ import { ProjectShowComponent } from '@app/account/projects/show/show.component'
 import { ProjectShowResolver } from '@app/account/projects/show/show.resolver';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
+import { ProjectItemComponent } from '@app/account/projects/item/item.component';
 
 @NgModule({
   declarations: [
     ProjectListComponent,
+    ProjectItemComponent,
     ProjectShowComponent,
-    ManagementComponent
+    ManagementComponent,
 ],
   imports: [
     RouterModule.forChild(ProjectRoutes),
@@ -23,6 +25,7 @@ import { SharedModule } from '@app/shared';
   ],
   exports: [
     ProjectListComponent,
+    ProjectItemComponent,
     ProjectShowComponent,
     ManagementComponent
   ],

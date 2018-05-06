@@ -10,7 +10,20 @@
     }
   }
 
-  &__submit-btn {
-    margin-top: 10px !important;
+  &__btn {
+    &-submit {
+      margin-top: 10px !important;
+    }
+
+    &_yellow {
+      background-color: $gorse;
+      color: #fff;
+    }
+  }
+
+
+  &__label {
+    color: $transparent-color;
+    margin-bottom: 8px;
   }
 }

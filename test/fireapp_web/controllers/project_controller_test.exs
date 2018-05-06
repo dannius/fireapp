@@ -132,7 +132,7 @@ defmodule Fireapp.ProjectControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :archive, project.id))
+      |> get(project_path(conn_with_token, :archive, project.id))
 
       assert response.status == Status.code(:ok)
     end
@@ -141,7 +141,7 @@ defmodule Fireapp.ProjectControllerTest do
       %{project: project} = create_project_with_owner(guest)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :archive, project.id))
+      |> get(project_path(conn_with_token, :archive, project.id))
 
       assert response.status == Status.code(:unauthorized)
     end
@@ -151,7 +151,7 @@ defmodule Fireapp.ProjectControllerTest do
       project = archive_project(project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :archive, project.id))
+      |> get(project_path(conn_with_token, :archive, project.id))
 
       assert response.status == Status.code(:conflict)
     end
@@ -165,7 +165,7 @@ defmodule Fireapp.ProjectControllerTest do
       project = archive_project(project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unarchive, project.id))
+      |> get(project_path(conn_with_token, :unarchive, project.id))
 
       assert response.status == Status.code(:ok)
     end
@@ -175,7 +175,7 @@ defmodule Fireapp.ProjectControllerTest do
       project = archive_project(project)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unarchive, project.id))
+      |> get(project_path(conn_with_token, :unarchive, project.id))
 
       assert response.status == Status.code(:unauthorized)
     end
@@ -184,7 +184,7 @@ defmodule Fireapp.ProjectControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> post(project_path(conn_with_token, :unarchive, project.id))
+      |> get(project_path(conn_with_token, :unarchive, project.id))
 
       assert response.status == Status.code(:conflict)
     end

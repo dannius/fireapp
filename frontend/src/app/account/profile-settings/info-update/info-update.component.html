@@ -9,12 +9,12 @@
 
       <mat-error 
         *ngIf="form.touched && form.controls.name.value === user.name"
-        class="form__error mat-text-warn text-center">
+        class="form__error mat-text-warn">
         Нечего обновлять
       </mat-error>
 
       <div>
-        <button mat-raised-button class="form__submit-btn" color="primary" type="submit">Сохранить</button>
+        <button mat-raised-button class="form__btn-submit" color="primary" type="submit">Сохранить</button>
       </div>
     </form>
   </mat-card-content>

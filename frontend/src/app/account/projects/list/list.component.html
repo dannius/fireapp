@@ -1,7 +1,7 @@
 <div class="container container__column">
   <div class="project-list__controls">
     <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по проектам"></app-search>
-    <button (click)="toggleCreateProjectModal()" mat-fab class="project-list__btn-add">
+    <button (click)="showCreateProjectModal()" mat-fab class="project-list__btn-add">
       <mat-icon>add</mat-icon>
     </button>
   </div>
@@ -10,19 +10,26 @@
     <a
       *ngFor="let project of projects"
       [routerLink]="[project.id]"
-      class="project-list__item">
-      <mat-card class="project-list__item-content">
-        <mat-card-title class="text-center">{{project.name}}</mat-card-title>
-        <mat-card-content>
-          <mat-card-subtitle>Участники:</mat-card-subtitle>
-          <ul class="project-list__user-list">
-            <li *ngFor="let user of project.users" class="project-list__user-item">
-              {{user.name}}
-            </li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
+      class="project-item"
+    >
+      <app-project-item class="project-item__outer" [project]="project"></app-project-item>
     </a>
+  </div>
+
+  <div *ngIf="archivedProjects && archivedProjects.length">
+    <div class="headline">
+      <h1 class="headline__title headline__lines headline_transparent">Архивированные</h1>
+    </div>
+  
+    <div class="project-list">
+      <a
+        *ngFor="let project of archivedProjects"
+        [routerLink]="[project.id]"
+        class="project-item project-item_archived"
+      >
+        <app-project-item class="project-item__outer" [project]="project"></app-project-item>
+      </a>
+    </div>
   </div>
 </div>
 

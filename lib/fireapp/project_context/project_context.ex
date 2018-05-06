@@ -45,9 +45,9 @@ defmodule Fireapp.ProjectContext do
         :conflict
 
       false ->
-        project
-        |> Project.archive_changeset
-        |> Repo.update!
+        project = project
+        |> Project.archive_changeset()
+        |> Repo.update!()
         {:ok, project}
     end
   end
@@ -63,9 +63,9 @@ defmodule Fireapp.ProjectContext do
         :conflict
 
       true ->
-        project
-        |> Project.unarchive_changeset
-        |> Repo.update!
+        project = project
+        |> Project.unarchive_changeset()
+        |> Repo.update!()
         {:ok, project}
     end
   end

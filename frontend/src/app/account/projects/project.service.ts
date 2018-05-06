@@ -54,4 +54,28 @@ export class ProjectService {
       .map(({ project }: any) => Project.fromJson(project))
       .catch((err) => Observable.of(err.status));
   }
+
+  public archive(id: number): Observable<Project> {
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects/${id}/archive`)
+      .map(({ project }: any) => Project.fromJson(project))
+      .catch((err) => Observable.of(err.status));
+  }
+
+  public unarchive(id: number): Observable<Project> {
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects/${id}/unarchive`)
+      .map(({ project }: any) => Project.fromJson(project))
+      .catch((err) => Observable.of(err.status));
+  }
+
+  public delete(id: number): Observable<Project> {
+    return this
+      .http
+      .delete<any>(`${environment.apiUrl}/api/projects/${id}`)
+      .map(({ project }: any) => Project.fromJson(project))
+      .catch((err) => Observable.of(err.status));
+  }
 }

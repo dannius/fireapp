@@ -43,8 +43,6 @@ export class InputDialogComponent implements OnInit {
       return;
     }
 
-    this.isLoading = true;
-
     this.data.onSubmit(this);
   }
 

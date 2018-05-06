@@ -87,6 +87,7 @@ defmodule FireappWeb.ProjectController do
         |> put_status(:not_found)
         |> render("error.json")
       project ->
+        Repo.delete!(project)
         conn
         |> put_status(:ok)
         |> render("successfull_with_project.json", %{project: project})

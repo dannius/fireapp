@@ -1,7 +1,7 @@
 defmodule FireappWeb.ProjectView do
   use FireappWeb, :view
-  @project_with_users_attributes [:id, :name, :owner_id, :users]
-  @project_attributes [:id, :name, :owner_id]
+  @project_with_users_attributes [:id, :name, :owner_id, :archived, :users]
+  @project_attributes [:id, :name, :owner_id, :archived]
   @user_attributes [:id, :name, :email]
 
   def render("list.json", %{projects: projects}) do

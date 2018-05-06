@@ -1,10 +1,32 @@
 .headline {
-  font-size: 32px;
   color: $mine-shaft;
-  text-align: center;
+
+  &__title {
+    font-size: 32px;
+  }
+
+  &__subtitle {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+
+  &__lines {
+    &::after {
+      content: '';
+      margin-top: 8px;
+      width: 100%;
+      height: 1px;
+      display: block;
+      background-color: $transparent-color;
+    }
+  }
 
   &_white {
     color: #fff;
+  }
+
+  &_transparent {
+    color: $transparent-color;
   }
 }
 

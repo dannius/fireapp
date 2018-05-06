@@ -1,0 +1,11 @@
+<mat-card class="project-item__inner">
+  <mat-card-title class="text-center">{{project.name}}</mat-card-title>
+  <mat-card-content>
+    <mat-card-subtitle>Участники:</mat-card-subtitle>
+    <ul class="project-item__user-list">
+      <li *ngFor="let user of project.users" class="project-item__user-item">
+        {{user.name}}
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>

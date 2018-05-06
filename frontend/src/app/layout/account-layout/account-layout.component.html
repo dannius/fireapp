@@ -3,7 +3,7 @@
 <mat-sidenav-container class="app-inner">
   <mat-sidenav #sidenav *ngIf="!!project" mode="side" [opened]="true">
       <mat-divider></mat-divider>
-      <a mat-button [routerLink]="['/../']">Назад к проектам</a>
+      <a mat-button [routerLink]="['/', 'account', 'projects']">Назад к проектам</a>
   </mat-sidenav>
 
   <mat-sidenav-content>

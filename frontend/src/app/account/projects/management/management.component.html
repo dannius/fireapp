@@ -1,11 +1,9 @@
-<!-- <button *ngIf="!!project; else homeIcon" mat-icon-button (click)="toggleSidenav.emit()">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <ng-template #homeIcon>
-    <i class="header__home-icon"><mat-icon>home</mat-icon></i>
-  </ng-template> -->
+<div *ngIf="project" class="section section_lg">
+  <div *ngIf="project.archived" class="headline">
+    <h1 class="headline__title">Проект архивирован</h1>
+    <h3 class="headline__subtitle">Для дальньйшего функционирования необходимо разархивировать проект</h3>
+  </div>
 
-<div *ngIf="project" class="project__management-content">
   <mat-card class="project__participant">
     <mat-card-title>Участники</mat-card-title>
     <mat-card-content>
@@ -15,7 +13,7 @@
 
       <ng-template #withoutUsers>
         <div>
-            Только вы участник проекта
+          <mat-label>Только вы участник проекта</mat-label>
         </div>
       </ng-template>
     </mat-card-content>
@@ -24,7 +22,36 @@
   <mat-card *ngIf="isOwnership" class="project__settings">
     <mat-card-title>Управление</mat-card-title>
     <mat-card-content>
-      удолить
+      <div class="project__settings-controls">
+        <p class="form__label">Архивация</p>
+        <button
+          *ngIf="!project.archived; else restoreBtn"
+          mat-raised-button
+          class="form__btn_yellow"
+          (click)="showArchivationDialog()"
+        >
+        архивировать
+        </button>
+
+        <ng-template #restoreBtn>
+          <button mat-raised-button
+            class="form__btn_yellow"
+            (click)="showRestoreDialog()"
+          >
+          восстановить
+          </button>
+        </ng-template>
+      </div>
+      <div class="project__settings-controls">
+        <p class="form__label">Удаление</p>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="showInputDialog()"
+        >
+        удалить
+        </button>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

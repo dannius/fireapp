@@ -18,7 +18,7 @@ export class PasswordResetComponent implements OnInit {
   public isLoading: boolean;
   public isInvalidPassword: boolean;
 
-  private config = {
+  private snackBarConfig = {
     duration: 2000
   };
 
@@ -76,7 +76,7 @@ export class PasswordResetComponent implements OnInit {
       .resetPassword(this.user.id, this.form.value)
       .subscribe((user) => {
         if (user) {
-          this.snackBar.open('Пароль обновлен', '', this.config);
+          this.snackBar.open('Пароль обновлен', '', this.snackBarConfig);
           this.resetForm();
         } else {
           this.isInvalidPassword = true;

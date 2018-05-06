@@ -1,0 +1,12 @@
+.section {
+  width: 100%;
+  margin: 20px;
+
+  &_md {
+    max-width: 350px;
+  }
+
+  &_lg {
+    max-width: 550px;
+  }
+}

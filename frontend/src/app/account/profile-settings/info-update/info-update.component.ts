@@ -16,7 +16,7 @@ export class InfoUpdateComponent implements OnInit {
   public isLoading: boolean;
   public user: User;
 
-  private config = {
+  private snackBarConfig = {
     duration: 2000
   };
 
@@ -51,9 +51,9 @@ export class InfoUpdateComponent implements OnInit {
       .subscribe((user) => {
         if (user) {
           this.authService.setUser(user);
-          this.snackBar.open('Информация обновлена', '', this.config);
+          this.snackBar.open('Информация обновлена', '', this.snackBarConfig);
         } else {
-          this.snackBar.open('Что то пошло не так', '', this.config);
+          this.snackBar.open('Что то пошло не так', '', this.snackBarConfig);
         }
 
         this.form.markAsUntouched();
