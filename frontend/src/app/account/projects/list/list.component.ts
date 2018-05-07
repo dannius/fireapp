@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
+import { SpecialProjectService } from '@app/account/projects/special-project.service';
 import { ProjectWithUsers } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
@@ -14,19 +15,30 @@ export class ProjectListComponent implements OnInit {
 
   public projects: ProjectWithUsers[];
   public archivedProjects: ProjectWithUsers[];
+  public specialProjects: ProjectWithUsers[];
+
+  private allProjects: ProjectWithUsers[];
+  private specialProjectIds: Number[];
 
   constructor(
     private dialog: MatDialog,
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
-    private pubSubService: PubSubService
+    private pubSubService: PubSubService,
+    private specialProjectService: SpecialProjectService
   ) { }
 
   ngOnInit() {
-    this.route.data.subscribe(({ projects }) => {
-      this.sortProjects(projects);
-    });
+
+    this.allProjects = this.route.snapshot.data.projects;
+
+    this.specialProjectService
+      .specialProjectIds
+      .subscribe((ids) => {
+        this.specialProjectIds = ids;
+        this.sortProjects(this.allProjects);
+      });
 
     this.pubSubService.setProject(null);
   }
@@ -35,17 +47,21 @@ export class ProjectListComponent implements OnInit {
     this.projectService
       .filteredListWithUsers(substring)
       .subscribe((projects) => {
-        this.sortProjects(projects);
+        this.allProjects = projects;
+        this.sortProjects(this.allProjects);
       });
   }
 
   private sortProjects(projects) {
     this.projects = [];
     this.archivedProjects = [];
+    this.specialProjects = [];
 
     projects.forEach((project) => {
       if (project.archived) {
         this.archivedProjects.push(project);
+      } else if (this.specialProjectIds.includes(project.id)) {
+        this.specialProjects.push(project);
       } else {
         this.projects.push(project);
       }

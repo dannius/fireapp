@@ -6,17 +6,41 @@
     </button>
   </div>
 
-  <div class="project-list">
-    <a
-      *ngFor="let project of projects"
-      [routerLink]="[project.id]"
-      class="project-item"
-    >
-      <app-project-item class="project-item__outer" [project]="project"></app-project-item>
-    </a>
+  <div *ngIf="specialProjects?.length">
+    <div class="headline">
+      <h1 class="headline__title headline__lines headline_transparent">Избранные</h1>
+    </div>
+  
+    <div class="project-list">
+      <a
+        *ngFor="let project of specialProjects"
+        [routerLink]="[project.id]"
+        class="project-item"
+      >
+        <app-project-item class="project-item__outer" [special]="true" [project]="project"></app-project-item>
+      </a>
+    </div>
   </div>
 
-  <div *ngIf="archivedProjects && archivedProjects.length">
+  <div *ngIf="projects?.length">
+    <div class="headline">
+      <h1 class="headline__title headline__lines headline_transparent">
+        {{specialProjects?.length ? "Остальные" : "Все проекты"}}
+      </h1>
+    </div>
+
+    <div class="project-list">
+      <a
+        *ngFor="let project of projects"
+        [routerLink]="[project.id]"
+        class="project-item"
+      >
+        <app-project-item class="project-item__outer" [project]="project"></app-project-item>
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="archivedProjects?.length">
     <div class="headline">
       <h1 class="headline__title headline__lines headline_transparent">Архивированные</h1>
     </div>

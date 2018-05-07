@@ -3,13 +3,14 @@ import '@app/shared/rxjs-operators';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProjectService } from '@app/account/projects/project.service';
+import { SpecialProjectService } from '@app/account/projects/special-project.service';
 import { AuthService } from '@app/core/auth';
 import { ProjectWithUsers, User } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { Observable } from 'rxjs/Observable';
-import { ProjectService } from '@app/account/projects/project.service';
 
 @Component({
   selector: 'app-project-management',
@@ -31,6 +32,7 @@ export class ManagementComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private projectService: ProjectService,
+    private specialProjectService: SpecialProjectService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
@@ -108,7 +110,6 @@ export class ManagementComponent implements OnInit {
         this.projectService
           .unarchive(this.project.id)
           .subscribe((project) => {
-            console.log(project);
             if (!project.archived) {
               this.project.archived = false;
               this.snackBar.open(`Проект "${this.project.name}" восстановлен`, '', this.snackBarConfig);
@@ -144,12 +145,19 @@ export class ManagementComponent implements OnInit {
 
         this.projectService
           .delete(this.project.id)
-          .subscribe(() => {
-            const snackBarDelay = 500;
-            this.router.navigate(['/', 'account', 'projects']);
-            setTimeout(() => {
-              this.snackBar.open(`Проект "${this.project.name}" удален`, '', this.snackBarConfig);
-            }, snackBarDelay);
+          .subscribe((project) => {
+            if (project) {
+              this.specialProjectService.removeFromSpecialIds(this.project);
+              const snackBarDelay = 500;
+              this.router.navigate(['/', 'account', 'projects']);
+
+              setTimeout(() => {
+                this.snackBar.open(`Проект "${this.project.name}" удален`, '', this.snackBarConfig);
+              }, snackBarDelay);
+            } else {
+              this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
+            }
+
           });
       });
   }
