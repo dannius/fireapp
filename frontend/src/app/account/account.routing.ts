@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { EventListComponent } from '@app/account/event/event-list/event-list.component';
 import { ProfileSettingsComponent } from '@app/account/profile-settings/profile-settings.component';
 
 export const AccountRoutes: Routes = [
@@ -7,10 +6,11 @@ export const AccountRoutes: Routes = [
     path: '',
     children: [{
       path: '',
-      redirectTo: 'events'
+      pathMatch: 'full',
+      redirectTo: 'projects'
     }, {
-      path: 'events',
-      component: EventListComponent
+      path: 'projects',
+      loadChildren: './projects/project.module#ProjectModule'
     }, {
       path: 'settings',
       component: ProfileSettingsComponent

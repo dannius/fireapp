@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { UserService } from '@app/account/user.service';
 import { AuthService } from '@app/core/auth';
 import { FormHelperService } from '@app/shared';
-import { User } from '@app/core/models/user';
+import { User } from '@app/core/models';
 import { EqualValuesValidation, PasswordValidation } from '@app/shared';
 
 
@@ -18,7 +18,7 @@ export class PasswordResetComponent implements OnInit {
   public isLoading: boolean;
   public isInvalidPassword: boolean;
 
-  private config = {
+  private snackBarConfig = {
     duration: 2000
   };
 
@@ -76,7 +76,7 @@ export class PasswordResetComponent implements OnInit {
       .resetPassword(this.user.id, this.form.value)
       .subscribe((user) => {
         if (user) {
-          this.snackBar.open('Пароль обновлен', '', this.config);
+          this.snackBar.open('Пароль обновлен', '', this.snackBarConfig);
           this.resetForm();
         } else {
           this.isInvalidPassword = true;

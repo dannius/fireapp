@@ -4,15 +4,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatCardModule,
+  MatDialogModule,
+  MatDividerModule,
   MatIconModule,
   MatInputModule,
   MatMenuModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
+  MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
 } from '@angular/material';
+import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
+import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
+import { SearchFormComponent } from '@app/shared/search/search.component';
 
 @NgModule({
   imports: [
@@ -29,6 +35,9 @@ import {
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatSelectModule,
   ],
   exports: [
     CommonModule,
@@ -44,7 +53,25 @@ import {
     MatIconModule,
     MatMenuModule,
     MatSnackBarModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatSelectModule,
+
+    /////////////
+    // Components
+    /////////////
+    SearchFormComponent,
+    InputDialogComponent
+  ],
+  declarations: [
+    ConfirmationDialogComponent,
+    SearchFormComponent,
+    InputDialogComponent
+  ],
+  entryComponents: [
+    ConfirmationDialogComponent,
+    InputDialogComponent
   ]
 })
 
-export class SharedModule {}
+export class SharedModule { }

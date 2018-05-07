@@ -5,5 +5,5 @@ defmodule FireappWeb.RegistrationView do
   def render("create-successful.json", %{user: user, token: jwt}), do:
     %{user: Map.take(user, @user_attributes), token: jwt}
 
-  def render("create-fail.json", _), do: ''
+  def render("create-fail.json", _), do: ""
 end

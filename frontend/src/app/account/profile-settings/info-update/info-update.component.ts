@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '@app/account/user.service';
 import { AuthService } from '@app/core/auth';
-import { User } from '@app/core/models/user';
+import { User } from '@app/core/models';
 
 
 @Component({
@@ -16,7 +16,7 @@ export class InfoUpdateComponent implements OnInit {
   public isLoading: boolean;
   public user: User;
 
-  private config = {
+  private snackBarConfig = {
     duration: 2000
   };
 
@@ -47,13 +47,13 @@ export class InfoUpdateComponent implements OnInit {
 
     this
       .userService
-      .updateAttributes(this.user.id, this.form.value)
+      .update(this.user.id, this.form.value)
       .subscribe((user) => {
         if (user) {
           this.authService.setUser(user);
-          this.snackBar.open('Информация обновлена', '', this.config);
+          this.snackBar.open('Информация обновлена', '', this.snackBarConfig);
         } else {
-          this.snackBar.open('Что то пошло не так', '', this.config);
+          this.snackBar.open('Что то пошло не так', '', this.snackBarConfig);
         }
 
         this.form.markAsUntouched();

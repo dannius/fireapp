@@ -1,0 +1,20 @@
+<mat-card class="project-item__inner">
+  <button 
+    *ngIf="!project.archived"
+    mat-icon-button
+    (click)="toggleSpecial($event)"
+    class="project-item__btn-star"
+    [ngClass]="{'project-item__btn-star_active': special}"
+  >
+    <mat-icon>{{ special ? "star" : "star_border" }}</mat-icon>
+  </button>
+  <mat-card-title class="text-center">{{project.name}}</mat-card-title>
+  <mat-card-content>
+    <mat-card-subtitle>Участники:</mat-card-subtitle>
+    <ul class="project-item__user-list">
+      <li *ngFor="let user of project.users" class="project-item__user-item">
+        {{user.name}}
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>

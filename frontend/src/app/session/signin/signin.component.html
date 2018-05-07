@@ -1,5 +1,8 @@
 <div class="session">
-  <h1 class="headline headline_white">Вход в личный кабинет</h1>
+  <div class="headline">
+    <h1 class="headline__title headline_white text-center">Вход в личный кабинет</h1>
+  </div>
+
   <div class="session__content">
     <mat-card>
       <mat-progress-bar class="loader loader_absolute" *ngIf="!form || isLoading" mode="indeterminate"></mat-progress-bar>
@@ -17,7 +20,7 @@
             Неверный логин или пароль
           </mat-error>
 
-          <button mat-raised-button color="primary" type="submit" class="form__submit-btn">Войти</button>
+          <button mat-raised-button color="primary" type="submit" class="form__btn-submit">Войти</button>
           <a class="session__redirect-link" [routerLink]="['/session/signup']">Перейти на страницу регистрации</a>
         </form>
       </mat-card-content>

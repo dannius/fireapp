@@ -1,0 +1,10 @@
+<div *ngIf="project" class="section section_lg">
+  <div *ngIf="project.archived" class="headline">
+    <h1 class="headline__title">Проект архивирован</h1>
+    <h3 class="headline__subtitle">Для дальньйшего функционирования необходимо разархивировать проект</h3>
+  </div>
+
+  <app-project-team [project]="project"></app-project-team>
+  <app-project-update *ngIf="isOwnership()" [project]="project"></app-project-update>
+  <app-project-settings *ngIf="isOwnership()" [project]="project"></app-project-settings>
+</div>

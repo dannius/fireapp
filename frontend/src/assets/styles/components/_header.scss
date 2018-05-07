@@ -1,6 +1,90 @@
 .header {
+  width: 100%;
+  background-color: $material-primary;
   display: flex;
   align-items: center;
+  height: 54px !important;
+
+  &:not(.header_fake) {
+    box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),
+                0 6px 10px 0 rgba(0,0,0,.14),
+                0 1px 18px 0 rgba(0,0,0,.12);
+  }
+
+  &_fake {
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      z-index: -1;
+      height: 250px;
+      width: 100%;
+      background-color: $material-primary;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      display: block;
+      height: 54px;
+      width: 100%;
+      box-shadow: 0 3px 5px -1px rgba(0,0,0,.2),
+        0 6px 10px 0 rgba(0,0,0,.14),
+        0 1px 18px 0 rgba(0,0,0,.12);
+    }
+  }
+
+  &__nav {
+    display: flex;
+    margin-left: 20px;
+  }
+
+  &__togglers {
+    display: flex;
+    align-items: center;
+  }
+
+  &__home-icon {
+    width: 40px;
+    display: inline-flex;
+    justify-content: center;
+  }
+
+  &__controls {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+
+  &_slim {
+    display: block;
+  }
+
+  &__link {
+    &_active {
+      color: #C5CAE9 !important;
+    }
+  }
+
+  &__selector {
+    font-size: 14px;
+    width: 150px;
+    margin-left: 20px;
+
+    .mat-form-field-ripple {
+      background-color: transparent;
+    }
+
+    .mat-input-underline {
+      background-color: $sapphire;
+    }
+
+    .mat-select-value-text,
+    .mat-select-arrow {
+      color: $sapphire !important;
+    }
+  }
 
   &__profile {
     display: flex;

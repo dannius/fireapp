@@ -1,0 +1,17 @@
+<div class="dialog__form">
+  <p class="dialog__label">{{data.title}}</p>
+  <div class="dialog__controls">
+    <button mat-raised-button
+      class="dialog__btn-close"
+      color="warn"
+      (click)="dialogRef.close(false)">
+      {{btnTitle.close}}
+    </button>
+    <button mat-raised-button
+      class="dialog__btn-create"
+      color="primary"
+      (click)="dialogRef.close(true)">
+      {{btnTitle.confirm}}
+    </button>
+  </div>
+</div>

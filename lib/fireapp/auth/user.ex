@@ -8,6 +8,8 @@ defmodule Fireapp.User do
     field :password, :string, virtual: true
     field :password_hash, :string
 
+    many_to_many :projects, Fireapp.Project, join_through: "users_projects"
+
     timestamps()
   end
 

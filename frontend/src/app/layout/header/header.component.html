@@ -1,15 +1,69 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <button mat-icon-button (click)="toggleSidenav.emit()">
-      <mat-icon>menu</mat-icon>
-    </button>
+<mat-toolbar class="header" color="primary">
+    <div class="header__controls">
+      <div class="header__togglers">
+        <button *ngIf="!!project; else homeIcon" mat-icon-button (click)="toggleSidenav.emit()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <ng-template #homeIcon>
+          <i class="header__home-icon"><mat-icon>home</mat-icon></i>
+        </ng-template>
+
+        <mat-form-field class="header__selector">
+          <mat-select [value]="project?.id" (selectionChange)="selectProject($event)">
+            <mat-option *ngFor="let p of specialProjects" [value]="p.id">{{p.name}}</mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let p of commonProjects" [value]="p.id">{{p.name}}</mat-option>
+            <ng-container *ngIf="project?.archived">
+              <mat-divider></mat-divider>
+              <mat-option *ngFor="let p of archivedProjects" [value]="p.id">{{p.name}}</mat-option>
+            </ng-container>
+          </mat-select>
+          <mat-label *ngIf="!project">проект</mat-label>
+        </mat-form-field>
+      </div>
+
+      <div class="header__nav">
+        <a mat-button
+          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActive]="'header__link_active'"
+          [routerLink]="['/', 'account', 'projects']"
+        >
+          Проекты
+        </a>
+
+        <a mat-button
+          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActive]="'header__link_active'"
+          [routerLink]="['/', 'account', 'projects', 'management']"
+        >
+          Пользователи
+        </a>
+        <div *ngIf="!!project" class="header__nav_hidden">
+          <a mat-button
+            [routerLinkActiveOptions]="{exact: true}"
+            [routerLinkActive]="'header__link_active'"
+            [routerLink]="['/', 'account', 'projects', project.id]"
+          >
+            Доска
+          </a>
+  
+          <a mat-button
+            [routerLinkActiveOptions]="{exact: true}"
+            [routerLinkActive]="'header__link_active'"
+            [routerLink]="['/', 'account', 'projects', project.id, 'management']"
+          >
+            Управление
+          </a>
+        </div>
+      </div>
+    </div>
 
     <div class="header__profile">
       <span class="header__profile-name">{{ login }}</span>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
+      <button mat-icon-button [matMenuTriggerFor]="menuSettings">
         <mat-icon>more_vert</mat-icon>
       </button>
-      <mat-menu #menu="matMenu">
+      <mat-menu #menuSettings>
         <a mat-menu-item [routerLink]="['/account/settings']">
           <mat-icon>settings</mat-icon>
           <span>Настройки</span>
@@ -20,5 +74,4 @@
         </button>
       </mat-menu>
     </div>
-  </mat-toolbar-row>
 </mat-toolbar>
