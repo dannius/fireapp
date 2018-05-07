@@ -9,29 +9,52 @@
         </ng-template>
 
         <mat-form-field class="header__selector">
-          <mat-select [value]="project && project.id" (selectionChange)="selectProject($event)">
-            <mat-option *ngFor="let project of projects" [value]="project.id">{{project.name}}</mat-option>
+          <mat-select [value]="project?.id" (selectionChange)="selectProject($event)">
+            <mat-option *ngFor="let p of specialProjects" [value]="p.id">{{p.name}}</mat-option>
+            <mat-divider></mat-divider>
+            <mat-option *ngFor="let p of commonProjects" [value]="p.id">{{p.name}}</mat-option>
+            <ng-container *ngIf="project?.archived">
+              <mat-divider></mat-divider>
+              <mat-option *ngFor="let p of archivedProjects" [value]="p.id">{{p.name}}</mat-option>
+            </ng-container>
           </mat-select>
           <mat-label *ngIf="!project">проект</mat-label>
         </mat-form-field>
       </div>
 
-      <div *ngIf="!!project" class="header__nav">
+      <div class="header__nav">
         <a mat-button
           [routerLinkActiveOptions]="{exact: true}"
           [routerLinkActive]="'header__link_active'"
-          [routerLink]="['/', 'account', 'projects', project.id]"
+          [routerLink]="['/', 'account', 'projects']"
         >
-          Доска
+          Проекты
         </a>
 
         <a mat-button
           [routerLinkActiveOptions]="{exact: true}"
           [routerLinkActive]="'header__link_active'"
-          [routerLink]="['/', 'account', 'projects', project.id, 'management']"
+          [routerLink]="['/', 'account', 'projects', 'management']"
         >
-          Управление
+          Пользователи
         </a>
+        <div *ngIf="!!project" class="header__nav_hidden">
+          <a mat-button
+            [routerLinkActiveOptions]="{exact: true}"
+            [routerLinkActive]="'header__link_active'"
+            [routerLink]="['/', 'account', 'projects', project.id]"
+          >
+            Доска
+          </a>
+  
+          <a mat-button
+            [routerLinkActiveOptions]="{exact: true}"
+            [routerLinkActive]="'header__link_active'"
+            [routerLink]="['/', 'account', 'projects', project.id, 'management']"
+          >
+            Управление
+          </a>
+        </div>
       </div>
     </div>
 

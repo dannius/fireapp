@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <div *ngIf="projects?.length">
+  <div *ngIf="commonProjects?.length">
     <div class="headline">
       <h1 class="headline__title headline__lines headline_transparent">
         {{specialProjects?.length ? "Остальные" : "Все проекты"}}
@@ -31,7 +31,7 @@
 
     <div class="project-list">
       <a
-        *ngFor="let project of projects"
+        *ngFor="let project of commonProjects"
         [routerLink]="[project.id]"
         class="project-item"
       >

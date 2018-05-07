@@ -29,7 +29,7 @@ export class UserService {
       .catch((_error) => Observable.of(null));
   }
 
-  public updateAttributes(id: number, userParams: any): Observable<User> {
+  public update(id: number, userParams: any): Observable<User> {
     const params = {
       user: {
         name: userParams.name

@@ -35,6 +35,11 @@
     }
   }
 
+  &__nav {
+    display: flex;
+    margin-left: 20px;
+  }
+
   &__togglers {
     display: flex;
     align-items: center;
@@ -47,13 +52,9 @@
   }
 
   &__controls {
-    max-width: 450px;
     display: flex;
-    justify-content: space-between;
     height: 100%;
-    width: 100%;
     align-items: center;
-
   }
 
   &_slim {

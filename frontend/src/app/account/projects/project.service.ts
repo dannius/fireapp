@@ -71,6 +71,20 @@ export class ProjectService {
       .catch((err) => Observable.of(err.status));
   }
 
+  public update(id: number, projectParams: any): Observable<Project> {
+    const params = {
+      project: {
+        name: projectParams.name
+      }
+    };
+
+    return this
+      .http
+      .put<any>(`${environment.apiUrl}/api/projects/${id}`, params)
+      .map(({ project }) => Project.fromJson(project))
+      .catch((_error) => Observable.of(null));
+  }
+
   public delete(id: number): Observable<Project> {
     return this
       .http

@@ -1,0 +1,27 @@
+<mat-card class="project__settings">
+  <mat-card-title>Редактировать проект</mat-card-title>
+  <mat-card-content>
+    <form *ngIf="form" [formGroup]="form" class="form" (ngSubmit)="updateInfo()">
+      <mat-form-field>
+        <input formControlName="name" matInput placeholder="Имя">
+      </mat-form-field>
+
+      <mat-error 
+        *ngIf="form.touched && form.controls.name.value === project.name"
+        class="form__error mat-text-warn">
+        Нечего обновлять
+      </mat-error>
+
+      <div>
+        <button mat-raised-button
+          class="form__btn-submit"
+          color="primary"
+          type="submit"
+          [disabled]="project?.archived"
+        >
+        Обновить
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

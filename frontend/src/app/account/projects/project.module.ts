@@ -4,11 +4,13 @@ import { ProjectItemComponent } from '@app/account/projects/item/item.component'
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 import { ManagementComponent } from '@app/account/projects/management/management.component';
+import { ProjectSettingsComponent } from '@app/account/projects/management/project-settings/project-settings.component';
+import { ProjectTeamComponent } from '@app/account/projects/management/project-team/project-team.component';
+import { ProjectUpdateComponent } from '@app/account/projects/management/project-update/project-update.component';
 import { ProjectRoutes } from '@app/account/projects/project.routing';
 import { ProjectService } from '@app/account/projects/project.service';
 import { ProjectShowComponent } from '@app/account/projects/show/show.component';
 import { ProjectShowResolver } from '@app/account/projects/show/show.resolver';
-import { SpecialProjectService } from '@app/account/projects/special-project.service';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
 
@@ -18,6 +20,9 @@ import { SharedModule } from '@app/shared';
     ProjectItemComponent,
     ProjectShowComponent,
     ManagementComponent,
+    ProjectTeamComponent,
+    ProjectSettingsComponent,
+    ProjectUpdateComponent,
 ],
   imports: [
     RouterModule.forChild(ProjectRoutes),
@@ -28,12 +33,14 @@ import { SharedModule } from '@app/shared';
     ProjectListComponent,
     ProjectItemComponent,
     ProjectShowComponent,
-    ManagementComponent
+    ManagementComponent,
+    ProjectTeamComponent,
+    ProjectSettingsComponent,
+    ProjectUpdateComponent,
   ],
   providers: [
     UserService,
     ProjectService,
-    SpecialProjectService,
 
     /////////////
     // RESOLVERS

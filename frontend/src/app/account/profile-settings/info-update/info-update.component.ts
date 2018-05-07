@@ -47,7 +47,7 @@ export class InfoUpdateComponent implements OnInit {
 
     this
       .userService
-      .updateAttributes(this.user.id, this.form.value)
+      .update(this.user.id, this.form.value)
       .subscribe((user) => {
         if (user) {
           this.authService.setUser(user);

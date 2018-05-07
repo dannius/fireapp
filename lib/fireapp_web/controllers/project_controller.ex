@@ -2,8 +2,7 @@ defmodule FireappWeb.ProjectController do
   use FireappWeb, :controller
   alias Fireapp.{ProjectContext, Repo}
 
-  plug :scrub_params, "project" when action in [:create]
-  plug :scrub_params, "project_params" when action in [:update]
+  plug :scrub_params, "project" when action in [:create, :update]
   plug :scrub_params, "user_id" when action in [:bind, :unbind]
 
   def action(conn, _) do
@@ -56,7 +55,7 @@ defmodule FireappWeb.ProjectController do
     end
   end
 
-  def update(conn, %{"id" => id, "project_params" => params}, current_user) do
+  def update(conn, %{"id" => id, "project" => params}, current_user) do
     case ProjectContext.update_project(id, params, current_user) do
       :conflict ->
         conn

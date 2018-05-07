@@ -13,11 +13,11 @@ import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component'
 })
 export class ProjectListComponent implements OnInit {
 
-  public projects: ProjectWithUsers[];
+  public commonProjects: ProjectWithUsers[];
   public archivedProjects: ProjectWithUsers[];
   public specialProjects: ProjectWithUsers[];
 
-  private allProjects: ProjectWithUsers[];
+  private projects: ProjectWithUsers[];
   private specialProjectIds: Number[];
 
   constructor(
@@ -30,14 +30,13 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-    this.allProjects = this.route.snapshot.data.projects;
+    this.projects = this.route.snapshot.data.projects;
 
     this.specialProjectService
       .specialProjectIds
       .subscribe((ids) => {
         this.specialProjectIds = ids;
-        this.sortProjects(this.allProjects);
+        this.sortProjects(this.projects);
       });
 
     this.pubSubService.setProject(null);
@@ -47,13 +46,13 @@ export class ProjectListComponent implements OnInit {
     this.projectService
       .filteredListWithUsers(substring)
       .subscribe((projects) => {
-        this.allProjects = projects;
-        this.sortProjects(this.allProjects);
+        this.projects = projects;
+        this.sortProjects(this.projects);
       });
   }
 
   private sortProjects(projects) {
-    this.projects = [];
+    this.commonProjects = [];
     this.archivedProjects = [];
     this.specialProjects = [];
 
@@ -63,7 +62,7 @@ export class ProjectListComponent implements OnInit {
       } else if (this.specialProjectIds.includes(project.id)) {
         this.specialProjects.push(project);
       } else {
-        this.projects.push(project);
+        this.commonProjects.push(project);
       }
     });
   }
