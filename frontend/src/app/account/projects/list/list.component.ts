@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
 import { ProjectWithUsers } from '@app/core/models';
-import { PubSubService } from '@app/core/pub-sub.service';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 
 @Component({
@@ -25,7 +24,6 @@ export class ProjectListComponent implements OnInit {
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
-    private pubSubService: PubSubService,
     private specialProjectService: SpecialProjectService
   ) { }
 
@@ -38,8 +36,6 @@ export class ProjectListComponent implements OnInit {
         this.specialProjectIds = ids;
         this.sortProjects(this.projects);
       });
-
-    this.pubSubService.setProject(null);
   }
 
   public filterProjects(substring: string) {
