@@ -12,7 +12,7 @@ defmodule Fireapp.BindControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, guest.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: [project.id]))
 
       assert response.status == Status.code(:created)
     end
@@ -20,10 +20,10 @@ defmodule Fireapp.BindControllerTest do
     test "Guest already exist in project", %{conn_with_token: conn_with_token, current_user: current_user, guest: guest} do
       %{project: project} = create_project_with_owner(current_user)
 
-      UserProject.add_user_to_project(guest, project)
+      UserProject.add_user_to_project(guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, guest.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: [project.id]))
 
       assert response.status == Status.code(:conflict)
     end
@@ -32,66 +32,53 @@ defmodule Fireapp.BindControllerTest do
       %{project: project} = create_project_with_owner(guest)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, current_user.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :bind, current_user.id, project_ids: [project.id]))
 
-      assert response.status == Status.code(:unauthorized)
+      assert response.status == Status.code(:conflict)
     end
-
   end
-
 
   describe "unbind" do
     setup [:create_user, :login_user, :create_guest_user]
 
     test "Successful bind then unbind user-project relationship", %{conn_with_token: conn_with_token, current_user: current_user, guest: guest} do
       %{project: project} = create_project_with_owner(current_user)
-      UserProject.add_user_to_project(guest, project)
+      UserProject.add_user_to_project(guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, guest.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: [project.id]))
 
       assert response.status == Status.code(:ok)
-    end
-
-    test "Unsuccessful unbind, archived", %{conn_with_token: conn_with_token, current_user: current_user, guest: guest} do
-      %{project: project} = create_project_with_owner(current_user)
-      UserProject.add_user_to_project(guest, project)
-      project = archive_project(project)
-
-      response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, guest.id, project_id: project.id))
-
-      assert response.status == Status.code(:unprocessable_entity)
     end
 
     test "Unsuccessful unbind, from not exist project", %{conn_with_token: conn_with_token, guest: guest} do
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, guest.id, project_id: undefined_id()))
+      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: [undefined_id()]))
 
-      assert response.status == Status.code(:unprocessable_entity)
+      assert response.status == Status.code(:conflict)
     end
 
     test "Can not unbind owner", %{conn_with_token: conn_with_token, current_user: current_user} do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, current_user.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :unbind, current_user.id, project_ids: [project.id]))
 
-      assert response.status == Status.code(:unprocessable_entity)
+      assert response.status == Status.code(:conflict)
     end
 
     test "Guest can not unbind another guest", 
       %{conn_with_token: conn_with_token, current_user: current_user, guest: guest, another_guest: another_guest} do
 
       %{project: project} = create_project_with_owner(guest)
-      UserProject.add_user_to_project(current_user, project)
-      UserProject.add_user_to_project(another_guest, project)
+      UserProject.add_user_to_project(current_user.id, project.id)
+      UserProject.add_user_to_project(another_guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, another_guest.id, project_id: project.id))
+      |> get(bind_path(conn_with_token, :unbind, another_guest.id, project_ids: [project.id]))
 
-      assert response.status == Status.code(:unprocessable_entity)
+      assert response.status == Status.code(:conflict)
     end
   end
 

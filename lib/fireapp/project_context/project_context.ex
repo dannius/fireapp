@@ -1,6 +1,6 @@
 defmodule Fireapp.ProjectContext do
 
-  alias Fireapp.{Repo, User, Project, UserProject}
+  alias Fireapp.{Repo, Project}
 
   def create_project(project_params, owner_id) do
     project_params = project_params
@@ -68,55 +68,6 @@ defmodule Fireapp.ProjectContext do
         |> Repo.update!()
         {:ok, project}
     end
-  end
-
-  def bind_user_to_project(user_id, project_id, current_user) do
-    project = getOneIfOwner(project_id, current_user)
-
-    case project && project.archived do
-      nil ->
-        :unauthorized
-
-      true ->
-        :conflict
-
-      false ->
-        user = Repo.get(User, user_id)
-        case UserProject.add_user_to_project(user, project) do
-          {:ok, _} ->
-            :ok
-          {:error, _} ->
-            :conflict
-          :already_exist ->
-            :conflict
-        end
-    end
-  end
-
-  def unbind_user_from_project(user_id, project_id, current_user) do
-    user = Repo.get(User, user_id)
-    project = getOne(project_id, user)
-
-    if (
-      #project does not exist
-      project == nil || 
-      #can not delete owner, can not modify archived
-      user.id == project.owner_id || project.archived || 
-      #owner can unbind every user, guest can unbind yourself
-      current_user.id != project.owner_id && current_user.id != user.id 
-    ) do
-      :unprocessable_entity
-    else
-      case UserProject.delete_user_from_project(user, project) do
-        {:ok, _} ->
-          :ok
-        {:error, _} ->
-          :unprocessable_entity
-        :not_exist ->
-          :unprocessable_entity
-      end
-    end
-
   end
 
   def getOne(id, current_user) do
