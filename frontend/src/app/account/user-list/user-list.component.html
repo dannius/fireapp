@@ -1,3 +1,75 @@
-<p>
-  user-list works!
-</p>
+<div class="container container__column">
+  <div class="user__section-controls">
+    <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по пользователям"></app-search>
+  </div>
+
+  <mat-card>
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef> E-Mail </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.email}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Имя </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.name || '-'}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="commonProjects">
+        <mat-header-cell class="user__project-header-cell" *matHeaderCellDef> Общие проекты </mat-header-cell>
+        <mat-cell class="user__project-cell" *matCellDef="let row">
+          <ul *ngIf="row.projects?.length; else emptyCommonProjects" class="user__project-list">
+            <li *ngFor="let project of row.projects" class="user__project-item">{{project.name}}</li>
+          </ul>
+          <ng-template #emptyCommonProjects>-</ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="yoursProjects">
+        <mat-header-cell class="user__project-header-cell" *matHeaderCellDef> Ваши проекты </mat-header-cell>
+        <mat-cell class="user__project-cell" *matCellDef="let row">
+          <ul *ngIf="userHelper[row.id]?.selectedNames?.length; else emptyYoursProjects" class="user__project-list">
+            <li *ngFor="let name of userHelper[row.id]?.selectedNames" class="user__project-item">{{name}}</li>
+          </ul>
+          <ng-template #emptyYoursProjects>-</ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <mat-form-field *ngIf="!userHelper[row.id]?.isLoading; else spinner" class="user__project-select-field">
+            <mat-select
+              [value]="userHelper[row.id].selectedIds"
+              [placeholder]="userHelper[row.id]?.selectedNames?.length ? '' : 'добавить'"
+              (selectionChange)="toggleProject($event, row.id)"
+              (openedChange)="togglePanel($event, row.id, userHelper[row.id]?.selectedIds)"
+              multiple
+            >
+              <mat-select-trigger *ngIf="userHelper[row.id]">
+                {{userHelper[row.id].selectedNames?.length ? userHelper[row.id].selectedNames[0] : ''}}
+                <span *ngIf="userHelper[row.id].selectedNames?.length > 1">(+{{userHelper[row.id].selectedNames.length - 1}})</span>
+              </mat-select-trigger>
+
+              <mat-option *ngFor="let project of row.commonProjects" [value]="project.id">{{project.name}}</mat-option>
+              <mat-optgroup disabled label="архивированные">
+                <mat-option *ngFor="let project of row.archivedProjects" [value]="project.id">{{project.name}}</mat-option>
+              </mat-optgroup>
+            </mat-select>
+          </mat-form-field>
+          <ng-template #spinner><mat-spinner class="user__project-spinner"></mat-spinner></ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator
+      [length]="40"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+    >
+    </mat-paginator>
+  </mat-card>
+
+</div>

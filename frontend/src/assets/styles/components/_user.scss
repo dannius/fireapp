@@ -1,0 +1,42 @@
+.user {
+  &__section {
+    &-controls {
+      margin: 20px auto;
+    }
+  }
+
+  &__project-list {
+    list-style: none;
+    padding: 0 5px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__project-spinner {
+    width: 35px !important;
+    height: 35px !important;
+    margin: auto;
+
+    svg {
+      width: 35px !important;
+      height: 35px !important;
+    }
+  }
+
+  &__project-select-field {
+    height: 48px !important;
+  }
+
+  &__project-item {
+    margin: 2px 4px;
+
+    &:not(:last-child)::after {
+      content: ',';
+    }
+  }
+
+  &__project-cell,
+  &__project-header-cell {
+    flex-grow: 2 !important;
+  }
+}
