@@ -4,7 +4,8 @@ import { AccountRoutes } from '@app/account/account.routing';
 import { InfoUpdateComponent, PasswordResetComponent, ProfileSettingsComponent } from '@app/account/profile-settings';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
-import { UserListComponent } from './user-list/user-list.component';
+import { UserListComponent } from '@app/account/user-list/user-list.component';
+import { BindingService } from '@app/account/user-list/binding.service';
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { UserListComponent } from './user-list/user-list.component';
   ],
   providers: [
     UserService,
+    BindingService
   ]
 })
 export class AccountModule { }

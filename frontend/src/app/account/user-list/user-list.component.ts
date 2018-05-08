@@ -1,3 +1,5 @@
+import '@app/shared/rxjs-operators';
+
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { UserDataSource } from '@app/account/user-list/user.data-source';
@@ -5,8 +7,9 @@ import { UserService } from '@app/account/user.service';
 import { FormControl } from '@angular/forms';
 import { ProjectService } from '@app/account/projects/project.service';
 import { Project } from '@app/core/models';
-import { Observable } from 'rxjs/observable';
+import { Observable } from 'rxjs/Observable';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { BindingService } from '@app/account/user-list/binding.service';
 
 @Component({
   selector: 'app-user-list',
@@ -22,15 +25,12 @@ export class UserListComponent implements OnInit {
   public pageSize = 10;
 
   private projectList: Project[];
-  private bindUnbindForm = {
-    selectedOnOpen: [],
-    selectedOnClose: []
-  };
 
   constructor(
     private userService: UserService,
     private pubSubService: PubSubService,
-    private projectService: ProjectService
+    private projectService: ProjectService,
+    private bindingService: BindingService
   ) { }
 
   ngOnInit() {
@@ -66,50 +66,49 @@ export class UserListComponent implements OnInit {
   }
 
   public togglePanel(openAction, userId, projectIds) {
-    let unbindingProjects = [];
-    let bindingProjects = [];
+    let unbindingProjectIds = [];
+    let bindingProjectIds = [];
 
     if (openAction) {
-      this.bindUnbindForm.selectedOnOpen = projectIds;
+      this.userHelper[userId].selectedOnOpen = projectIds;
     } else {
-      this.bindUnbindForm.selectedOnClose = projectIds;
-      bindingProjects = this.getBindingProjectsIds(this.bindUnbindForm.selectedOnOpen, this.bindUnbindForm.selectedOnClose);
-      unbindingProjects = this.getUnbindingProjectsIds(this.bindUnbindForm.selectedOnOpen, this.bindUnbindForm.selectedOnClose);
+      this.userHelper[userId].selectedOnClose = projectIds;
+      bindingProjectIds = this.getBindingProjectsIds(this.userHelper[userId].selectedOnOpen, this.userHelper[userId].selectedOnClose);
+      unbindingProjectIds = this.getUnbindingProjectsIds(this.userHelper[userId].selectedOnOpen, this.userHelper[userId].selectedOnClose);
     }
 
-    if (openAction || !(bindingProjects.length || unbindingProjects.length)) {
+    if (openAction || !(bindingProjectIds.length || unbindingProjectIds.length)) {
       return;
     }
 
-    this.userHelper[userId].isLoading = true;
+    this.userHelper[userId].isLoading = false;
 
-    if (bindingProjects.length) {
-      console.log(bindingProjects);
+    if (bindingProjectIds.length && unbindingProjectIds.length) {
+      Observable
+        .forkJoin(
+          this.bindingService.bind(userId, bindingProjectIds),
+          this.bindingService.unbind(userId, unbindingProjectIds)
+        )
+        .subscribe(([bindingIds, unbindingIds]) => {
+          this.mergeAndRemoveIds(bindingIds, unbindingIds, userId);
+        });
+
+    } else if (bindingProjectIds.length) {
+      this.bindingService.bind(userId, bindingProjectIds)
+      .subscribe((ids) => {
+        this.mergeBindingsIds(ids, userId);
+      });
+
+    } else if (unbindingProjectIds.length) {
+      this.bindingService.unbind(userId, unbindingProjectIds)
+      .subscribe((ids) => {
+        this.removeUnbindingIds(ids, userId);
+      });
     }
-
-    if (unbindingProjects.length) {
-      console.log(unbindingProjects);
-    }
-
-    if (bindingProjects.length && unbindingProjects.length) {
-      console.log(bindingProjects);
-    }
-
-
-    setTimeout(() => {
-      const value = true;
-      this.userHelper[userId].selectedIds = value ? projectIds : this.bindUnbindForm.selectedOnOpen;
-      this.setNamesToHelperByProjectIds(this.userHelper[userId].selectedIds, userId);
-      this.userHelper[userId].isLoading = false;
-    }, 1000);
-
   }
 
   public toggleProject({ value }, userId) {
-    this.userHelper[userId] = {
-      selectedIds: value || [],
-      selectedNames: this.userHelper[userId] && this.userHelper[userId].selectedNames || []
-    };
+    this.userHelper[userId].selectedIds = value || [];
   }
 
   private getBindingProjectsIds(openedIds, closedIds) {
@@ -130,6 +129,27 @@ export class UserListComponent implements OnInit {
       return names;
     }, []);
     return n;
+  }
+
+  private mergeAndRemoveIds(bindingIds, unbindingIds, userId) {
+    this.userHelper[userId].selectedIds = [
+      ...this.getUnbindingProjectsIds(this.userHelper[userId].selectedOnOpen, unbindingIds),
+      ...bindingIds
+    ];
+    this.setNamesToHelperByProjectIds(this.userHelper[userId].selectedIds, userId);
+    this.userHelper[userId].isLoading = false;
+  }
+
+  private mergeBindingsIds(bindingIds, userId) {
+    this.userHelper[userId].selectedIds = [...this.userHelper[userId].selectedOnOpen, ...bindingIds];
+    this.setNamesToHelperByProjectIds(this.userHelper[userId].selectedIds, userId);
+    this.userHelper[userId].isLoading = false;
+  }
+
+  private removeUnbindingIds(unbindingIds, userId) {
+    this.userHelper[userId].selectedIds = this.getUnbindingProjectsIds(this.userHelper[userId].selectedOnOpen, unbindingIds);
+    this.setNamesToHelperByProjectIds(this.userHelper[userId].selectedIds, userId);
+    this.userHelper[userId].isLoading = false;
   }
 
   private setNamesToHelperByProjectIds(ids, userId) {
