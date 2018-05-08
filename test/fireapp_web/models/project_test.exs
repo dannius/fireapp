@@ -1,6 +1,6 @@
 defmodule Fireapp.ProjectTest do
   use FireappWeb.ConnCase
-  use Fireapp.ModelTestHelper
+  use FireappWeb.ModelTestHelper
 
   alias Fireapp.{Repo, Project, User}
 

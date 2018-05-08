@@ -23,7 +23,7 @@ defmodule FireappWeb.UserController do
     |> render("list.json", %{users: users})
   end
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def update(conn, %{"id" => id, "user" => user_params}, _) do
     user = Repo.get(User, id)
     |> User.changeset(user_params)
     |> Repo.update!()
@@ -35,7 +35,7 @@ defmodule FireappWeb.UserController do
 
   def reset_password(conn, %{"id" => id, "password_params" =>
                                             %{"old_password" => old_password, "password" => password,
-                                            "password_confirmation" => password_confirmation}}) do
+                                            "password_confirmation" => password_confirmation}}, _) do
     user = Repo.get(User, id)
 
     with {:ok, user} <- Fireapp.Auth.authenticate_user(user.email, old_password),

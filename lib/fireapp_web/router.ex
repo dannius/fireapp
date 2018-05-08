@@ -41,14 +41,16 @@ defmodule FireappWeb.Router do
   scope "/api", FireappWeb do
     pipe_through [:api, :with_session]
 
+    get "/session", SessionController, :setup
+
     resources "/users", UserController, only: [:update, :index]
     put "/users/:id/reset-password", UserController, :reset_password
-    get "/session", SessionController, :setup
+
+    get "/users/:id/bind", BindController, :bind
+    get "/users/:id/unbind", BindController, :unbind
 
     resources "/projects", ProjectController
     get "/projects/:id/archive", ProjectController, :archive
     get "/projects/:id/unarchive", ProjectController, :unarchive
-    post "/projects/:id/bind", ProjectController, :bind
-    post "/projects/:id/unbind", ProjectController, :unbind
   end
 end

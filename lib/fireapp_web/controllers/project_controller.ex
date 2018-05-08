@@ -130,37 +130,4 @@ defmodule FireappWeb.ProjectController do
         |> render("successfull_with_project.json", %{project: project})
     end
   end
-
-  def bind(conn, %{"id" => project_id, "user_id" => user_id}, current_user) do
-    case ProjectContext.bind_user_to_project(user_id, project_id, current_user) do
-      :conflict ->
-        conn
-        |> put_status(:conflict)
-        |> render("error.json")
-
-      :unauthorized ->
-        conn
-        |> put_status(:unauthorized)
-        |> render("error.json")
-
-      :ok ->
-        conn
-        |> put_status(:created)
-        |> render("success_bind.json")
-    end
-  end
-
-  def unbind(conn, %{"id" => project_id, "user_id" => user_id}, current_user) do
-    case ProjectContext.unbind_user_from_project(user_id, project_id, current_user) do
-      :ok ->
-        conn
-        |> put_status(:ok)
-        |> render("success_bind.json")
-
-      :unprocessable_entity ->
-        conn
-        |> put_status(:unprocessable_entity)
-        |> render("error.json")
-    end
-  end
 end
