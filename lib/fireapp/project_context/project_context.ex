@@ -1,6 +1,38 @@
 defmodule Fireapp.ProjectContext do
 
-  alias Fireapp.{Repo, Project}
+  import Ecto.Query, only: [from: 2]
+  alias Fireapp.{Repo, Project, User, UserProject}
+
+  def project_list_by_params(params, current_user) do
+    %{
+      "substring" => substring,
+      "users" => users,
+      "ownership" => ownership
+    } = params
+
+    ids =
+      from(relationship in UserProject,
+        where: relationship.user_id == ^current_user.id,
+        join: p in Project, where: relationship.project_id == p.id,
+        select: p.id
+      ) |> Repo.all
+
+    query =
+      from(p in Project,
+        where: (p.id in ^ids),
+        where: ilike(p.name, ^"%#{substring}%")
+      )
+
+    query = if users == "true",
+              do: from(p in query, preload: [:users]),
+              else: query
+
+    query = if ownership == "true",
+              do: from(p in query, where: p.owner_id == ^current_user.id),
+              else: query
+
+    Repo.all(query)
+  end
 
   def create_project(project_params, owner_id) do
     project_params = project_params

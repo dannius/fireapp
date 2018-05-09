@@ -13,10 +13,23 @@ export class ProjectService {
     private http: HttpClient
   ) { }
 
+  public ownershipList(): Observable<Project[]> {
+    const params: HttpParams = new HttpParams()
+      .set('substring', '')
+      .set('users', '')
+      .set('ownership', 'true');
+
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects`, { params })
+      .map(({ projects }: any) => projects.map((project) => Project.fromJson(project)));
+  }
+
   public filteredListWithUsers(substring: string): Observable<ProjectWithUsers[]> {
     const params: HttpParams = new HttpParams()
       .set('substring', substring)
-      .set('users', 'true');
+      .set('users', 'true')
+      .set('ownership', '');
 
     return this
       .http
@@ -27,7 +40,8 @@ export class ProjectService {
   public list(): Observable<Project[]> {
     const params: HttpParams = new HttpParams()
       .set('substring', '')
-      .set('users', '');
+      .set('users', '')
+      .set('ownership', '');
 
     return this
       .http

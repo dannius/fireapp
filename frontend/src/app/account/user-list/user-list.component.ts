@@ -34,7 +34,7 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projectService.list()
+    this.projectService.ownershipList()
       .subscribe((projects) => {
         this.projectList = projects;
 
@@ -62,7 +62,7 @@ export class UserListComponent implements OnInit {
   }
 
   public filterProjects(value) {
-    console.log(value);
+
   }
 
   public togglePanel(openAction, userId, projectIds) {

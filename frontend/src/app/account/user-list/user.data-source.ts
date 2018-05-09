@@ -18,7 +18,7 @@ export class UserDataSource extends DataSource<any> {
   }
 
   connect(): Observable<User[]> {
-    return this.userService.list()
+    return this.userService.list('')
       .switchMap((users) => {
         users = users.map((user) => {
 

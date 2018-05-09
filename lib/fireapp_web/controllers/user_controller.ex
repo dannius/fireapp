@@ -1,8 +1,7 @@
 defmodule FireappWeb.UserController do
   use FireappWeb, :controller
 
-  alias Fireapp.{User, Repo}
-  import Ecto.Query, only: [from: 2]
+  alias Fireapp.{User, Repo, UserContext}
 
   plug :scrub_params, "user" when action in [:update]
   plug :scrub_params, "password_params" when action in [:reset_password]
@@ -12,14 +11,11 @@ defmodule FireappWeb.UserController do
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def index(conn, _, current_user) do
-    query = from user in User,
-            where: user.id != ^current_user.id,
-            preload: [:projects]
+  def index(conn, params, current_user) do
+  # please kill that action
+  users = UserContext.user_list_by_params(params, current_user)
 
-    users = Repo.all(query)
-
-    conn
+  conn
     |> render("list.json", %{users: users})
   end
 

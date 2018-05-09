@@ -52,7 +52,7 @@
               </mat-select-trigger>
 
               <mat-option *ngFor="let project of row.commonProjects" [value]="project.id">{{project.name}}</mat-option>
-              <mat-optgroup label="архивированные">
+              <mat-optgroup *ngIf="row.archivedProjects?.length" label="архивированные">
                 <mat-option *ngFor="let project of row.archivedProjects" [value]="project.id">{{project.name}}</mat-option>
               </mat-optgroup>
             </mat-select>

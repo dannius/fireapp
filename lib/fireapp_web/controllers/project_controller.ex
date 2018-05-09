@@ -3,26 +3,14 @@ defmodule FireappWeb.ProjectController do
   alias Fireapp.{ProjectContext, Repo}
 
   plug :scrub_params, "project" when action in [:create, :update]
-  plug :scrub_params, "user_id" when action in [:bind, :unbind]
 
   def action(conn, _) do
     args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
     apply(__MODULE__, action_name(conn), args)
   end
 
-  def index(conn, %{"substring" => substring, "users" => users}, current_user) do
-    current_user = Repo.preload(current_user, :projects)
-
-    projects = current_user.projects
-    |> Enum.filter(fn (project) -> project.name =~ substring end)
-
-    projects = 
-      case users do
-        "true" ->
-          Enum.map(projects, fn (project) -> Repo.preload(project, :users) end)
-        _ ->
-          projects
-      end
+  def index(conn, params, current_user) do
+    projects = ProjectContext.project_list_by_params(params, current_user)
 
     conn
     |> render("list.json", %{projects: projects})
