@@ -1,7 +1,6 @@
 defmodule FireappWeb.UserController do
   use FireappWeb, :controller
 
-  import Ecto.Query, only: [from: 2]
   alias Fireapp.{User, Repo, UserContext}
 
   plug :scrub_params, "user" when action in [:update]
@@ -13,19 +12,8 @@ defmodule FireappWeb.UserController do
   end
 
   def index(conn, params, current_user) do
-  # please kill that action
   users = UserContext.user_list_by_params(params, current_user)
-
-  %{
-    "substring" => substring,
-  } = params
-
-  count = (
-    from u in User,
-    where: u.id != ^current_user.id,
-    where: ilike(u.email, ^"%#{substring}%"),
-    select: count("*")
-  ) |> Repo.all()
+  count = UserContext.get_count_of_users(params, current_user)
 
   conn
     |> render("list.json", %{users: users, count: count})
