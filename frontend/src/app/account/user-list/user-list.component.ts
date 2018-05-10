@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
     this.page = this.paginator.pageIndex;
     this.limit = this.pageSize;
 
-    this.projectService.ownershipList()
+    this.projectService.list('', false, true)
       .subscribe((projects) => {
         this.projectList = projects;
 

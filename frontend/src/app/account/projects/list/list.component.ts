@@ -40,9 +40,9 @@ export class ProjectListComponent implements OnInit {
 
   public filterProjects(substring: string) {
     this.projectService
-      .filteredListWithUsers(substring)
+      .list(substring, true, false)
       .subscribe((projects) => {
-        this.projects = projects;
+        this.projects = <ProjectWithUsers[]> projects;
         this.sortProjects(this.projects);
       });
   }

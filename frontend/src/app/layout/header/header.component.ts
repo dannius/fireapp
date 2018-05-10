@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit {
       .specialProjectIds
       .switchMap((ids) => {
         this.specialProjectIds = ids;
-        return this.projectService.list();
+        return this.projectService.list('', false, false);
       })
       .switchMap((projects) => {
         this.unsortedProjects = projects;
