@@ -28,7 +28,7 @@ export class ProjectShowComponent implements OnInit {
     })
     .subscribe((project) => {
       this.pubSubService
-        .setProject(Project.fromJson(this.project));
+        .setProject(this.project);
     });
   }
 }

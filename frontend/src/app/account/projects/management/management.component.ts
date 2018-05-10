@@ -45,7 +45,7 @@ export class ManagementComponent implements OnInit {
   }
 
   public isOwnership(): Boolean {
-    return this.project && this.user && this.project.owner_id === this.user.id;
+    return this.project && this.user && this.project.ownerId === this.user.id;
   }
 
 }

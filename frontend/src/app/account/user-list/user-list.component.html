@@ -24,27 +24,27 @@
       <ng-container matColumnDef="commonProjects">
         <mat-header-cell class="user__project-header-cell" *matHeaderCellDef> Общие проекты </mat-header-cell>
         <mat-cell class="user__project-cell" *matCellDef="let row">
-          <ul *ngIf="row.projects?.length; else emptyCommonProjects" class="user__project-list">
+          <ul *ngIf="row.projects?.length; else EmptyCommonProjects" class="user__project-list">
             <li *ngFor="let project of row.projects" class="user__project-item">{{project.name}}</li>
           </ul>
-          <ng-template #emptyCommonProjects>-</ng-template>
+          <ng-template #EmptyCommonProjects>-</ng-template>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="yoursProjects">
         <mat-header-cell class="user__project-header-cell" *matHeaderCellDef> Ваши проекты </mat-header-cell>
         <mat-cell class="user__project-cell" *matCellDef="let row">
-          <ul *ngIf="userHelper[row.id]?.selectedNames?.length; else emptyYoursProjects" class="user__project-list">
+          <ul *ngIf="userHelper[row.id]?.selectedNames?.length; else EmptyYoursProjects" class="user__project-list">
             <li *ngFor="let name of userHelper[row.id]?.selectedNames" class="user__project-item">{{name}}</li>
           </ul>
-          <ng-template #emptyYoursProjects>-</ng-template>
+          <ng-template #EmptyYoursProjects>-</ng-template>
         </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="actions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <mat-form-field *ngIf="!userHelper[row.id]?.isLoading; else spinner" class="user__project-select-field">
+          <mat-form-field *ngIf="!userHelper[row.id]?.isLoading; else Spinner" class="user__project-select-field">
             <mat-select
               [value]="userHelper[row.id].selectedIds"
               [placeholder]="userHelper[row.id]?.selectedNames?.length ? '' : 'добавить'"
@@ -63,7 +63,7 @@
               </mat-optgroup>
             </mat-select>
           </mat-form-field>
-          <ng-template #spinner><mat-spinner class="user__project-spinner"></mat-spinner></ng-template>
+          <ng-template #Spinner><mat-spinner class="user__project-spinner"></mat-spinner></ng-template>
         </mat-cell>
       </ng-container>
 

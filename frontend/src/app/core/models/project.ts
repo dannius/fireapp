@@ -15,7 +15,7 @@ export class Project {
 
   constructor(
     public id: number,
-    public owner_id: number,
+    public ownerId: number,
     public name: string,
     public archived: boolean
   ) { }

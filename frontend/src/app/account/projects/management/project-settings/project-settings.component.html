@@ -1,35 +1,48 @@
 <mat-card class="project__settings">
   <mat-card-title>Управление</mat-card-title>
   <mat-card-content>
-    <div class="project__settings-controls">
-      <p class="form__label">Архивация</p>
-      <button
-        *ngIf="!project.archived; else restoreBtn"
-        mat-raised-button
-        class="form__btn_yellow"
-        (click)="showArchivationDialog()"
-      >
-      архивировать
-      </button>
-
-      <ng-template #restoreBtn>
-        <button mat-raised-button
+    <div *ngIf="isOwner; else NotOwner">
+      <div class="project__settings-controls">
+        <p class="form__label">Архивация</p>
+        <button
+          *ngIf="!project.archived; else RestoreBtn"
+          mat-raised-button
           class="form__btn_yellow"
-          (click)="showRestoreDialog()"
+          (click)="showArchivationDialog()"
         >
-        восстановить
+        архивировать
         </button>
-      </ng-template>
+  
+        <ng-template #RestoreBtn>
+          <button mat-raised-button
+            class="form__btn_yellow"
+            (click)="showRestoreDialog()"
+          >
+          восстановить
+          </button>
+        </ng-template>
+      </div>
+      <div class="project__settings-controls">
+        <p class="form__label">Удаление</p>
+        <button
+          mat-raised-button
+          color="warn"
+          (click)="showInputDialog()"
+        >
+        удалить
+        </button>
+      </div> 
     </div>
-    <div class="project__settings-controls">
-      <p class="form__label">Удаление</p>
-      <button
-        mat-raised-button
-        color="warn"
-        (click)="showInputDialog()"
-      >
-      удалить
-      </button>
-    </div>
+    <ng-template #NotOwner>
+      <div class="project__settings-controls">
+        <button
+          mat-raised-button
+          class="form__btn_yellow"
+          (click)="showLeaveProjectDialog()"
+        >
+        Покинуть проект
+        </button>
+      </div>
+    </ng-template>
   </mat-card-content>
 </mat-card>

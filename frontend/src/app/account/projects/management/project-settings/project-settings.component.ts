@@ -3,9 +3,10 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
-import { ProjectWithUsers } from '@app/core/models';
+import { ProjectWithUsers, User } from '@app/core/models';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
+import { BindingService } from '@app/account/user-list/binding.service';
 
 @Component({
   selector: 'app-project-settings',
@@ -16,17 +17,57 @@ export class ProjectSettingsComponent {
   @Input()
   public project: ProjectWithUsers;
 
+  @Input()
+  public isOwner: boolean;
+
+  @Input()
+  public currentUser: User;
+
   private snackBarConfig = {
     duration: 3000
   };
+
+  private snackBarDelay = 500;
 
   constructor(
     private router: Router,
     private projectService: ProjectService,
     private specialProjectService: SpecialProjectService,
+    private bindingService: BindingService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
+
+  public showLeaveProjectDialog() {
+    const data = {
+      btnConfirm: 'Покинуть',
+      btnClose: 'Отмена',
+      title: 'Точно покинуть проект ?'
+    };
+
+    this.dialog
+      .open(ConfirmationDialogComponent, { data })
+      .afterClosed()
+      .subscribe((state: boolean) => {
+        if (!state) {
+          return;
+        }
+
+        this.bindingService
+          .unbind(this.currentUser.id, [this.project.id])
+          .subscribe((res) => {
+            if (res && res.length) {
+              this.router.navigate(['/', 'account', 'projects']);
+
+              setTimeout(() => {
+                this.snackBar.open(`Вы покинули проект "${this.project.name}"`, '', this.snackBarConfig);
+              }, this.snackBarDelay);
+            } else {
+              this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
+            }
+          });
+      });
+  }
 
   public showArchivationDialog() {
     const data = {
@@ -112,12 +153,11 @@ export class ProjectSettingsComponent {
           .subscribe((project) => {
             if (project) {
               this.specialProjectService.removeFromSpecialIds(this.project);
-              const snackBarDelay = 500;
               this.router.navigate(['/', 'account', 'projects']);
 
               setTimeout(() => {
                 this.snackBar.open(`Проект "${this.project.name}" удален`, '', this.snackBarConfig);
-              }, snackBarDelay);
+              }, this.snackBarDelay);
             } else {
               this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
             }

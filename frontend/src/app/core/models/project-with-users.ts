@@ -19,11 +19,11 @@ export class ProjectWithUsers extends Project {
 
   constructor(
     public id: number,
-    public owner_id: number,
+    public ownerId: number,
     public name: string,
     public archived: boolean,
     public users: User[]
   ) {
-    super(id, owner_id, name, archived);
+    super(id, ownerId, name, archived);
   }
 }

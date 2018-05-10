@@ -1,11 +1,11 @@
 <mat-card class="project__participant">
   <mat-card-title>Участники</mat-card-title>
   <mat-card-content>
-    <div *ngIf="project.users.length; else withoutUsers">
+    <div *ngIf="project.users.length; else WithoutUsers">
       <span *ngFor="let user of project.users">{{user.name || user.email}}</span>
     </div>
 
-    <ng-template #withoutUsers>
+    <ng-template #WithoutUsers>
       <div>
         <mat-label>Только вы участник проекта</mat-label>
       </div>
