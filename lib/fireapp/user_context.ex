@@ -6,12 +6,19 @@ defmodule Fireapp.UserContext do
   def user_list_by_params(params, current_user) do
     %{
       "substring" => substring,
-      "common" => common
+      "limit" => limit,
+      "page" => page
     } = params
+
+    limit = String.to_integer(limit)
+    offset = String.to_integer(page) * limit
 
     basic_query =
       from(u in User,
-        where: ilike(u.email, ^"%#{substring}%")
+        where: u.id != ^current_user.id,
+        where: ilike(u.email, ^"%#{substring}%"),
+        limit: ^limit,
+        offset: ^offset
       )
 
     projects_subquery =
@@ -19,10 +26,9 @@ defmodule Fireapp.UserContext do
       |> join(:inner, [p], up in UserProject, p.id == up.project_id)
       |> where([p, up], up.user_id == ^current_user.id)
       |> select([p, up], p)
-    
+
     projects_by_user_ids =
-    basic_query
-      |> where([u], u.id != ^current_user.id)
+      basic_query
       |> join(:inner, [u], up in UserProject, u.id == up.user_id)
       |> join(:inner, [u, up], p in Project, up.project_id == p.id)
       |> join(:inner, [u, up, p], ps in subquery(projects_subquery), ps.id == p.id)
@@ -33,7 +39,7 @@ defmodule Fireapp.UserContext do
         fn {_user, project} -> project end
       )
 
-    users = basic_query
+    basic_query
     |> Repo.all()
     |> Enum.map(fn (u) ->
       Map.replace!(u, :projects, Map.get(projects_by_user_ids, u.id, []))

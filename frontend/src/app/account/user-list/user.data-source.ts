@@ -4,10 +4,19 @@ import { Observable } from 'rxjs/Observable';
 import { User, Project } from '@app/core/models';
 import { ProjectService } from '@app/account/projects/project.service';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
+import { catchError } from 'rxjs/operators/catchError';
+import { finalize } from 'rxjs/operators/finalize';
 
 export class UserDataSource extends DataSource<any> {
 
   private userHelper = {};
+  private dataSubject = new BehaviorSubject<any[]>([]);
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+
+  public loading$ = this.loadingSubject.asObservable();
+  public length: number;
 
   constructor(
     private userService: UserService,
@@ -18,10 +27,27 @@ export class UserDataSource extends DataSource<any> {
   }
 
   connect(): Observable<User[]> {
-    return this.userService.list('')
-      .switchMap((users) => {
-        users = users.map((user) => {
+    return this.dataSubject.asObservable();
+  }
 
+  disconnect() {
+    this.dataSubject.complete();
+    this.loadingSubject.complete();
+  }
+
+  public loadList(substring, limit, page): void {
+    this.loadingSubject.next(true);
+
+    this.userService
+      .list(substring, limit, page)
+      .pipe(
+        catchError(() => Observable.of({ users: [], length: 0 })),
+        finalize(() => this.loadingSubject.next(false))
+      )
+      .subscribe(({users, length }) => {
+        this.length = length;
+
+        users = users.map((user) => {
           this.userHelper[`${user.id}`] = {
             selectedIds: this.getCommonProjectIds(user.projects, this.projects),
             selectedNames: []
@@ -52,11 +78,9 @@ export class UserDataSource extends DataSource<any> {
         });
 
         this.pubSubService.setUserHelper(this.userHelper);
-
-        return Observable.of(users);
+        this.dataSubject.next(users);
       });
   }
-  disconnect() {}
 
   private getCommonProjectIds(proj1: Project[], proj2: Project[]) {
     const ids = proj1.reduce((commonIds, p1) => {

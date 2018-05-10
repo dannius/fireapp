@@ -4,7 +4,7 @@ defmodule FireappWeb.UserView do
   @user_attributes [:id, :name, :email]
   @project_attributes [:id, :name, :owner_id]
 
-  def render("list.json", %{users: users}) do
+  def render("list.json", %{users: users, count: count}) do
     users = Enum.map(users, fn (user) ->
 
       if (Ecto.assoc_loaded?(user.projects)) do
@@ -18,7 +18,7 @@ defmodule FireappWeb.UserView do
       end
     end)
     
-    %{users: users}
+    %{users: users, count: List.first(count)}
   end
 
   def render("update-successful.json", %{user: user}),

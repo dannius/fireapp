@@ -1,7 +1,7 @@
 import '@app/shared/rxjs-operators';
 
-import { Component, OnInit } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { UserDataSource } from '@app/account/user-list/user.data-source';
 import { UserService } from '@app/account/user.service';
 import { FormControl } from '@angular/forms';
@@ -15,16 +15,21 @@ import { BindingService } from '@app/account/user-list/binding.service';
   selector: 'app-user-list',
   templateUrl: './user-list.component.html'
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent implements OnInit, AfterViewInit {
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public userHelper: any = {};
 
   public dataSource: UserDataSource;
   public displayedColumns = ['email', 'name', 'commonProjects', 'yoursProjects', 'actions'];
-  public pageSizeOptions = [10, 20, 50, 100];
-  public pageSize = 10;
+  public pageSizeOptions = [5, 20, 50, 100];
+  public pageSize = 5;
 
   private projectList: Project[];
+  private filteredString = '';
+  private page: number;
+  private limit: number;
 
   constructor(
     private userService: UserService,
@@ -34,6 +39,9 @@ export class UserListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.page = this.paginator.pageIndex;
+    this.limit = this.pageSize;
+
     this.projectService.ownershipList()
       .subscribe((projects) => {
         this.projectList = projects;
@@ -43,6 +51,8 @@ export class UserListComponent implements OnInit {
           this.pubSubService,
           this.projectList
         );
+
+        this.loadList();
       });
 
     this.pubSubService
@@ -61,8 +71,18 @@ export class UserListComponent implements OnInit {
       });
   }
 
-  public filterProjects(value) {
+  ngAfterViewInit() {
+    this.paginator.page
+    .subscribe((event) => {
+      this.page = event.pageIndex;
+      this.limit = event.pageSize;
+      this.loadList();
+    });
+  }
 
+  public filterProjects(value) {
+    this.filteredString = value;
+    this.loadList();
   }
 
   public togglePanel(openAction, userId, projectIds) {
@@ -125,7 +145,8 @@ export class UserListComponent implements OnInit {
 
   private getCommonProjectNamesByIds(ids: number[], projects: Project[]) {
     const n = ids.reduce((names, id) => {
-      names.push(projects && projects.find((p) => p.id === id).name);
+      const project = projects && projects.find((p) => p.id === id);
+      names.push(project && project.name);
       return names;
     }, []);
     return n;
@@ -157,5 +178,8 @@ export class UserListComponent implements OnInit {
       this.userHelper[userId].selectedNames = this.getCommonProjectNamesByIds(ids, this.projectList);
     }
   }
-}
 
+  private loadList() {
+    this.dataSource.loadList(this.filteredString, this.limit, this.page);
+  }
+}

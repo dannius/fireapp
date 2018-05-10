@@ -4,13 +4,12 @@ defmodule Fireapp.BindContext do
   import Ecto.Query, only: [from: 2]
 
   def bind_user_to_project(user_id, project_ids, current_user) do
-    query = from(p in Project,
-              where: (p.id in ^project_ids) and
-                      (p.owner_id == ^current_user.id),
-              select: p.id
-            )
-
-    project_ids = Repo.all(query)
+    project_ids =
+      from(p in Project,
+        where: p.id in ^project_ids,
+        where: p.owner_id == ^current_user.id,
+        select: p.id
+      ) |> Repo.all()
 
     if (length(project_ids) == 0) do
       :conflict

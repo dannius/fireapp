@@ -13,15 +13,21 @@ export class UserService {
     private http: HttpClient
   ) { }
 
-  public list(substring: string): Observable<UserWithProject[]> {
+  public list(substring: string, limit: number, page: number): Observable<any> {
     const params = new HttpParams()
-      .set('common', 'true')
-      .set('substring', substring);
+      .set('substring', substring)
+      .set('limit', `${limit}`)
+      .set('page', `${page}`);
 
     return this
       .http
       .get<any>(`${environment.apiUrl}/api/users/`, { params })
-      .map(({ users }) => users.map((user) => UserWithProject.fromJson(user)))
+      .map(({ users, count }) => {
+        return {
+          users: users.map((user) => UserWithProject.fromJson(user)),
+          length: count
+        };
+      })
       .catch((_error) => Observable.of(null));
   }
 

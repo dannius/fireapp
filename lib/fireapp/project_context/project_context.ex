@@ -1,7 +1,7 @@
 defmodule Fireapp.ProjectContext do
 
   import Ecto.Query, only: [from: 2]
-  alias Fireapp.{Repo, Project, User, UserProject}
+  alias Fireapp.{Repo, Project, UserProject}
 
   def project_list_by_params(params, current_user) do
     %{

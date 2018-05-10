@@ -1,9 +1,15 @@
 <div class="container container__column">
   <div class="user__section-controls">
-    <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по пользователям"></app-search>
+    <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по email"></app-search>
   </div>
 
   <mat-card>
+    <mat-progress-bar
+      *ngIf="dataSource?.loading$ | async"
+      class="loader loader_absolute"
+      mode="indeterminate">
+    </mat-progress-bar>
+    
     <mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="email">
         <mat-header-cell *matHeaderCellDef> E-Mail </mat-header-cell>
@@ -65,7 +71,8 @@
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
     <mat-paginator
-      [length]="40"
+      #MatPaginator
+      [length]="dataSource?.length"
       [pageSize]="pageSize"
       [pageSizeOptions]="pageSizeOptions"
     >
