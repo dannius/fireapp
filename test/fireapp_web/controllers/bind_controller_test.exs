@@ -12,7 +12,7 @@ defmodule Fireapp.BindControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:created)
     end
@@ -23,7 +23,7 @@ defmodule Fireapp.BindControllerTest do
       UserProject.add_user_to_project(guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :bind, guest.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:conflict)
     end
@@ -32,7 +32,7 @@ defmodule Fireapp.BindControllerTest do
       %{project: project} = create_project_with_owner(guest)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :bind, current_user.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :bind, current_user.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:conflict)
     end
@@ -46,7 +46,7 @@ defmodule Fireapp.BindControllerTest do
       UserProject.add_user_to_project(guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:ok)
     end
@@ -54,7 +54,7 @@ defmodule Fireapp.BindControllerTest do
     test "Unsuccessful unbind, from not exist project", %{conn_with_token: conn_with_token, guest: guest} do
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: [undefined_id()]))
+      |> get(bind_path(conn_with_token, :unbind, guest.id, project_ids: "#{undefined_id()}"))
 
       assert response.status == Status.code(:conflict)
     end
@@ -63,7 +63,7 @@ defmodule Fireapp.BindControllerTest do
       %{project: project} = create_project_with_owner(current_user)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, current_user.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :unbind, current_user.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:conflict)
     end
@@ -76,7 +76,7 @@ defmodule Fireapp.BindControllerTest do
       UserProject.add_user_to_project(another_guest.id, project.id)
 
       response = conn_with_token
-      |> get(bind_path(conn_with_token, :unbind, another_guest.id, project_ids: [project.id]))
+      |> get(bind_path(conn_with_token, :unbind, another_guest.id, project_ids: "#{project.id}"))
 
       assert response.status == Status.code(:conflict)
     end
