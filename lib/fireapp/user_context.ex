@@ -17,8 +17,8 @@ defmodule Fireapp.UserContext do
       from(u in User,
         where: u.id != ^current_user.id,
         where: ilike(u.email, ^"%#{substring}%"),
-        limit: ^limit,
-        offset: ^offset
+        # limit: ^limit,
+        # offset: ^offset
       )
 
     projects_subquery =

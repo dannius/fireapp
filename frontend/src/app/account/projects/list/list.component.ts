@@ -18,6 +18,8 @@ export class ProjectListComponent implements OnInit {
 
   private projects: ProjectWithUsers[];
   private specialProjectIds: Number[];
+  private searchString = '';
+  private onlyOwnership = false;
 
   constructor(
     private dialog: MatDialog,
@@ -39,12 +41,8 @@ export class ProjectListComponent implements OnInit {
   }
 
   public filterProjects(substring: string) {
-    this.projectService
-      .list(substring, true, false)
-      .subscribe((projects) => {
-        this.projects = <ProjectWithUsers[]> projects;
-        this.sortProjects(this.projects);
-      });
+    this.searchString = substring;
+    this.getProjects();
   }
 
   private sortProjects(projects) {
@@ -60,6 +58,20 @@ export class ProjectListComponent implements OnInit {
       } else {
         this.commonProjects.push(project);
       }
+    });
+  }
+
+  public toggleOwnershipProjects({ checked }) {
+    this.onlyOwnership = checked;
+    this.getProjects();
+  }
+
+  private getProjects() {
+    this.projectService
+    .list(this.searchString, true, this.onlyOwnership)
+    .subscribe((projects) => {
+      this.projects = <ProjectWithUsers[]> projects;
+      this.sortProjects(this.projects);
     });
   }
 
