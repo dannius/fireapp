@@ -32,6 +32,8 @@ defmodule FireappWeb.ProjectView do
     %{project: project}
   end
 
+  def render("sdk_key.json", %{key: key}), do: %{key: key}
+
   def render("successfull.json", _), do: %{success: true}
 
   def render("error_changeset.json", %{data: data}), do: ""

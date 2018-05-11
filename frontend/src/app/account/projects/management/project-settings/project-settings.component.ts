@@ -86,11 +86,12 @@ export class ProjectSettingsComponent {
           return;
         }
 
-        this.bindingService
-          .unbind(this.currentUser.id, [this.project.id])
-          .subscribe((res) => {
-            if (res) {
+        this.projectService
+          .resetSdkKey(this.project.id)
+          .subscribe((key) => {
+            if (typeof key === 'string') {
               this.snackBar.open(`Ключ проекта ${this.project.name} изменен`, '', this.snackBarConfig);
+              this.project.sdkKey = key;
             } else {
               this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
             }

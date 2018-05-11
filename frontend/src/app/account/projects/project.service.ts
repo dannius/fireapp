@@ -55,6 +55,14 @@ export class ProjectService {
       .catch((err) => Observable.of(err.status));
   }
 
+  public resetSdkKey(id: number): Observable<string> {
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/projects/${id}/reset-sdk-key`)
+      .map(({ key }: any) => key)
+      .catch((err) => Observable.of(err.status));
+  }
+
   public unarchive(id: number): Observable<Project> {
     return this
       .http

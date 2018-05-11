@@ -149,12 +149,9 @@ defmodule FireappWeb.ProjectController do
         |> render("error.json")
 
       {:ok, project} ->
-        project = project 
-        |> Repo.preload(:owner)
-
         conn
         |> put_status(:ok)
-        |> render("successfull_with_project.json", %{project: project})
+        |> render("sdk_key.json", %{key: project.sdk_key})
     end
   end
 end
