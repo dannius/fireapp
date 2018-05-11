@@ -15,6 +15,10 @@ import {
   MatSidenavModule,
   MatSnackBarModule,
   MatToolbarModule,
+  MatTableModule,
+  MatPaginatorModule,
+  MatSlideToggleModule,
+  MatTooltipModule
 } from '@angular/material';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
@@ -38,6 +42,10 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatDialogModule,
     MatDividerModule,
     MatSelectModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatTooltipModule,
   ],
   exports: [
     CommonModule,
@@ -56,6 +64,10 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatDialogModule,
     MatDividerModule,
     MatSelectModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatTooltipModule,
 
     /////////////
     // Components

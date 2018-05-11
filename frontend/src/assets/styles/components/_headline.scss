@@ -1,6 +1,16 @@
 .headline {
   color: $mine-shaft;
 
+  &_absolute-center {
+    position: absolute;
+    height: calc(100% - 54px);
+    width: 100%;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
   &__title {
     font-size: 32px;
   }

@@ -1,8 +1,8 @@
 import '@app/shared/rxjs-operators';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '@app/core/models';
+import { User, UserWithProject } from '@app/core/models';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs/Observable';
 
@@ -12,6 +12,24 @@ export class UserService {
   constructor(
     private http: HttpClient
   ) { }
+
+  public list(substring: string, limit: number, page: number): Observable<any> {
+    const params = new HttpParams()
+      .set('substring', substring)
+      .set('limit', `${limit}`)
+      .set('page', `${page}`);
+
+    return this
+      .http
+      .get<any>(`${environment.apiUrl}/api/users/`, { params })
+      .map(({ users, count }) => {
+        return {
+          users: users.map((user) => UserWithProject.fromJson(user)),
+          length: count
+        };
+      })
+      .catch((_error) => Observable.of(null));
+  }
 
   public resetPassword(id: number, passwordParams: any): Observable<User> {
     const params = {

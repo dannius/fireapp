@@ -1,10 +1,10 @@
 <mat-toolbar class="header" color="primary">
     <div class="header__controls">
       <div class="header__togglers">
-        <button *ngIf="!!project; else homeIcon" mat-icon-button (click)="toggleSidenav.emit()">
+        <button *ngIf="!!project; else HomeIcon" mat-icon-button (click)="toggleSidenav.emit()">
           <mat-icon>menu</mat-icon>
         </button>
-        <ng-template #homeIcon>
+        <ng-template #HomeIcon>
           <i class="header__home-icon"><mat-icon>home</mat-icon></i>
         </ng-template>
 
@@ -34,7 +34,7 @@
         <a mat-button
           [routerLinkActiveOptions]="{exact: true}"
           [routerLinkActive]="'header__link_active'"
-          [routerLink]="['/', 'account', 'projects', 'management']"
+          [routerLink]="['/', 'account', 'users']"
         >
           Пользователи
         </a>

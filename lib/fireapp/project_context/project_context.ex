@@ -1,6 +1,38 @@
 defmodule Fireapp.ProjectContext do
 
-  alias Fireapp.{Repo, User, Project, UserProject}
+  import Ecto.Query, only: [from: 2]
+  alias Fireapp.{Repo, Project, UserProject}
+
+  def project_list_by_params(params, current_user) do
+    %{
+      "substring" => substring,
+      "users" => users,
+      "ownership" => ownership
+    } = params
+
+    ids =
+      from(relationship in UserProject,
+        where: relationship.user_id == ^current_user.id,
+        join: p in Project, where: relationship.project_id == p.id,
+        select: p.id
+      ) |> Repo.all
+
+    query =
+      from(p in Project,
+        where: (p.id in ^ids),
+        where: ilike(p.name, ^"%#{substring}%")
+      )
+
+    query = if users == "true",
+              do: from(p in query, preload: [:users]),
+              else: query
+
+    query = if ownership == "true",
+              do: from(p in query, where: p.owner_id == ^current_user.id),
+              else: query
+
+    Repo.all(query)
+  end
 
   def create_project(project_params, owner_id) do
     project_params = project_params
@@ -68,55 +100,6 @@ defmodule Fireapp.ProjectContext do
         |> Repo.update!()
         {:ok, project}
     end
-  end
-
-  def bind_user_to_project(user_id, project_id, current_user) do
-    project = getOneIfOwner(project_id, current_user)
-
-    case project && project.archived do
-      nil ->
-        :unauthorized
-
-      true ->
-        :conflict
-
-      false ->
-        user = Repo.get(User, user_id)
-        case UserProject.add_user_to_project(user, project) do
-          {:ok, _} ->
-            :ok
-          {:error, _} ->
-            :conflict
-          :already_exist ->
-            :conflict
-        end
-    end
-  end
-
-  def unbind_user_from_project(user_id, project_id, current_user) do
-    user = Repo.get(User, user_id)
-    project = getOne(project_id, user)
-
-    if (
-      #project does not exist
-      project == nil || 
-      #can not delete owner, can not modify archived
-      user.id == project.owner_id || project.archived || 
-      #owner can unbind every user, guest can unbind yourself
-      current_user.id != project.owner_id && current_user.id != user.id 
-    ) do
-      :unprocessable_entity
-    else
-      case UserProject.delete_user_from_project(user, project) do
-        {:ok, _} ->
-          :ok
-        {:error, _} ->
-          :unprocessable_entity
-        :not_exist ->
-          :unprocessable_entity
-      end
-    end
-
   end
 
   def getOne(id, current_user) do

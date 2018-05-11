@@ -37,15 +37,14 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.authService.user.subscribe((user) => {
-      this.login = user ? user && user.name ||
-                    user && user.email.substring(0, user.email.indexOf('@')) : '';
+      this.login = user ? user && user.name || user && user.email : '';
     });
 
     this.specialProjectService
       .specialProjectIds
       .switchMap((ids) => {
         this.specialProjectIds = ids;
-        return this.projectService.list();
+        return this.projectService.list('', false, false);
       })
       .switchMap((projects) => {
         this.unsortedProjects = projects;

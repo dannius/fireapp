@@ -4,14 +4,19 @@
   justify-content: center;
 
   &__controls {
+    position: relative;
     margin: 20px auto;
   }
 
   &__btn-add {
     position: fixed !important;
-    right: 15%;
+    right: 10%;
     bottom: 15%;
     z-index: 100;
     transform: scale(1.2) !important;
+  }
+
+  &__ownership-toggler {
+    margin-top: 12px;
   }
 }

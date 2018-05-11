@@ -13,26 +13,18 @@ export class ProjectService {
     private http: HttpClient
   ) { }
 
-  public filteredListWithUsers(substring: string): Observable<ProjectWithUsers[]> {
+  public list(substring: string, preloadUsers: boolean,
+              onlyOwnership: boolean): Observable<Project[] | ProjectWithUsers[]> {
     const params: HttpParams = new HttpParams()
-      .set('substring', substring)
-      .set('users', 'true');
+      .set('substring', substring || '')
+      .set('users', preloadUsers ? 'true' : '')
+      .set('ownership', onlyOwnership ? 'true' : '');
 
     return this
       .http
       .get<any>(`${environment.apiUrl}/api/projects`, { params })
-      .map(({ projects }: any) => projects.map((project) => ProjectWithUsers.fromJson(project)));
-  }
-
-  public list(): Observable<Project[]> {
-    const params: HttpParams = new HttpParams()
-      .set('substring', '')
-      .set('users', '');
-
-    return this
-      .http
-      .get<any>(`${environment.apiUrl}/api/projects`, { params })
-      .map(({ projects }: any) => projects.map((project) => Project.fromJson(project)));
+      .map(({ projects }: any) => projects.map((project) =>
+        preloadUsers ? ProjectWithUsers.fromJson(project) : Project.fromJson(project)));
   }
 
   public get(id: number): Observable<ProjectWithUsers> {
@@ -89,7 +81,7 @@ export class ProjectService {
     return this
       .http
       .delete<any>(`${environment.apiUrl}/api/projects/${id}`)
-      .map(({ project }: any) => Project.fromJson(project))
+      .map(({ success }: any) => success)
       .catch((err) => Observable.of(err.status));
   }
 }

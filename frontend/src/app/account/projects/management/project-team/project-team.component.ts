@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ProjectWithUsers } from '@app/core/models';
+import { ProjectWithUsers, User } from '@app/core/models';
 
 @Component({
   selector: 'app-project-team',
@@ -9,6 +9,9 @@ export class ProjectTeamComponent {
 
   @Input()
   public project: ProjectWithUsers;
+
+  @Input()
+  public isOwner: boolean;
 
   constructor() { }
 

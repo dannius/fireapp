@@ -1,12 +1,25 @@
 defmodule FireappWeb.UserController do
   use FireappWeb, :controller
 
-  alias Fireapp.{User, Repo}
+  alias Fireapp.{User, Repo, UserContext}
 
   plug :scrub_params, "user" when action in [:update]
   plug :scrub_params, "password_params" when action in [:reset_password]
 
-  def update(conn, %{"id" => id, "user" => user_params}) do
+  def action(conn, _) do
+    args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
+  def index(conn, params, current_user) do
+  users = UserContext.user_list_by_params(params, current_user)
+  count = UserContext.get_count_of_users(params, current_user)
+
+  conn
+    |> render("list.json", %{users: users, count: count})
+  end
+
+  def update(conn, %{"id" => id, "user" => user_params}, _) do
     user = Repo.get(User, id)
     |> User.changeset(user_params)
     |> Repo.update!()
@@ -18,7 +31,7 @@ defmodule FireappWeb.UserController do
 
   def reset_password(conn, %{"id" => id, "password_params" =>
                                             %{"old_password" => old_password, "password" => password,
-                                            "password_confirmation" => password_confirmation}}) do
+                                            "password_confirmation" => password_confirmation}}, _) do
     user = Repo.get(User, id)
 
     with {:ok, user} <- Fireapp.Auth.authenticate_user(user.email, old_password),

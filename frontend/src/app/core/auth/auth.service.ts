@@ -8,6 +8,7 @@ import { User } from '@app/core/models';
 import { environment } from '@env/environment';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
+import { PubSubService } from '@app/core/pub-sub.service';
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private tokenService: TokenService,
-    private router: Router
+    private router: Router,
+    private pubSubService: PubSubService
   ) { }
 
   public get user(): Observable<User> {
@@ -79,6 +81,8 @@ export class AuthService {
   public logout() {
     this.tokenService.clear();
     this.setUser(null);
+    this.pubSubService.setProject(null);
+    this.pubSubService.setUserHelper(null);
     this.router.navigate(['/session', 'signin']);
   }
 

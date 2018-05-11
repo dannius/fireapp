@@ -17,8 +17,8 @@ defmodule Fireapp.UserProject do
     |> validate_required(:project_id)
   end
 
-  def delete_user_from_project(user, project) do
-    case check_user_in_project(user, project) do
+  def delete_user_from_project(user_id, project_id) do
+    case check_user_in_project(user_id, project_id) do
       {:ok, relationship} ->
         Repo.delete(relationship)
       nil ->
@@ -26,20 +26,20 @@ defmodule Fireapp.UserProject do
     end
   end
 
-  def add_user_to_project(user, project) do
-    case check_user_in_project(user, project) do
+  def add_user_to_project(user_id, project_id) do
+    case check_user_in_project(user_id, project_id) do
       {:ok, _} ->
         :already_exist
       nil ->
-        __MODULE__.changeset(%__MODULE__{user_id: user.id, project_id: project.id})
+        __MODULE__.changeset(%__MODULE__{user_id: user_id, project_id: project_id})
         |> Repo.insert()
     end
   end
 
-  defp check_user_in_project(user, project) do
+  defp check_user_in_project(user_id, project_id) do
     query = from relationship in __MODULE__,
-    where: (relationship.user_id == ^user.id) and
-            (relationship.project_id == ^project.id)
+    where: (relationship.user_id == ^user_id) and
+            (relationship.project_id == ^project_id)
 
     case Repo.one(query) do
       nil ->

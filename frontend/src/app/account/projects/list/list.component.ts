@@ -4,7 +4,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
 import { ProjectWithUsers } from '@app/core/models';
-import { PubSubService } from '@app/core/pub-sub.service';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 
 @Component({
@@ -16,39 +15,35 @@ export class ProjectListComponent implements OnInit {
   public commonProjects: ProjectWithUsers[];
   public archivedProjects: ProjectWithUsers[];
   public specialProjects: ProjectWithUsers[];
+  public isLoading = false;
+  public searchString = '';
 
-  private projects: ProjectWithUsers[];
+  private allProjects: ProjectWithUsers[];
   private specialProjectIds: Number[];
+  private onlyOwnership = false;
 
   constructor(
     private dialog: MatDialog,
     private projectService: ProjectService,
     private route: ActivatedRoute,
     private router: Router,
-    private pubSubService: PubSubService,
     private specialProjectService: SpecialProjectService
   ) { }
 
   ngOnInit() {
-    this.projects = this.route.snapshot.data.projects;
+    this.allProjects = this.route.snapshot.data.projects;
 
     this.specialProjectService
       .specialProjectIds
       .subscribe((ids) => {
         this.specialProjectIds = ids;
-        this.sortProjects(this.projects);
+        this.sortProjects(this.allProjects);
       });
-
-    this.pubSubService.setProject(null);
   }
 
   public filterProjects(substring: string) {
-    this.projectService
-      .filteredListWithUsers(substring)
-      .subscribe((projects) => {
-        this.projects = projects;
-        this.sortProjects(this.projects);
-      });
+    this.searchString = substring;
+    this.getProjects();
   }
 
   private sortProjects(projects) {
@@ -64,6 +59,23 @@ export class ProjectListComponent implements OnInit {
       } else {
         this.commonProjects.push(project);
       }
+    });
+  }
+
+  public toggleOwnershipProjects({ checked }) {
+    this.onlyOwnership = checked;
+    this.getProjects();
+  }
+
+  private getProjects() {
+    this.isLoading = true;
+
+    this.projectService
+    .list(this.searchString, true, this.onlyOwnership)
+    .subscribe((projects) => {
+      this.allProjects = <ProjectWithUsers[]> projects;
+      this.sortProjects(this.allProjects);
+      this.isLoading = false;
     });
   }
 
