@@ -187,7 +187,39 @@ defmodule Fireapp.ProjectControllerTest do
     end
   end
 
-  def login_user(_) do
+  describe "reset_sdk_key" do
+    setup [:create_user, :login_user, :create_guest_user]
+
+    test "Successful reset sdk_key as owner", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+
+      response = conn_with_token
+      |> get(project_path(conn_with_token, :reset_sdk_key, project.id))
+
+      assert response.status == Status.code(:ok)
+    end
+
+    test "Create project as guest and unsuccessful reset sdk_key as user", %{conn_with_token: conn_with_token, guest: guest} do
+      %{project: project} = create_project_with_owner(guest)
+
+      response = conn_with_token
+      |> get(project_path(conn_with_token, :reset_sdk_key, project.id))
+
+      assert response.status == Status.code(:unauthorized)
+    end
+
+    test "Unsuccessful reset sdk_key, archived project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+      project = archive_project(project)
+
+      response = conn_with_token
+      |> get(project_path(conn_with_token, :reset_sdk_key, project.id))
+
+      assert response.status == Status.code(:conflict)
+    end
+  end
+
+  defp login_user(_) do
     conn = build_conn()
     response = conn
     |> post(session_path(conn, :create, session: login_params()))

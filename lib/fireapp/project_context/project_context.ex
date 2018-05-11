@@ -102,6 +102,24 @@ defmodule Fireapp.ProjectContext do
     end
   end
 
+  def reset_sdk(id, current_user) do
+    project = getOneIfOwner(id, current_user)
+
+    case project && !project.archived do
+      nil ->
+        :unauthorized
+
+      false ->
+        :conflict
+
+      true ->
+        project = project
+        |> Project.reset_sdk_changeset()
+        |> Repo.update!()
+        {:ok, project}
+    end
+  end
+
   def getOne(id, current_user) do
     id = String.to_integer(id)
     current_user = Repo.preload(current_user, :projects)

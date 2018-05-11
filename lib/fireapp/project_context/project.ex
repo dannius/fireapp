@@ -43,6 +43,12 @@ defmodule Fireapp.Project do
     |> unarchive()
   end
 
+  def reset_sdk_changeset(model, params \\ %{}) do
+    model
+    |> cast(params, [])
+    |> make_sdk_key()
+  end
+
   defp archive(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->

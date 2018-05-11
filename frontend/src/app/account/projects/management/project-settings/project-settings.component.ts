@@ -71,6 +71,33 @@ export class ProjectSettingsComponent {
       });
   }
 
+  public showResetSdkDialog() {
+    const data = {
+      btnConfirm: 'Подтвердить',
+      btnClose: 'Отмена',
+      title: 'Сгенерировать новый sdk ключ ?'
+    };
+
+    this.dialog
+      .open(ConfirmationDialogComponent, { data })
+      .afterClosed()
+      .subscribe((state: boolean) => {
+        if (!state) {
+          return;
+        }
+
+        this.bindingService
+          .unbind(this.currentUser.id, [this.project.id])
+          .subscribe((res) => {
+            if (res) {
+              this.snackBar.open(`Ключ проекта ${this.project.name} изменен`, '', this.snackBarConfig);
+            } else {
+              this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
+            }
+          });
+      });
+  }
+
   public showArchivationDialog() {
     const data = {
       btnConfirm: 'Архивировать',

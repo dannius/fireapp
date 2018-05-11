@@ -1,6 +1,11 @@
 .project {
   &__settings {
     margin-top: 20px;
+
+    &-btn {
+      display: block !important;
+      margin-bottom: 10px !important;
+    }
   }
 
   &__participant-list {
@@ -32,5 +37,15 @@
     position: absolute !important;
     top: -15px;
     right: 60px;
+  }
+
+  &__zone {
+    &:not(:first-child) {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba($transparent-color, 0.1);
+    }
+
+
   }
 }
