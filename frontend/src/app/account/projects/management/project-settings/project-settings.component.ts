@@ -60,6 +60,7 @@ export class ProjectSettingsComponent {
           .subscribe((res) => {
             if (res && res.length) {
               this.router.navigate(['/', 'account', 'projects']);
+              this.pubSubService.setProject(null);
 
               setTimeout(() => {
                 this.snackBar.open(`Вы покинули проект "${this.project.name}"`, '', this.snackBarConfig);

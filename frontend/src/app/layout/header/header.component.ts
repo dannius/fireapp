@@ -23,9 +23,9 @@ export class HeaderComponent implements OnInit {
   public commonProjects: Project[];
   public archivedProjects: Project[];
   public specialProjects: Project[];
+  public allProjects: Project[];
 
   private specialProjectIds: Number[];
-  private unsortedProjects: Project[];
 
   constructor(
     private authService: AuthService,
@@ -47,21 +47,21 @@ export class HeaderComponent implements OnInit {
         return this.projectService.list('', false, false);
       })
       .switchMap((projects) => {
-        this.unsortedProjects = projects;
+        this.allProjects = projects;
         return this.pubSubService.project;
       })
       .subscribe((project) => {
         this.project = project;
 
-        if (!this.unsortedProjects) {
+        if (!this.allProjects) {
           return;
         }
         if (this.project && !this.isProjectsIncludeProject()) {
-          this.unsortedProjects.push(project);
+          this.allProjects.push(project);
         }
 
         if (this.project) {
-          this.unsortedProjects = this.unsortedProjects.map((p) => p.id === this.project.id ? project : p);
+          this.allProjects = this.allProjects.map((p) => p.id === this.project.id ? project : p);
         }
 
         this.sortProjects();
@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit {
   }
 
   private isProjectsIncludeProject(): boolean {
-    return !!(this.unsortedProjects.find((project) =>
+    return !!(this.allProjects.find((project) =>
                 project.id === this.project.id));
   }
 
@@ -87,7 +87,7 @@ export class HeaderComponent implements OnInit {
     this.archivedProjects = [];
     this.specialProjects = [];
 
-    this.unsortedProjects.forEach((project) => {
+    this.allProjects.forEach((project) => {
       if (project.archived) {
         this.archivedProjects.push(project);
       } else if (this.specialProjectIds.includes(project.id)) {

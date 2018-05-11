@@ -9,7 +9,7 @@
         </ng-template>
 
         <mat-form-field class="header__selector">
-          <mat-select [value]="project?.id" (selectionChange)="selectProject($event)">
+          <mat-select [value]="project?.id" (selectionChange)="selectProject($event)" [disabled]="!project && !allProjects?.length">
             <mat-option *ngFor="let p of specialProjects" [value]="p.id">{{p.name}}</mat-option>
             <mat-divider></mat-divider>
             <mat-option *ngFor="let p of commonProjects" [value]="p.id">{{p.name}}</mat-option>
@@ -18,7 +18,7 @@
               <mat-option *ngFor="let p of archivedProjects" [value]="p.id">{{p.name}}</mat-option>
             </ng-container>
           </mat-select>
-          <mat-label *ngIf="!project">проект</mat-label>
+          <mat-label *ngIf="!project">{{allProjects?.length ? "выберите проект" : "нет проектов"}}</mat-label>
         </mat-form-field>
       </div>
 

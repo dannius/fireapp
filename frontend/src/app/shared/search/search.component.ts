@@ -30,7 +30,7 @@ export class SearchFormComponent implements OnInit {
       .debounceTime(400)
       .distinctUntilChanged()
       .subscribe((value) => {
-        this.pushSubstring.emit(value);
+        this.pushSubstring.emit(value.trim().toLowerCase());
       });
   }
 
