@@ -1,9 +1,7 @@
 <div class="container container__column">
-  <div class="project-list__controls">
+  <div *ngIf="allProjects?.length || searchString || isLoading; else EmptyProjects" class="project-list__controls">
+    <mat-progress-bar class="loader loader_absolute" *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
     <app-search (pushSubstring)="filterProjects($event)" placeholder="Поиск по проектам"></app-search>
-    <button (click)="showCreateProjectModal()" mat-fab class="project-list__btn-add">
-      <mat-icon>add</mat-icon>
-    </button>
     <mat-slide-toggle
       class="project-list__ownership-toggler"
       (change)="toggleOwnershipProjects($event)"
@@ -11,6 +9,16 @@
     Показать только мои проекты
     </mat-slide-toggle>
   </div>
+
+  <ng-template #EmptyProjects>
+    <div class="headline headline_absolute-center">
+      <h1 class="headline__title text-center headline_transparent">Список ваших проектов пуст</h1>
+    </div>
+  </ng-template>
+
+  <button (click)="showCreateProjectModal()" mat-fab class="project-list__btn-add">
+    <mat-icon>add</mat-icon>
+  </button>
 
   <div *ngIf="specialProjects?.length">
     <div class="headline">

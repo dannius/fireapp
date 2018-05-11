@@ -7,6 +7,7 @@ import { ProjectWithUsers, User } from '@app/core/models';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { BindingService } from '@app/account/user-list/binding.service';
+import { PubSubService } from '@app/core/pub-sub.service';
 
 @Component({
   selector: 'app-project-settings',
@@ -34,6 +35,7 @@ export class ProjectSettingsComponent {
     private projectService: ProjectService,
     private specialProjectService: SpecialProjectService,
     private bindingService: BindingService,
+    private pubSubService: PubSubService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) { }
@@ -150,9 +152,10 @@ export class ProjectSettingsComponent {
 
         this.projectService
           .delete(this.project.id)
-          .subscribe((project) => {
-            if (project) {
+          .subscribe((status) => {
+            if (status) {
               this.specialProjectService.removeFromSpecialIds(this.project);
+              this.pubSubService.setProject(null);
               this.router.navigate(['/', 'account', 'projects']);
 
               setTimeout(() => {

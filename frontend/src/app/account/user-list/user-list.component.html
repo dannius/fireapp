@@ -46,6 +46,8 @@
         <mat-cell *matCellDef="let row">
           <mat-form-field *ngIf="!userHelper[row.id]?.isLoading; else Spinner" class="user__project-select-field">
             <mat-select
+              [matTooltip]="!projectList?.length ? 'Tooltip!' : '' "
+              matTooltipPosition="left"
               [value]="userHelper[row.id].selectedIds"
               [placeholder]="userHelper[row.id]?.selectedNames?.length ? '' : 'добавить'"
               (selectionChange)="toggleProject($event, row.id)"

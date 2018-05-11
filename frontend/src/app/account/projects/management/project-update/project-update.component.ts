@@ -48,6 +48,7 @@ export class ProjectUpdateComponent implements OnInit {
       .subscribe((project) => {
         if (project) {
           this.pubSubService.setProject(project);
+          this.project.name = project.name;
           this.snackBar.open('Информация обновлена', '', this.snackBarConfig);
         } else {
           this.snackBar.open('Уже есть проект с таким названием, придумайте другое', '', this.snackBarConfig);

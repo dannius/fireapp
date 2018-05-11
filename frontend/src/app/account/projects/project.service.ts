@@ -81,7 +81,7 @@ export class ProjectService {
     return this
       .http
       .delete<any>(`${environment.apiUrl}/api/projects/${id}`)
-      .map(({ project }: any) => Project.fromJson(project))
+      .map(({ success }: any) => success)
       .catch((err) => Observable.of(err.status));
   }
 }

@@ -10,7 +10,7 @@
   </button>
   <mat-card-title class="text-center">{{project.name}}</mat-card-title>
   <mat-card-content>
-    <mat-card-subtitle>Участники:</mat-card-subtitle>
+    <label class="form__label">Участники:</label>
     <ul class="project-item__user-list">
       <li *ngFor="let user of project.users" class="project-item__user-item">
         {{user.name || user.email}}

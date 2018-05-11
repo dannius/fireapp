@@ -1,7 +1,7 @@
 import '@app/shared/rxjs-operators';
 
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatTableDataSource, MatPaginator, MatSnackBar } from '@angular/material';
 import { UserDataSource } from '@app/account/user-list/user.data-source';
 import { UserService } from '@app/account/user.service';
 import { FormControl } from '@angular/forms';
@@ -35,7 +35,8 @@ export class UserListComponent implements OnInit, AfterViewInit {
     private userService: UserService,
     private pubSubService: PubSubService,
     private projectService: ProjectService,
-    private bindingService: BindingService
+    private bindingService: BindingService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -125,6 +126,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
         this.removeUnbindingIds(ids, userId);
       });
     }
+
+    const snackBarConfig = {
+      duration: 2000
+    };
+
+    this.snackBar.open('Информация обновлена', '', snackBarConfig);
   }
 
   public toggleProject({ value }, userId) {

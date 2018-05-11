@@ -15,10 +15,11 @@ export class ProjectListComponent implements OnInit {
   public commonProjects: ProjectWithUsers[];
   public archivedProjects: ProjectWithUsers[];
   public specialProjects: ProjectWithUsers[];
+  public isLoading = false;
+  public searchString = '';
 
-  private projects: ProjectWithUsers[];
+  private allProjects: ProjectWithUsers[];
   private specialProjectIds: Number[];
-  private searchString = '';
   private onlyOwnership = false;
 
   constructor(
@@ -30,13 +31,13 @@ export class ProjectListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.projects = this.route.snapshot.data.projects;
+    this.allProjects = this.route.snapshot.data.projects;
 
     this.specialProjectService
       .specialProjectIds
       .subscribe((ids) => {
         this.specialProjectIds = ids;
-        this.sortProjects(this.projects);
+        this.sortProjects(this.allProjects);
       });
   }
 
@@ -67,11 +68,14 @@ export class ProjectListComponent implements OnInit {
   }
 
   private getProjects() {
+    this.isLoading = true;
+
     this.projectService
     .list(this.searchString, true, this.onlyOwnership)
     .subscribe((projects) => {
-      this.projects = <ProjectWithUsers[]> projects;
-      this.sortProjects(this.projects);
+      this.allProjects = <ProjectWithUsers[]> projects;
+      this.sortProjects(this.allProjects);
+      this.isLoading = false;
     });
   }
 
