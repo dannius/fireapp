@@ -4,8 +4,8 @@ import { ProjectItemComponent } from '@app/account/projects/item/item.component'
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
 import { ManagementComponent } from '@app/account/projects/management/management.component';
+import { ProjectInfoComponent } from '@app/account/projects/management/project-info/project-info.component';
 import { ProjectSettingsComponent } from '@app/account/projects/management/project-settings/project-settings.component';
-import { ProjectTeamComponent } from '@app/account/projects/management/project-team/project-team.component';
 import { ProjectUpdateComponent } from '@app/account/projects/management/project-update/project-update.component';
 import { ProjectRoutes } from '@app/account/projects/project.routing';
 import { ProjectService } from '@app/account/projects/project.service';
@@ -20,7 +20,7 @@ import { SharedModule } from '@app/shared';
     ProjectItemComponent,
     ProjectShowComponent,
     ManagementComponent,
-    ProjectTeamComponent,
+    ProjectInfoComponent,
     ProjectSettingsComponent,
     ProjectUpdateComponent,
 ],
@@ -34,7 +34,7 @@ import { SharedModule } from '@app/shared';
     ProjectItemComponent,
     ProjectShowComponent,
     ManagementComponent,
-    ProjectTeamComponent,
+    ProjectInfoComponent,
     ProjectSettingsComponent,
     ProjectUpdateComponent,
   ],

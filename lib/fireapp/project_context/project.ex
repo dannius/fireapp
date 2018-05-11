@@ -6,6 +6,7 @@ defmodule Fireapp.Project do
 
   schema "projects" do
     field :name, :string
+    field :sdk_key, :string
     field :archived, :boolean, default: false
 
     many_to_many :users, User, join_through: "users_projects", on_replace: :delete, on_delete: :delete_all
@@ -18,9 +19,10 @@ defmodule Fireapp.Project do
     model
     |> cast(params, ~w(name owner_id))
     |> validate_required([:owner_id, :name])
-    |> put_owner_to_users
+    |> put_owner_to_users()
     |> foreign_key_constraint(:users, name: :users_projects_project_id_fkey)
     |> uniq_project_name_for_user(:name)
+    |> make_sdk_key()
   end
 
   def update_changeset(model, params \\ %{}) do
@@ -32,13 +34,13 @@ defmodule Fireapp.Project do
   def archive_changeset(model, params \\ %{}) do
     model
     |> cast(params, [])
-    |> archive
+    |> archive()
   end
 
   def unarchive_changeset(model, params \\ %{}) do
     model
     |> cast(params, [])
-    |> unarchive
+    |> unarchive()
   end
 
   defp archive(changeset) do
@@ -59,7 +61,7 @@ defmodule Fireapp.Project do
     end
   end
 
-  def put_owner_to_users(changeset) do
+  defp put_owner_to_users(changeset) do
     case Map.has_key?(changeset.changes, :owner_id) do
       true ->
         owner_id = get_field(changeset, :owner_id)
@@ -70,7 +72,7 @@ defmodule Fireapp.Project do
     end
   end
 
-  def uniq_project_name_for_user(changeset, field, options \\ []) do
+  defp uniq_project_name_for_user(changeset, field, options \\ []) do
     owner_id = if changeset.data.owner_id,
                     do: changeset.data.owner_id, else: changeset.changes.owner_id
 
@@ -87,6 +89,16 @@ defmodule Fireapp.Project do
         false -> [name: "mast have unique name"]
       end
     end)
+  end
+
+  defp make_sdk_key(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true} ->
+        hash = :crypto.strong_rand_bytes(32) |> Base.encode64 |> binary_part(0, 32)
+        put_change(changeset, :sdk_key, hash)
+      _ ->
+        changeset
+    end
   end
 
 end

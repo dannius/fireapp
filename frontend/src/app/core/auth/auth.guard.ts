@@ -18,7 +18,7 @@ export class AuthGuard implements CanActivate {
     return this
       .authService
       .findSession()
-      .map((user) => user !== null)
+      .map((user) => user && !!user.id)
       .map((isAuthenticated) => {
         if (!isAuthenticated) {
           this.router.navigate(['/session', 'signin']);

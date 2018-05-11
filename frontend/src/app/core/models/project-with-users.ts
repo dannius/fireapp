@@ -3,19 +3,20 @@ import { Project } from '@app/core/models/project';
 
 export class ProjectWithUsers extends Project {
 
-  public static fromJson({ id, owner_id, owner_login, name, archived, users }): ProjectWithUsers {
+  public static fromJson({ id, owner_id, owner_login, name, sdk_key, archived, users }): ProjectWithUsers {
     return new ProjectWithUsers(
       +id,
       +owner_id,
       owner_login,
       name,
+      sdk_key,
       archived,
       users.map((user) => User.fromJson(user)) || []
     );
   }
 
   public static empty(): Project {
-    return new ProjectWithUsers(null, null, '', '', false, []);
+    return new ProjectWithUsers(null, null, '', '', '', false, []);
   }
 
   constructor(
@@ -23,6 +24,7 @@ export class ProjectWithUsers extends Project {
     public ownerId: number,
     public ownerLogin: string,
     public name: string,
+    public sdkKey: string,
     public archived: boolean,
     public users: User[]
   ) {

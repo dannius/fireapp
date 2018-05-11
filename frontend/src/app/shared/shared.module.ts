@@ -23,6 +23,7 @@ import {
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { SearchFormComponent } from '@app/shared/search/search.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   imports: [
@@ -46,6 +47,7 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatPaginatorModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    ClipboardModule
   ],
   exports: [
     CommonModule,
@@ -68,6 +70,7 @@ import { SearchFormComponent } from '@app/shared/search/search.component';
     MatPaginatorModule,
     MatSlideToggleModule,
     MatTooltipModule,
+    ClipboardModule,
 
     /////////////
     // Components

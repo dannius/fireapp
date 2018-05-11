@@ -1,6 +1,6 @@
 defmodule FireappWeb.ProjectView do
   use FireappWeb, :view
-  @project_with_users_attributes [:id, :name, :owner_id, :archived, :owner_login, :users]
+  @project_with_users_attributes [:id, :name, :owner_id, :archived, :sdk_key, :owner_login, :users]
   @project_attributes [:id, :name, :owner_id, :archived, :owner_login]
   @user_attributes [:id, :name, :email]
 

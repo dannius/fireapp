@@ -4,7 +4,7 @@
     <h3 class="headline__subtitle">Для дальньйшего функционирования необходимо разархивировать проект</h3>
   </div>
 
-  <app-project-team [isOwner]="isOwnership()" [project]="project"></app-project-team>
+  <app-project-info [isOwner]="isOwnership()" [project]="project"></app-project-info>
   <app-project-update *ngIf="isOwnership()" [project]="project"></app-project-update>
   <app-project-settings
     [isOwner]="isOwnership()"

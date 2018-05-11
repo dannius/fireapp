@@ -16,4 +16,21 @@
       margin: 1px 2px;
     }
   }
+
+  &__sdk-label {
+    position: relative;
+    margin-top: 0;
+  }
+
+  &__sdk-key {
+    font-weight: bold;
+    color: $tundora;
+  }
+
+  &__sdk-copy-btn {
+    margin-left: 10px !important;
+    position: absolute !important;
+    top: -15px;
+    right: 60px;
+  }
 }

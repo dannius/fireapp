@@ -16,7 +16,7 @@
     }
 
     &_yellow {
-      background-color: $gorse;
+      background-color: $gorse !important;
       color: #fff;
     }
   }
@@ -24,6 +24,6 @@
 
   &__label {
     color: $transparent-color;
-    margin-bottom: 8px;
+    margin: 10px 0;
   }
 }
