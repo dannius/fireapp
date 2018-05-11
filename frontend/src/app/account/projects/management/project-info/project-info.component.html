@@ -1,0 +1,34 @@
+<mat-card class="project__info">
+  <mat-card-title>Информация</mat-card-title>
+
+  <mat-card-content>
+    <div class="project__zone">
+      <mat-label class="form__label">Участнкики:</mat-label>
+      <ul *ngIf="project.users.length; else WithoutUsers" class="project__participant-list">
+        <li class="project__participant-item">Вы, а так же: </li>
+        <li *ngFor="let user of project.users" class="project__participant-item">{{user.name || user.email}}</li>
+      </ul>
+
+      <ng-template #WithoutUsers>
+        <div class="project__participant-list">
+          <span class="project__participant-item">Только вы участник проекта</span>
+        </div>
+      </ng-template>
+    </div>
+
+    <p class="form__label">Владелец проекта - {{isOwner ? "вы" : project.ownerLogin}}</p>
+
+    <p class="form__label project__sdk-label">SDK ключ проекта:
+      <span class="project__sdk-key">{{project.sdkKey}}</span>
+      <button
+        (click)="copyToClipboard()"
+        [cbContent]="project.sdkKey"
+        ngxClipboard
+        class="project__sdk-copy-btn"
+        color="primary"
+        mat-mini-fab>
+        <mat-icon>file_copy</mat-icon>
+      </button>
+    </p>
+  </mat-card-content>
+</mat-card>

@@ -135,4 +135,23 @@ defmodule FireappWeb.ProjectController do
         |> render("successfull_with_project.json", %{project: project})
     end
   end
+
+  def reset_sdk_key(conn, %{"id" => id}, current_user) do
+    case ProjectContext.reset_sdk(id, current_user) do
+      :conflict ->
+        conn
+        |> put_status(:conflict)
+        |> render("error.json")
+
+      :unauthorized ->
+        conn
+        |> put_status(:unauthorized)
+        |> render("error.json")
+
+      {:ok, project} ->
+        conn
+        |> put_status(:ok)
+        |> render("sdk_key.json", %{key: project.sdk_key})
+    end
+  end
 end

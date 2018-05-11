@@ -2,40 +2,50 @@
   <mat-card-title>Управление</mat-card-title>
   <mat-card-content>
     <div *ngIf="isOwner; else NotOwner">
-      <div class="project__settings-controls">
-        <p class="form__label">Архивация</p>
+      <div class="project__zone">
+        <mat-card-subtitle class="project__zone-title">Warning zone</mat-card-subtitle>
         <button
           *ngIf="!project.archived; else RestoreBtn"
           mat-raised-button
-          class="form__btn_yellow"
+          class="project__settings-btn form__btn_yellow"
           (click)="showArchivationDialog()"
         >
         архивировать
         </button>
-  
         <ng-template #RestoreBtn>
           <button mat-raised-button
-            class="form__btn_yellow"
+            class="project__settings-btn form__btn_yellow"
             (click)="showRestoreDialog()"
           >
           восстановить
           </button>
         </ng-template>
-      </div>
-      <div class="project__settings-controls">
-        <p class="form__label">Удаление</p>
+
         <button
+          mat-raised-button
+          class="project__settings-btn form__btn_yellow"
+          (click)="showResetSdkDialog()"
+        >
+        Сбросить sdk ключ
+        </button>
+      </div>
+
+      <div class="project__zone">
+        <mat-card-subtitle class="project__zone-title">Danger zone</mat-card-subtitle>
+        <button
+          class="project__settings-btn"
           mat-raised-button
           color="warn"
           (click)="showInputDialog()"
         >
         удалить
         </button>
-      </div> 
+      </div>
     </div>
     <ng-template #NotOwner>
-      <div class="project__settings-controls">
+      <div class="project__zone">
         <button
+          class="project__settings-btn"
           mat-raised-button
           color="warn"
           (click)="showLeaveProjectDialog()"

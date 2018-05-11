@@ -1,6 +1,11 @@
 .project {
   &__settings {
     margin-top: 20px;
+
+    &-btn {
+      display: block !important;
+      margin-bottom: 10px !important;
+    }
   }
 
   &__participant-list {
@@ -8,12 +13,46 @@
     flex-wrap: wrap;
     padding: 0;
     list-style: none;
+    margin-top: 5px;
   }
 
   &__participant-item {
-    &:not(:last-child)::after {
-      content: '/';
-      margin: 1px 2px;
+    &:first-child {
+      margin-right: 5px;
+    }
+
+    &:not(:last-child):not(:first-child)::after {
+      content: ',';
+      margin: 0 3px 0 0;
+    }
+  }
+
+  &__sdk-label {
+    position: relative;
+    margin-top: 0;
+  }
+
+  &__sdk-key {
+    font-weight: bold;
+    color: $tundora;
+  }
+
+  &__sdk-copy-btn {
+    margin-left: 10px !important;
+    position: absolute !important;
+    top: -15px;
+    right: -5px;
+  }
+
+  &__zone {
+    &:not(:first-child) {
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid rgba($transparent-color, 0.2);
+    }
+
+    &-title {
+      font-size: 16px;
     }
   }
 }

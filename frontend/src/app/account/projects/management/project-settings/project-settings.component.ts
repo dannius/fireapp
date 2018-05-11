@@ -60,10 +60,39 @@ export class ProjectSettingsComponent {
           .subscribe((res) => {
             if (res && res.length) {
               this.router.navigate(['/', 'account', 'projects']);
+              this.pubSubService.setProject(null);
 
               setTimeout(() => {
                 this.snackBar.open(`Вы покинули проект "${this.project.name}"`, '', this.snackBarConfig);
               }, this.snackBarDelay);
+            } else {
+              this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
+            }
+          });
+      });
+  }
+
+  public showResetSdkDialog() {
+    const data = {
+      btnConfirm: 'Подтвердить',
+      btnClose: 'Отмена',
+      title: 'Сгенерировать новый sdk ключ ?'
+    };
+
+    this.dialog
+      .open(ConfirmationDialogComponent, { data })
+      .afterClosed()
+      .subscribe((state: boolean) => {
+        if (!state) {
+          return;
+        }
+
+        this.projectService
+          .resetSdkKey(this.project.id)
+          .subscribe((key) => {
+            if (typeof key === 'string') {
+              this.snackBar.open(`Ключ проекта ${this.project.name} изменен`, '', this.snackBarConfig);
+              this.project.sdkKey = key;
             } else {
               this.snackBar.open(`Что то пошло не так`, '', this.snackBarConfig);
             }

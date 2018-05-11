@@ -58,13 +58,10 @@ defmodule Fireapp.ProjectTest do
     setup [:valid_project_params]
 
     test "Insert then update project", %{valid_project_params: valid_project_params} do
-      project = Project.create_changeset(%Project{}, valid_project_params)
-      |> Repo.insert!()
-
-      project = Repo.get!(Project, project.id)
       updated_name = "updated_name";
 
-      assert project
+      assert Project.create_changeset(%Project{}, valid_project_params)
+      |> Repo.insert!()
       |> Repo.preload(:users)
       |> Project.update_changeset(%{name: updated_name})
       |> Repo.update()
@@ -87,12 +84,8 @@ defmodule Fireapp.ProjectTest do
     setup [:valid_project_params]
 
     test "Insert then archive project", %{valid_project_params: valid_project_params} do
-      project = Project.create_changeset(%Project{}, valid_project_params)
+      assert Project.create_changeset(%Project{}, valid_project_params)
       |> Repo.insert!()
-
-      project = Repo.get!(Project, project.id)
-
-      assert project
       |> Repo.preload(:users)
       |> Project.archive_changeset()
       |> Repo.update()
@@ -104,16 +97,24 @@ defmodule Fireapp.ProjectTest do
     setup [:valid_project_params]
 
     test "Insert, archive and unarchive project", %{valid_project_params: valid_project_params} do
-      project = Project.create_changeset(%Project{}, valid_project_params)
+      assert Project.create_changeset(%Project{}, valid_project_params)
       |> Repo.insert!()
-
-      project = Repo.get!(Project, project.id)
-
-      assert project
       |> Repo.preload(:users)
       |> Project.archive_changeset()
       |> Repo.update!()
       |> Project.unarchive_changeset()
+      |> Repo.update()
+      |> repo_condition()
+    end
+  end
+
+  describe "reset sdk_key" do
+    setup [:valid_project_params]
+
+    test "Insert, then reset sdk_key", %{valid_project_params: valid_project_params} do
+      assert Project.create_changeset(%Project{}, valid_project_params)
+      |> Repo.insert!()
+      |> Project.reset_sdk_changeset()
       |> Repo.update()
       |> repo_condition()
     end

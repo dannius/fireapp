@@ -1,6 +1,6 @@
 defmodule FireappWeb.ProjectView do
   use FireappWeb, :view
-  @project_with_users_attributes [:id, :name, :owner_id, :archived, :owner_login, :users]
+  @project_with_users_attributes [:id, :name, :owner_id, :archived, :sdk_key, :owner_login, :users]
   @project_attributes [:id, :name, :owner_id, :archived, :owner_login]
   @user_attributes [:id, :name, :email]
 
@@ -31,6 +31,8 @@ defmodule FireappWeb.ProjectView do
     project = configurate_project_params(project)
     %{project: project}
   end
+
+  def render("sdk_key.json", %{key: key}), do: %{key: key}
 
   def render("successfull.json", _), do: %{success: true}
 
