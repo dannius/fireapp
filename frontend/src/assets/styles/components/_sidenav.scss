@@ -1,0 +1,13 @@
+.sidenav {
+  min-width: 210px;
+  display: flex;
+
+  &__environment-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__environment-link {
+
+  }
+}

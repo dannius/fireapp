@@ -1,0 +1,33 @@
+<div class="env__controls">
+  <form *ngIf="showCreateForm | async; else ToggleShowBtn" [formGroup]="envForm" (ngSubmit)="createEnv()" class="env__form">
+    <mat-form-field class="env__create-field">
+      <input formControlName="name" matInput placeholder="Название">
+
+      <mat-error 
+        *ngIf="envForm.controls.name?.errors?.existName"
+        class="form__error mat-text-warn">
+        Такое название уже есть
+      </mat-error>
+    </mat-form-field>
+
+    <div class="env__form-controls">
+      <button (click)="showCreateForm.next(false)" mat-button type="button">
+        <mat-icon color="warn">keyboard_backspace</mat-icon>
+      </button>
+      <button mat-button type="submit">
+        <mat-icon>save</mat-icon>
+      </button>
+    </div>
+  </form>
+
+  <ng-template #ToggleShowBtn>
+    <button
+      (click)="showCreateForm.next(true)"
+      class="env__btn-create"
+      mat-button
+      color="primary"
+    >
+    {{this.project?.environments?.length ? "Добавить" : "Создать среду разработки"}}
+    </button>
+  </ng-template>
+</div>

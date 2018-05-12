@@ -6,12 +6,15 @@ import { AccountLayoutComponent } from '@app/layout/account-layout/account-layou
 import { AuthLayoutComponent } from '@app/layout/auth-layout/auth-layout.component';
 import { HeaderComponent } from '@app/layout/header/header.component';
 import { SharedModule } from '@app/shared';
+import { EnvFormComponent } from '@app/account/env-form/env-form.component';
+import { EnvironmentService } from '@app/account/environment.service';
 
 @NgModule({
   declarations: [
     AuthLayoutComponent,
     AccountLayoutComponent,
-    HeaderComponent
+    HeaderComponent,
+    EnvFormComponent
   ],
   imports: [
     SharedModule,
@@ -20,11 +23,13 @@ import { SharedModule } from '@app/shared';
   exports: [
     AuthLayoutComponent,
     AccountLayoutComponent,
-    HeaderComponent
+    HeaderComponent,
+    EnvFormComponent
   ],
   providers: [
     ProjectService,
-    SpecialProjectService
+    SpecialProjectService,
+    EnvironmentService
   ]
 })
 export class LayoutModule { }

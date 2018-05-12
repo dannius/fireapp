@@ -12,7 +12,11 @@ defmodule FireappWeb.ProjectController do
   def index(conn, params, current_user) do
     projects =
       ProjectContext.project_list_by_params(params, current_user)
-      |> Enum.map(fn (project) -> Repo.preload(project, :owner) end)
+      |> Enum.map(fn (project) ->
+        project
+        |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
+      end)
 
     conn
     |> render("list.json", %{projects: projects})
@@ -29,6 +33,7 @@ defmodule FireappWeb.ProjectController do
         project = project 
         |> Repo.preload(:users)
         |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
 
         conn
         |> render("show.json", project: project)
@@ -40,10 +45,11 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         project = project 
         |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
 
         conn
         |> put_status(:created)
-        |> render("successfull_with_project.json", %{project: project})
+        |> render("show.json", %{project: project})
       {:error, changeset} ->
         conn
         |> put_status(:unprocessable_entity)
@@ -66,10 +72,11 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         project = project
         |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
 
         conn
         |> put_status(:ok)
-        |> render("successfull_with_project.json", %{project: project})
+        |> render("show.json", %{project: project})
 
       {:unprocessable_entity, changeset} ->
         conn
@@ -107,10 +114,11 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         project = project 
         |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
 
         conn
         |> put_status(:ok)
-        |> render("successfull_with_project.json", %{project: project})
+        |> render("show.json", %{project: project})
     end
   end
 
@@ -129,10 +137,11 @@ defmodule FireappWeb.ProjectController do
       {:ok, project} ->
         project = project 
         |> Repo.preload(:owner)
+        |> Repo.preload(:environments)
 
         conn
         |> put_status(:ok)
-        |> render("successfull_with_project.json", %{project: project})
+        |> render("show.json", %{project: project})
     end
   end
 

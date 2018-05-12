@@ -130,7 +130,7 @@ defmodule Fireapp.ProjectContext do
   end
 
   def get_one_if_owner(id, current_user) do
-    id = String.to_integer(id)
+    id = if is_integer(id), do: id, else: String.to_integer(id)
     current_user = Repo.preload(current_user, :projects)
 
     current_user.projects
