@@ -36,7 +36,7 @@ defmodule FireappWeb.ProjectView do
 
   def render("successfull.json", _), do: %{success: true}
 
-  def render("error_changeset.json", %{data: data}), do: ""
+  def render("error_changeset.json", _), do: ""
 
   def render("error.json", _), do: ""
 

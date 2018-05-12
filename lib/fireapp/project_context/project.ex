@@ -79,7 +79,7 @@ defmodule Fireapp.Project do
     end
   end
 
-  defp uniq_project_name_for_user(changeset, field, options \\ []) do
+  defp uniq_project_name_for_user(changeset, field) do
     owner_id = if changeset.data.owner_id,
                     do: changeset.data.owner_id, else: changeset.changes.owner_id
 

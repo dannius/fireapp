@@ -19,7 +19,7 @@ defmodule FireappWeb.ProjectController do
   end
 
   def show(conn, %{"id" => id}, current_user) do
-    case ProjectContext.getOne(id, current_user) do
+    case ProjectContext.get_one(id, current_user) do
       nil ->
         conn
         |> put_status(:not_found)
@@ -79,7 +79,7 @@ defmodule FireappWeb.ProjectController do
   end
 
   def delete(conn, %{"id" => id}, current_user) do
-    case ProjectContext.getOneIfOwner(id, current_user) do
+    case ProjectContext.get_one_if_owner(id, current_user) do
       nil ->
         conn
         |> put_status(:not_found)

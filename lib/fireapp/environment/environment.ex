@@ -24,7 +24,7 @@ defmodule Fireapp.Environment do
     |> name_to_lower_case()
   end
 
-  defp name_to_lower_case(changeset, options \\ []) do
+  defp name_to_lower_case(changeset) do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         env_name =
@@ -38,7 +38,7 @@ defmodule Fireapp.Environment do
     end
   end
 
-  defp uniq_environment_name_for_project(changeset, field, options \\ []) do
+  defp uniq_environment_name_for_project(changeset, field) do
     project_id = if changeset.data.project_id,
                     do: changeset.data.project_id, else: changeset.changes.project_id
 

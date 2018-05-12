@@ -1,4 +1,4 @@
-defmodule Fireapp.ProjectTest do
+defmodule Fireapp.EnvironmentTest do
   use FireappWeb.ConnCase
   use FireappWeb.ModelTestHelper
 
