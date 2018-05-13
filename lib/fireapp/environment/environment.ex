@@ -2,11 +2,13 @@ defmodule Fireapp.Environment do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Fireapp.{Repo, Project}
+  alias Fireapp.{Repo, Project, Event}
 
   schema "environments" do
     field :name, :string
+
     belongs_to :project, Project
+    has_many :errors, Event.Error
   end
 
   def create_changeset(model, params \\ %{}) do

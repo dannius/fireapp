@@ -2,13 +2,16 @@ defmodule Fireapp.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias Fireapp.{Project, Event}
+
   schema "users" do
     field :name, :string
     field :email, :string
     field :password, :string, virtual: true
     field :password_hash, :string
 
-    many_to_many :projects, Fireapp.Project, join_through: "users_projects"
+    many_to_many :projects, Project, join_through: "users_projects"
+    has_many :errors, Event.Error
 
     timestamps()
   end

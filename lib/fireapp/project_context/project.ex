@@ -2,7 +2,7 @@ defmodule Fireapp.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Fireapp.{User, Repo, Environment}
+  alias Fireapp.{User, Repo, Environment, Event}
 
   schema "projects" do
     field :name, :string
@@ -12,6 +12,7 @@ defmodule Fireapp.Project do
     many_to_many :users, User, join_through: "users_projects", on_replace: :delete, on_delete: :delete_all
     belongs_to :owner, User, foreign_key: :owner_id
     has_many :environments, Environment
+    has_many :errors, Event.Error
 
     timestamps()
   end
