@@ -13,6 +13,7 @@ import { ProjectShowComponent } from '@app/account/projects/show/show.component'
 import { ProjectShowResolver } from '@app/account/projects/show/show.resolver';
 import { UserService } from '@app/account/user.service';
 import { SharedModule } from '@app/shared';
+import { ManagementResolver } from '@app/account/projects/management/management.resolver';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { SharedModule } from '@app/shared';
     // RESOLVERS
     /////////////
     ProjectListResolver,
-    ProjectShowResolver
+    ProjectShowResolver,
+    ManagementResolver
   ]
 })
 export class ProjectModule { }

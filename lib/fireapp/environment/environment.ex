@@ -28,11 +28,10 @@ defmodule Fireapp.Environment do
     case changeset do
       %Ecto.Changeset{valid?: true} ->
         env_name =
-          if changeset.data.name,
-            do: changeset.data.name, else: changeset.changes.name
-          |> String.downcase()
+          if changeset.changes.name,
+            do: changeset.changes.name, else: changeset.data.name
 
-        put_change(changeset, :name, env_name)
+        put_change(changeset, :name, String.downcase(env_name))
       _ ->
         changeset
     end

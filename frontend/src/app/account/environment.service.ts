@@ -28,7 +28,7 @@ export class EnvironmentService {
       .catch((_error) => Observable.of(null));
   }
 
-  public update(id: number, envParams: any): Observable<Environment> {
+  public update(envParams: any): Observable<Environment> {
     const params = {
       environment: {
         name: envParams.name,
@@ -37,7 +37,7 @@ export class EnvironmentService {
 
     return this
       .http
-      .patch<any>(`${env.apiUrl}/api/environments/${id}`, params)
+      .patch<any>(`${env.apiUrl}/api/environments/${envParams.id}`, params)
       .map(({ environment }) => Environment.fromJson(environment))
       .catch((_error) => Observable.of(null));
   }

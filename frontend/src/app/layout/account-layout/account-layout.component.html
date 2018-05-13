@@ -3,7 +3,7 @@
 <mat-sidenav-container class="app-inner">
   <mat-sidenav #sidenav *ngIf="!!project" class="sidenav" mode="side" [opened]="true">
     <div *ngIf="project?.environments?.length" class="sidenav__environments">
-      <p class="form__label text-center">Среды разработки:</p>
+      <p class="form__label text-center">Environments:</p>
       <div class="sidenav__environment-list">
         <a
           *ngFor="let env of project.environments"
@@ -19,6 +19,7 @@
     </div>
     <mat-divider></mat-divider>
     <app-env-form *ngIf="isOwnership()" [project]="project"></app-env-form>
+    <p *ngIf="!isOwnership() && !project?.environments?.length" class="form__label text-center">Нет даннных</p>
   </mat-sidenav>
 
   <mat-sidenav-content>
