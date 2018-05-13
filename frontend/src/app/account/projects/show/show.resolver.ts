@@ -15,7 +15,7 @@ export class ProjectShowResolver implements Resolve<Observable<number>> {
   ) { }
 
   resolve(route: ActivatedRouteSnapshot) {
-    const id = +route.params['id'];
+    const id = +route.params['projectId'];
 
     if (!id) {
       this.router.navigate(['404']);

@@ -12,7 +12,7 @@ export const ProjectRoutes: Routes = [
     component: ProjectListComponent,
     resolve: { projects: ProjectListResolver },
   }, {
-    path: ':id',
+    path: ':projectId/environments/:envId',
     component: ProjectShowComponent,
     resolve: { project: ProjectShowResolver },
   }, {

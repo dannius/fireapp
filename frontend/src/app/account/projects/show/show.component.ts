@@ -18,17 +18,17 @@ export class ProjectShowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.route.data
-    .switchMap(({ project }) => {
-      if (!this.project || this.project.id !== project.id) {
-        this.project = project;
-      }
+    // this.route.data
+    // .switchMap(({ project }) => {
+    //   if (!this.project || this.project.id !== project.id) {
+    //     this.project = project;
+    //   }
 
-      return Observable.of(project);
-    })
-    .subscribe((project) => {
-      this.pubSubService
-        .setProject(this.project);
-    });
+    //   return Observable.of(project);
+    // })
+    // .subscribe((project) => {
+    //   this.pubSubService
+    //     .setProject(this.project);
+    // });
   }
 }

@@ -70,7 +70,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public selectProject({ value }): void {
-    this.router.navigate(['/', 'account', 'projects', value]);
+    this.router.navigate(['/', 'account', 'projects', value, 'management']);
   }
 
   public logout(): void {

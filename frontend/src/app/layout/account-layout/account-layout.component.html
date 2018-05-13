@@ -11,7 +11,7 @@
           class="sidenav__environment-link"
           [routerLinkActiveOptions]="{exact: true}"
           [routerLinkActive]="'header__link_active'"
-          [routerLink]="['/', 'account', 'users']"
+          [routerLink]="['/', 'account', 'projects', project.id, 'environments', env.id]"
         >
         {{env.name | uppercase}}
         </a>
