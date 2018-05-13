@@ -14,6 +14,7 @@ defmodule FireappWeb.ProjectController do
       ProjectContext.project_list_by_params(params, current_user)
       |> Enum.map(fn (project) ->
         project
+        |> Repo.preload(:users)
         |> Repo.preload(:owner)
         |> Repo.preload(:environments)
       end)
@@ -43,7 +44,8 @@ defmodule FireappWeb.ProjectController do
   def create(conn, %{"project" => project_params}, current_user) do
     case ProjectContext.create_project(project_params, current_user.id) do
       {:ok, project} ->
-        project = project 
+        project = project
+        |> Repo.preload(:users)
         |> Repo.preload(:owner)
         |> Repo.preload(:environments)
 
@@ -71,6 +73,7 @@ defmodule FireappWeb.ProjectController do
 
       {:ok, project} ->
         project = project
+        |> Repo.preload(:users)
         |> Repo.preload(:owner)
         |> Repo.preload(:environments)
 
@@ -112,7 +115,8 @@ defmodule FireappWeb.ProjectController do
         |> render("error.json")
 
       {:ok, project} ->
-        project = project 
+        project = project
+        |> Repo.preload(:users)
         |> Repo.preload(:owner)
         |> Repo.preload(:environments)
 
@@ -135,7 +139,8 @@ defmodule FireappWeb.ProjectController do
         |> render("error.json")
 
       {:ok, project} ->
-        project = project 
+        project = project
+        |> Repo.preload(:users)
         |> Repo.preload(:owner)
         |> Repo.preload(:environments)
 

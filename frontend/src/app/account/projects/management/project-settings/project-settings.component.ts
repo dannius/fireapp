@@ -3,7 +3,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
-import { ProjectWithUsers, User } from '@app/core/models';
+import { Project, User } from '@app/core/models';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { BindingService } from '@app/account/user-list/binding.service';
@@ -23,7 +23,7 @@ import { Observable } from 'rxjs/Observable';
 export class ProjectSettingsComponent implements OnInit {
 
   @Input()
-  public project: ProjectWithUsers;
+  public project: Project;
 
   @Input()
   public isOwner: boolean;

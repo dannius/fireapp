@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Project, ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
 import { Observable } from 'rxjs/Observable';
 
@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ProjectShowComponent implements OnInit {
 
-  private project: ProjectWithUsers;
+  private project: Project;
 
   constructor(
     private route: ActivatedRoute,
@@ -18,17 +18,12 @@ export class ProjectShowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.route.data
-    // .switchMap(({ project }) => {
-    //   if (!this.project || this.project.id !== project.id) {
-    //     this.project = project;
-    //   }
-
-    //   return Observable.of(project);
-    // })
-    // .subscribe((project) => {
-    //   this.pubSubService
-    //     .setProject(this.project);
-    // });
+    this.route.data
+    .subscribe(({ project }) => {
+      if (!this.project || this.project.id !== project.id) {
+        this.project = project;
+      }
+      this.pubSubService.setProject(this.project);
+    });
   }
 }

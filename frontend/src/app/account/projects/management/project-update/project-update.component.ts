@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { PubSubService } from '@app/core/pub-sub.service';
@@ -12,7 +12,7 @@ import { ProjectService } from '@app/account/projects/project.service';
 export class ProjectUpdateComponent implements OnInit {
 
   @Input()
-  public project: ProjectWithUsers;
+  public project: Project;
 
   public form: FormGroup;
   public isLoading: boolean;

@@ -3,7 +3,7 @@ import '@app/shared/rxjs-operators';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '@app/core/auth';
-import { ProjectWithUsers, User } from '@app/core/models';
+import { Project, User } from '@app/core/models';
 import { PubSubService } from '@app/core/pub-sub.service';
 import { Observable } from 'rxjs/Observable';
 
@@ -13,7 +13,7 @@ import { Observable } from 'rxjs/Observable';
 })
 export class ManagementComponent implements OnInit {
 
-  public project: ProjectWithUsers;
+  public project: Project;
   public user: User;
 
   constructor(
@@ -30,17 +30,11 @@ export class ManagementComponent implements OnInit {
         }
 
         this.pubSubService.setProject(project);
-        return Observable.of(project);
-      });
-
-    Observable
-      .forkJoin(
-        projectObservable.take(1),
-        this.authService.user.take(1)
-      )
-      .subscribe(([project, user]) => {
+        return this.authService.user;
+      })
+      .subscribe((user) => {
         this.user = user;
-        this.project.users = this.project.users.filter((u) => u.id !== this.user.id);
+        this.project.users = this.project.users.filter((u) => this.user && u.id !== this.user.id);
       });
   }
 

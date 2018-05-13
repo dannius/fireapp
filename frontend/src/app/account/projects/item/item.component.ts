@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
-import { ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 
 @Component({
   selector: 'app-project-item',
@@ -9,7 +9,7 @@ import { ProjectWithUsers } from '@app/core/models';
 export class ProjectItemComponent {
 
   @Input()
-  project: ProjectWithUsers;
+  project: Project;
 
   @Input()
   special: boolean;
