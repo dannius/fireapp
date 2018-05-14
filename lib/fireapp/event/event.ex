@@ -1,7 +1,25 @@
 defmodule Fireapp.Event do
 
-  alias Fireapp.{Repo, User, Environment, ProjectContext, Project, Event, UserProject}
+  alias Fireapp.{Repo, User, Environment, ProjectContext, Project, Event, UserProject, ProjectContext}
   import Ecto.Query, only: [from: 2]
+
+  def error_list_by_params(params, current_user) do
+    %{
+      "environment_id" => env_id,
+      "project_id" => project_id
+    } = params
+
+    case ProjectContext.get_one(project_id, current_user) do
+      nil ->
+        :unauthorized
+      _ ->
+        (
+          from error in Event.Error,
+          where: (error.environment_id == ^env_id)
+        )
+        |> Repo.all()
+    end
+  end
 
   def create_or_update_error(params) do
     %{
@@ -80,11 +98,11 @@ defmodule Fireapp.Event do
     end
   end
 
-  def check_user_exist_in_project(error, current_user) do
+  def check_user_exist_in_project(error, user) do
     if (error) do
       (
         from up in UserProject,
-        where: (up.user_id == ^current_user.id),
+        where: (up.user_id == ^user.id),
         where: (up.project_id == ^error.project.id)
       )
       |> Repo.one()

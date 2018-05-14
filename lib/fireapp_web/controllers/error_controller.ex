@@ -10,6 +10,23 @@ defmodule FireappWeb.ErrorController do
     apply(__MODULE__, action_name(conn), args)
   end
 
+  def index(conn, params, current_user) do
+    case Event.error_list_by_params(params, current_user) do
+      :unauthorized ->
+        conn
+        |> put_status(:unauthorized)
+        |> render("error.json")
+      
+      errors ->
+        errors = Enum.map(errors, fn (error) ->
+          Repo.preload(error, :user)
+        end)
+
+        conn
+        |> render("list.json", %{errors: errors})
+    end
+  end
+
   def create(conn, %{"error" => error_params}, _) do
     case Event.create_or_update_error(error_params) do
       {:ok, _} ->
@@ -26,6 +43,7 @@ defmodule FireappWeb.ErrorController do
   def update(conn, %{"id" => id, "error" => params}, current_user) do
     case Event.update_error(id, params, current_user) do
       {:ok, error} ->
+        error = Repo.preload(error, :user)
         conn
         |> put_status(:ok)
         |> render(FireappWeb.EventView, "show.json", %{error: error})
@@ -52,6 +70,7 @@ defmodule FireappWeb.ErrorController do
         |> render("error.json")
 
       _ ->
+        error = Repo.preload(error, :user)
         Repo.delete!(error)
         conn
         |> put_status(:ok)
