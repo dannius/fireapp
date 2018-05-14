@@ -1,5 +1,5 @@
-<div class="env__controls">
-  <form *ngIf="showCreateForm | async; else ToggleShowBtn" [formGroup]="envForm" (ngSubmit)="createEnv()" class="env__form">
+<div class="env-aside__controls">
+  <form *ngIf="showCreateForm | async; else ToggleShowBtn" [formGroup]="envForm" (ngSubmit)="createEnv()" class="env-aside__form">
     <mat-form-field class="env__create-field">
       <input formControlName="name" matInput placeholder="Название">
 
@@ -10,7 +10,7 @@
       </mat-error>
     </mat-form-field>
 
-    <div class="env__form-controls">
+    <div class="env-aside__form-controls">
       <button (click)="showCreateForm.next(false)" mat-button type="button">
         <mat-icon color="warn">keyboard_backspace</mat-icon>
       </button>
@@ -23,7 +23,7 @@
   <ng-template #ToggleShowBtn>
     <button
       (click)="showCreateForm.next(true)"
-      class="env__btn-create"
+      class="env-aside__btn-create"
       mat-button
       color="primary"
     >

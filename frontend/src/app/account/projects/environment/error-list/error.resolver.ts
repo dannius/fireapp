@@ -9,7 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import { EnvironmentService } from '@app/account/environment.service';
 
 @Injectable()
-export class EnvironmentResolver implements Resolve<Observable<any>> {
+export class ErrorResolver implements Resolve<Observable<any>> {
   private project: Project;
 
   constructor(

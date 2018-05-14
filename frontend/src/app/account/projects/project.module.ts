@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { EnvironmentShowComponent } from '@app/account/projects/environment/show/show.component';
-import { EnvironmentResolver } from '@app/account/projects/environment/show/show.resolver';
+import { ErrorItemComponent } from '@app/account/projects/environment/error-item/error-item.component';
+import { ErrorListComponent } from '@app/account/projects/environment/error-list/error-list.component';
+import { ErrorResolver } from '@app/account/projects/environment/error-list/error.resolver';
 import { ProjectItemComponent } from '@app/account/projects/item/item.component';
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
@@ -19,7 +20,8 @@ import { SharedModule } from '@app/shared';
   declarations: [
     ProjectListComponent,
     ProjectItemComponent,
-    EnvironmentShowComponent,
+    ErrorListComponent,
+    ErrorItemComponent,
     ManagementComponent,
     ProjectInfoComponent,
     ProjectSettingsComponent,
@@ -33,7 +35,8 @@ import { SharedModule } from '@app/shared';
   exports: [
     ProjectListComponent,
     ProjectItemComponent,
-    EnvironmentShowComponent,
+    ErrorListComponent,
+    ErrorItemComponent,
     ManagementComponent,
     ProjectInfoComponent,
     ProjectSettingsComponent,
@@ -47,7 +50,7 @@ import { SharedModule } from '@app/shared';
     // RESOLVERS
     /////////////
     ProjectListResolver,
-    EnvironmentResolver,
+    ErrorResolver,
     ManagementResolver
   ]
 })

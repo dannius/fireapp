@@ -1,0 +1,7 @@
+<div class="section section_lg">
+  <ul *ngIf="errors?.length" class="error-list">
+    <li *ngFor="let error of errors" class="error-item">
+      <app-error-item [project]="project" [error]="error"></app-error-item>
+    </li>
+  </ul>
+</div>

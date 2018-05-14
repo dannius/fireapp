@@ -5,10 +5,10 @@ import { PubSubService } from '@app/core/pub-sub.service';
 import { Error } from '@app/core/models/error';
 
 @Component({
-  selector: 'app-project-show',
-  templateUrl: './show.component.html'
+  selector: 'app-error-list',
+  templateUrl: './error-list.component.html'
 })
-export class EnvironmentShowComponent implements OnInit {
+export class ErrorListComponent implements OnInit {
 
   public errors: Error[];
   private project: Project;

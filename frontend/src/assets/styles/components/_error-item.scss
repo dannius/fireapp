@@ -1,0 +1,22 @@
+.error-item {
+  margin-top: 30px;
+
+  &__card {
+    position: relative;
+  }
+
+  &__badge-counter {
+    position: absolute;
+    display: inline-flex;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    right: -30px;
+    top: -15px;
+    background-color: $cinnabar;
+    min-width: 55px;
+    padding: 5px;
+    height: 25px;
+    border-radius: 20px;
+  }
+}

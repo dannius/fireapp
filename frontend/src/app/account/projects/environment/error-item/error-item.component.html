@@ -1,0 +1,20 @@
+<mat-card class="error-item__card">
+  <mat-card-title class="error-item__title">{{error.name}}</mat-card-title>
+  <mat-card-content>
+    <mat-card-subtitle class="error-item__subtitle">Описание</mat-card-subtitle>
+    <p *ngIf="error.description" class="error-item__description">{{error.description}}</p>
+
+    <mat-form-field class="error-item__selection-field">
+      <mat-select [value]="error.user?.id" (selectionChange)="selectProject($event)">
+        <mat-option *ngFor="let u of project.users" [value]="u.id">{{u.name || u.email}}</mat-option>
+      </mat-select>
+      <mat-label *ngIf="project.users">Назначить исполнителя</mat-label>
+    </mat-form-field>
+
+    <div class="error-item__date">
+      <span class="error-item__date-label">Дата {{error.counter === 1 ? 'создания' : 'обновления'}}</span>
+      <span class="error-item__date-string">{{error.counter === 1 ? error.insertedAt : error.updatedAt}}</span>
+    </div>
+  </mat-card-content>
+  <span class="error-item__badge-counter">{{error.counter}}</span>
+</mat-card>
