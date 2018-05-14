@@ -1,12 +1,29 @@
 defmodule FireappWeb.EnvironmentController do
   use FireappWeb, :controller
-  alias Fireapp.{EnvironmentContext, Repo, Environment}
+  alias Fireapp.{EnvironmentContext, Repo, Environment, Event}
 
   plug :scrub_params, "environment" when action in [:create, :update]
 
   def action(conn, _) do
     args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
     apply(__MODULE__, action_name(conn), args)
+  end
+
+  def index(conn, params, current_user) do
+    case Event.error_list_by_params(params, current_user) do
+      :unauthorized ->
+        conn
+        |> put_status(:unauthorized)
+        |> render("error.json")
+      
+      errors ->
+        errors = Enum.map(errors, fn (error) ->
+          Repo.preload(error, :user)
+        end)
+
+        conn
+        |> render(FireappWeb.EventView, "list.json", %{errors: errors})
+    end
   end
 
   def create(conn, %{"environment" => env_params}, current_user) do

@@ -1,7 +1,7 @@
 defmodule FireappWeb.EventView do
   use FireappWeb, :view
 
-  @error_attributes [:id, :name, :user, :description, :inserted_at, :updated_at]
+  @error_attributes [:id, :name, :user, :description, :counter, :inserted_at, :updated_at]
   @user_attributes [:id, :name, :email]
 
   def render("list.json", %{errors: errors}) do

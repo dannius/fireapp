@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Environment } from '@app/core/models/environment';
 import { environment as env } from '@env/environment';
 import { Observable } from 'rxjs/Observable';
+import { Error } from '@app/core/models/error';
 
 @Injectable()
 export class EnvironmentService {
@@ -12,6 +13,18 @@ export class EnvironmentService {
   constructor(
     private http: HttpClient
   ) { }
+
+  public list(envId: number, projectId: number): Observable<Error[]> {
+    const params: HttpParams = new HttpParams()
+    .set('environment_id', `${envId}` || '-1')
+    .set('project_id', `${projectId}` || '-1');
+
+    return this
+      .http
+      .get<any>(`${env.apiUrl}/api/environments`, { params })
+      .map(({ errors }: any) => errors.map((error) => Error.fromJson(error)))
+      .catch((err) => Observable.of(err.status));
+  }
 
   public create(envParams: any): Observable<Environment> {
     const params = {

@@ -78,7 +78,7 @@ defmodule Fireapp.Event do
     %{"user_id" => user_id} = params
 
     if (user_id) do
-      inserted_user = (
+      (
         from u in User,
         where: u.id == ^user_id
       )
@@ -89,13 +89,8 @@ defmodule Fireapp.Event do
   end
 
   defp check_users_in_project(error, current_user, inserted_user) do
-    with bind1 <- check_user_exist_in_project(error, current_user),
-      bind2 <- check_user_exist_in_project(error, inserted_user) do
-        bind1 && bind2
-    else
-      _ ->
-        false
-    end
+    check_user_exist_in_project(error, current_user) &&
+    check_user_exist_in_project(error, inserted_user)
   end
 
   def check_user_exist_in_project(error, user) do

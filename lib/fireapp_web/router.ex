@@ -55,7 +55,7 @@ defmodule FireappWeb.Router do
     get "/projects/:id/unarchive", ProjectController, :unarchive
     get "/projects/:id/reset-sdk-key", ProjectController, :reset_sdk_key
 
-    resources "/environments", EnvironmentController, only: [:create, :update, :delete]
-    resources "/errors", ErrorController, only: [:index, :update, :delete]
+    resources "/environments", EnvironmentController, only: [:index, :create, :update, :delete]
+    resources "/errors", ErrorController, only: [:update, :delete]
   end
 end

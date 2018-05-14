@@ -8,32 +8,6 @@ defmodule Fireapp.ErrorControllerTest do
   @env_name "test_env_name"
   @error_name "test_error_name"
 
-  describe "index" do
-    setup [:create_user, :create_guest_user, :login_user]
-
-    test "Successful get error list as project user", %{conn_with_token: conn_with_token, current_user: current_user} do
-      %{project: project} = create_project_with_owner(current_user)
-      env = create_environment(%{name: @env_name, project_id: project.id})
-      create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
-
-      response = conn_with_token
-      |> get(error_path(conn_with_token, :index, %{environment_id: env.id, project_id: project.id}))
-
-      assert response.status == Status.code(:ok)
-    end
-
-    test "Unuccessful get error list as unexist user", %{conn_with_token: conn_with_token, guest: guest} do
-      %{project: project} = create_project_with_owner(guest)
-      env = create_environment(%{name: @env_name, project_id: project.id})
-      create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
-
-      response = conn_with_token
-      |> get(error_path(conn_with_token, :index, %{environment_id: env.id, project_id: project.id}))
-
-      assert response.status == Status.code(:unauthorized)
-    end
-  end
-
   describe "create" do
     setup [:create_user, :login_user]
 

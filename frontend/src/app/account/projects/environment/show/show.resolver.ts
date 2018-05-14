@@ -4,23 +4,26 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { Project } from '@app/core/models';
-import { Observable } from 'rxjs/Observable';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { Observable } from 'rxjs/Observable';
+import { EnvironmentService } from '@app/account/environment.service';
 
 @Injectable()
-export class ProjectShowResolver implements Resolve<Observable<Project>> {
+export class EnvironmentResolver implements Resolve<Observable<any>> {
   private project: Project;
 
   constructor(
     private projectService: ProjectService,
     private router: Router,
-    private pubSubService: PubSubService
+    private pubSubService: PubSubService,
+    private envService: EnvironmentService
   ) { }
 
   resolve(route: ActivatedRouteSnapshot) {
-    const id = +route.params['projectId'];
+    const projectId = +route.params['projectId'];
+    const envId = +route.params['envId'];
 
-    if (!id) {
+    if (!projectId) {
       this.router.navigate(['404']);
       return Observable.of(null);
     }
@@ -30,19 +33,23 @@ export class ProjectShowResolver implements Resolve<Observable<Project>> {
         this.project = project;
       });
 
-    if (this.project && this.project.id === id) {
-      return Observable.of(this.project);
+    if (this.project && this.project.id === projectId) {
+      return Observable.forkJoin(
+        Observable.of(this.project),
+        this.envService.list(envId, projectId)
+      );
     } else {
-      return this.projectService.get(id)
-        .switchMap((project: Project | number) => {
-
+      return Observable.forkJoin(
+        this.projectService.get(projectId)
+        .switchMap((project: any) => {
           if (project === 404) {
             this.router.navigate(['404']);
             return Observable.of(null);
           }
-
           return Observable.of(project);
-        });
+        }),
+        this.envService.list(envId, projectId)
+      );
     }
   }
 }
