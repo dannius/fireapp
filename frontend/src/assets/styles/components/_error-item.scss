@@ -3,6 +3,35 @@
 
   &__card {
     position: relative;
+    
+    &-content {
+      margin: 0 !important;
+      display: flex !important;
+      justify-content: space-between;
+    }
+  }
+
+  &__title {
+    font-size: 20px;
+  }
+
+  &__date {
+    font-style: italic;
+  
+    &-string {
+      font-weight: bold;
+    }
+  }
+
+  &__performer {
+    margin-left: 5px;
+  }
+
+  &__edit-btn {
+    position: absolute !important;
+    transform: scale(0.9) !important;
+    top: -18px;
+    right: 50px;
   }
 
   &__badge-counter {

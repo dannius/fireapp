@@ -1,0 +1,59 @@
+<form [formGroup]="form" class="error-dialog" (ngSubmit)="update()">
+  <h3 class="error-dialog__title">{{error.name}}</h3>
+
+  <div class="error-dialog__description">
+    <p class="form__label">Описание:</p>
+
+    <mat-form-field *ngIf="editMode; else ShowMode" class="error-dialog__description-field">
+      <textarea formControlName="description" matInput></textarea>
+    </mat-form-field>
+
+    <ng-template #ShowMode>
+      <p class="error-dialog__description-text">{{error.description ? error.description : '-'}}</p>
+    </ng-template>
+
+    <button (click)="toggleEditMode()" type="button" color="primary" class="error-dialog__description-btn" mat-mini-fab>
+      <mat-icon *ngIf="editMode; else EditIcon">backspace</mat-icon>
+      <ng-template #EditIcon><mat-icon>edit</mat-icon></ng-template>
+    </button>
+  </div>
+
+  <div class="error-dialog__performer">
+    <mat-form-field class="error-dialog__selection-field">
+      <mat-select formControlName="userId">
+        <mat-option *ngFor="let u of users" [value]="u.id">{{u.name || u.email}}</mat-option>
+      </mat-select>
+      <mat-label *ngIf="users">Исполнитель</mat-label>
+    </mat-form-field>
+  </div>
+
+  <div class="error-dialog__footer-row">
+    <div>
+      <div class="error-dialog__date">
+        <span class="error-dialog__date-label">Дата обновления:</span>
+        <span class="error-dialog__date-string">{{error.updatedAt}}</span>
+      </div>
+      <div class="error-dialog__date">
+        <span class="error-dialog__date-label">Дата создания:</span>
+        <span class="error-dialog__date-string">{{error.insertedAt}}</span>
+      </div>
+    </div>
+  
+    <div>
+      <button mat-raised-button
+        color="warn"
+        type="button"
+        (click)="dialogRef.close(false)">
+        Отмена
+      </button>
+      <button mat-raised-button
+        color="primary">
+        Сохранить
+      </button>
+    </div>
+  </div>
+  <mat-error *ngIf="unchangedDataError" class="form__error error-dialog__error">
+    Нечего обновлять
+  </mat-error>
+</form>
+

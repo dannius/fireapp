@@ -1,7 +1,13 @@
 <div class="section section_lg">
-  <ul *ngIf="errors?.length" class="error-list">
+  <ul *ngIf="errors?.length; else EmptyErrors" class="error-list">
     <li *ngFor="let error of errors" class="error-item">
       <app-error-item [project]="project" [error]="error"></app-error-item>
     </li>
   </ul>
+
+  <ng-template #EmptyErrors>
+    <div class="headline headline_absolute-center">
+      <h1 class="headline__title text-center headline_transparent">Список ошибок пуст</h1>
+    </div>
+  </ng-template>
 </div>

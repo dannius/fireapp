@@ -1,7 +1,7 @@
 defmodule Fireapp.Event do
 
   alias Fireapp.{Repo, User, Environment, ProjectContext, Project, Event, UserProject, ProjectContext}
-  import Ecto.Query, only: [from: 2]
+  import Ecto.Query
 
   def error_list_by_params(params, current_user) do
     %{
@@ -17,6 +17,7 @@ defmodule Fireapp.Event do
           from error in Event.Error,
           where: (error.environment_id == ^env_id)
         )
+        |> order_by(desc: :counter)
         |> Repo.all()
     end
   end
@@ -50,12 +51,13 @@ defmodule Fireapp.Event do
 
   def update_error(id, params, current_user) do
     error = Repo.get(Event.Error, id) |> Repo.preload(:project)
-
     inserted_user = get_inserted_user_by_params(params)
 
     case inserted_user && check_users_in_project(error, current_user, inserted_user) do
       nil ->
-        :conflict
+        if (params["description"]),
+          do: Event.Error.update_changeset(error, %{description: params["description"]}) |> Repo.update(),
+          else: :conflict
 
       :conflict ->
         :conflict
@@ -84,7 +86,7 @@ defmodule Fireapp.Event do
       )
       |> Repo.one()
     else
-      :conflict
+      nil
     end
   end
 

@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ErrorDialogComponent } from '@app/account/projects/environment/error-dialog/error-dialog.component';
 import { ErrorItemComponent } from '@app/account/projects/environment/error-item/error-item.component';
 import { ErrorListComponent } from '@app/account/projects/environment/error-list/error-list.component';
 import { ErrorResolver } from '@app/account/projects/environment/error-list/error.resolver';
+import { ErrorService } from '@app/account/projects/error.service';
 import { ProjectItemComponent } from '@app/account/projects/item/item.component';
 import { ProjectListComponent } from '@app/account/projects/list/list.component';
 import { ProjectListResolver } from '@app/account/projects/list/list.resolver';
@@ -26,11 +28,12 @@ import { SharedModule } from '@app/shared';
     ProjectInfoComponent,
     ProjectSettingsComponent,
     ProjectUpdateComponent,
+    ErrorDialogComponent
 ],
   imports: [
     RouterModule.forChild(ProjectRoutes),
     SharedModule,
-    RouterModule,
+    RouterModule
   ],
   exports: [
     ProjectListComponent,
@@ -41,10 +44,12 @@ import { SharedModule } from '@app/shared';
     ProjectInfoComponent,
     ProjectSettingsComponent,
     ProjectUpdateComponent,
+    ErrorDialogComponent
   ],
   providers: [
     UserService,
     ProjectService,
+    ErrorService,
 
     /////////////
     // RESOLVERS
@@ -52,6 +57,9 @@ import { SharedModule } from '@app/shared';
     ProjectListResolver,
     ErrorResolver,
     ManagementResolver
+  ],
+  entryComponents: [
+    ErrorDialogComponent
   ]
 })
 export class ProjectModule { }

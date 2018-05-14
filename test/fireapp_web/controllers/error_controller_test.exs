@@ -58,33 +58,23 @@ defmodule Fireapp.ErrorControllerTest do
       assert response.status == Status.code(:ok)
     end
 
-    test "Unuccessful update error with unexist user", %{conn_with_token: conn_with_token, current_user: current_user} do
+    test "Unsuccessful set unexist user to error", %{conn_with_token: conn_with_token, current_user: current_user} do
       %{project: project} = create_project_with_owner(current_user)
       env = create_environment(%{name: @env_name, project_id: project.id})
       error = create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
 
       response = conn_with_token
-      |> patch(error_path(conn_with_token, :update, error.id, error: %{description: "awesome", user_id: undefined_id()}))
+      |> patch(error_path(conn_with_token, :update, error.id, error: %{description: "", user_id: undefined_id()}))
       assert response.status == Status.code(:conflict)
     end
 
-    test "Unuccessful update error with as unexist user in project", %{conn_with_token: conn_with_token, guest: guest} do
+    test "Unsuccessful update error with as unexist login-user in project", %{conn_with_token: conn_with_token, guest: guest} do
       %{project: project} = create_project_with_owner(guest)
       env = create_environment(%{name: @env_name, project_id: project.id})
       error = create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
 
       response = conn_with_token
-      |> patch(error_path(conn_with_token, :update, error.id, error: %{description: "awesome", user_id: guest.id}))
-      assert response.status == Status.code(:conflict)
-    end
-
-    test "Unuccessful update error with as unexist guest in project", %{conn_with_token: conn_with_token, guest: guest, current_user: current_user} do
-      %{project: project} = create_project_with_owner(current_user)
-      env = create_environment(%{name: @env_name, project_id: project.id})
-      error = create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
-
-      response = conn_with_token
-      |> patch(error_path(conn_with_token, :update, error.id, error: %{description: "awesome", user_id: guest.id}))
+      |> patch(error_path(conn_with_token, :update, error.id, error: %{description: "", user_id: guest.id}))
       assert response.status == Status.code(:conflict)
     end
 
