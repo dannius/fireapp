@@ -36,6 +36,7 @@ defmodule FireappWeb.Router do
 
     resources "/users", RegistrationController, only: [:create]
     resources "/session", SessionController, only: [:create]
+    resources "/errors", ErrorController, only: [:create]
   end
 
   scope "/api", FireappWeb do
@@ -55,5 +56,6 @@ defmodule FireappWeb.Router do
     get "/projects/:id/reset-sdk-key", ProjectController, :reset_sdk_key
 
     resources "/environments", EnvironmentController, only: [:create, :update, :delete]
+    resources "/errors", ErrorController, only: [:update, :delete]
   end
 end

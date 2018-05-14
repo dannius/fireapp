@@ -45,7 +45,7 @@ defmodule Fireapp.EnvironmentContext do
   def get_own_project_by_env(id, current_user_id) do
     env = Repo.get(Environment, id)
 
-    project = if (env != nil),
+    project = if (!is_nil(env)),
       do: Repo.preload(env, :project) |> Map.get(:project),
       else: nil
 

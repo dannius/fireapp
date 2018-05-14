@@ -35,12 +35,16 @@ defmodule Fireapp.Event.Error do
   end
 
   defp set_counter(changeset) do
-    case Map.has_key?(changeset.data, :counter) do
-      true ->
-        counter = get_field(changeset, :counter)
-        force_change(changeset, :counter, counter + 1)
-      false ->
-        changeset
+    if (changeset.valid?) do
+      case Map.has_key?(changeset.data, :counter) do
+        true ->
+          counter = get_field(changeset, :counter)
+          force_change(changeset, :counter, counter + 1)
+        false ->
+          changeset
+      end
+    else
+      changeset
     end
   end
 
