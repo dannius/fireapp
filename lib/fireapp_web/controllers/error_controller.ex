@@ -5,12 +5,7 @@ defmodule FireappWeb.ErrorController do
 
   plug :scrub_params, "error" when action in [:create, :update]
 
-  def action(conn, _) do
-    args = [conn, conn.params, Fireapp.Auth.Guardian.Plug.current_resource(conn)]
-    apply(__MODULE__, action_name(conn), args)
-  end
-
-  def create(conn, %{"error" => error_params}, _) do
+  def create(conn, %{"error" => error_params}) do
     case Event.create_or_update_error(error_params) do
       {:ok, _} ->
         conn
@@ -23,7 +18,9 @@ defmodule FireappWeb.ErrorController do
     end
   end
 
-  def update(conn, %{"id" => id, "error" => params}, current_user) do
+  def update(conn, %{"id" => id, "error" => params}) do
+    current_user = Fireapp.Auth.Guardian.Plug.current_resource(conn)
+
     case Event.update_error(id, params, current_user) do
       {:ok, error} ->
         error = Repo.preload(error, :user)
@@ -38,7 +35,8 @@ defmodule FireappWeb.ErrorController do
     end
   end
 
-  def delete(conn, %{"id" => id}, current_user) do
+  def delete(conn, %{"id" => id}) do
+    current_user = Fireapp.Auth.Guardian.Plug.current_resource(conn)
     error = Repo.get(Event.Error, id) |> Repo.preload(:project)
 
     case error && Event.check_user_exist_in_project(error, current_user) do

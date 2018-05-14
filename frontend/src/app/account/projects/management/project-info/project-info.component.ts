@@ -14,6 +14,9 @@ export class ProjectInfoComponent {
   @Input()
   public isOwner: boolean;
 
+  @Input()
+  public user: User;
+
   constructor(private snackBar: MatSnackBar) { }
 
   public copyToClipboard() {
@@ -22,5 +25,9 @@ export class ProjectInfoComponent {
     };
 
     this.snackBar.open('Ключ скопирован', '', snackBarConfig);
+  }
+
+  public filteredUsers() {
+    return this.project.users.filter((u) => this.user && u.id !== this.user.id);
   }
 }

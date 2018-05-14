@@ -4,9 +4,9 @@
   <mat-card-content>
     <div class="project__zone">
       <mat-label class="form__label">Участнкики:</mat-label>
-      <ul *ngIf="project.users.length; else WithoutUsers" class="project__participant-list">
+      <ul *ngIf="project.users.length > 1; else WithoutUsers" class="project__participant-list">
         <li class="project__participant-item">Вы, а так же:</li>
-        <li *ngFor="let user of project.users" class="project__participant-item">{{user.name || user.email}}</li>
+        <li *ngFor="let user of filteredUsers()" class="project__participant-item">{{user.name || user.email}}</li>
       </ul>
 
       <ng-template #WithoutUsers>

@@ -34,7 +34,6 @@ export class ManagementComponent implements OnInit {
       })
       .subscribe((user) => {
         this.user = user;
-        this.project.users = this.project.users.filter((u) => this.user && u.id !== this.user.id);
       });
   }
 
