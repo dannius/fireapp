@@ -2,7 +2,7 @@ import '@app/shared/rxjs-operators';
 
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Project, ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs/Observable';
 
@@ -14,7 +14,7 @@ export class ProjectService {
   ) { }
 
   public list(substring: string, preloadUsers: boolean,
-              onlyOwnership: boolean): Observable<Project[] | ProjectWithUsers[]> {
+              onlyOwnership: boolean): Observable<Project[]> {
     const params: HttpParams = new HttpParams()
       .set('substring', substring || '')
       .set('users', preloadUsers ? 'true' : '')
@@ -24,14 +24,14 @@ export class ProjectService {
       .http
       .get<any>(`${environment.apiUrl}/api/projects`, { params })
       .map(({ projects }: any) => projects.map((project) =>
-        preloadUsers ? ProjectWithUsers.fromJson(project) : Project.fromJson(project)));
+        preloadUsers ? Project.fromJson(project) : Project.fromJson(project)));
   }
 
-  public get(id: number): Observable<ProjectWithUsers> {
+  public get(id: number): Observable<Project> {
     return this
       .http
       .get<any>(`${environment.apiUrl}/api/projects/${id}`)
-      .map(({ project }: any) => ProjectWithUsers.fromJson(project))
+      .map(({ project }: any) => Project.fromJson(project))
       .catch((err) => Observable.of(err.status));
   }
 

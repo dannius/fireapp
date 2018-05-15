@@ -50,7 +50,7 @@
               [placeholder]="userHelper[row.id]?.selectedNames?.length ? '' : 'добавить'"
               (selectionChange)="toggleProject($event, row.id)"
               (openedChange)="togglePanel($event, row.id, userHelper[row.id]?.selectedIds)"
-              [matTooltip]="!projectList?.length ? 'Tooltip!' : '' "
+              [matTooltip]="!projectList?.length ? 'У вас нет собственных проектов, некуда добавлять' : '' "
               matTooltipPosition="left"
               multiple
             >

@@ -81,8 +81,8 @@ export class AuthService {
   public logout() {
     this.tokenService.clear();
     this.setUser(null);
-    this.pubSubService.setProject(null);
     this.pubSubService.setUserHelper(null);
+    this.pubSubService.setProject(null);
     this.router.navigate(['/session', 'signin']);
   }
 

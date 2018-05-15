@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/core/auth';
+import { DemoSdkService } from '@app/demo-sdk.service';
 
 @Component({
   selector: 'app-signin',
@@ -17,6 +18,8 @@ export class SigninComponent implements OnInit {
     private builder: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    // only for tests, remove later
+    private sdkService: DemoSdkService
   ) {}
 
   public ngOnInit() {
@@ -36,6 +39,8 @@ export class SigninComponent implements OnInit {
 
     this.authService.login(email, password)
     .subscribe((user) => {
+      this.sdkService.createError('Test error when user login');
+
       this.router.navigate(['/']);
       this.isLoading = false;
     }, (error) => {

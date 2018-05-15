@@ -43,7 +43,7 @@ defmodule Fireapp.ProjectContext do
   end
 
   def update_project(id, project_params, current_user) do
-    project = getOneIfOwner(id, current_user)
+    project = get_one_if_owner(id, current_user)
 
     case project && project.archived do
       nil ->
@@ -67,7 +67,7 @@ defmodule Fireapp.ProjectContext do
   end
 
   def archive_project(id, current_user) do
-    project = getOneIfOwner(id, current_user)
+    project = get_one_if_owner(id, current_user)
 
     case project && project.archived do
       nil ->
@@ -85,7 +85,7 @@ defmodule Fireapp.ProjectContext do
   end
 
   def unarchive_project(id, current_user) do
-    project = getOneIfOwner(id, current_user)
+    project = get_one_if_owner(id, current_user)
 
     case project && project.archived do
       nil ->
@@ -103,7 +103,7 @@ defmodule Fireapp.ProjectContext do
   end
 
   def reset_sdk(id, current_user) do
-    project = getOneIfOwner(id, current_user)
+    project = get_one_if_owner(id, current_user)
 
     case project && !project.archived do
       nil ->
@@ -120,7 +120,7 @@ defmodule Fireapp.ProjectContext do
     end
   end
 
-  def getOne(id, current_user) do
+  def get_one(id, current_user) do
     id = String.to_integer(id)
     current_user = Repo.preload(current_user, :projects)
 
@@ -129,8 +129,8 @@ defmodule Fireapp.ProjectContext do
     |> List.first()
   end
 
-  def getOneIfOwner(id, current_user) do
-    id = String.to_integer(id)
+  def get_one_if_owner(id, current_user) do
+    id = if is_integer(id), do: id, else: String.to_integer(id)
     current_user = Repo.preload(current_user, :projects)
 
     current_user.projects

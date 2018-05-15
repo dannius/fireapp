@@ -4,14 +4,27 @@
   <mat-card-content>
     <div class="project__zone">
       <mat-label class="form__label">Участнкики:</mat-label>
-      <ul *ngIf="project.users.length; else WithoutUsers" class="project__participant-list">
-        <li class="project__participant-item">Вы, а так же: </li>
-        <li *ngFor="let user of project.users" class="project__participant-item">{{user.name || user.email}}</li>
+      <ul *ngIf="project.users.length > 1; else WithoutUsers" class="project__participant-list">
+        <li class="project__participant-item">Вы, а так же:</li>
+        <li *ngFor="let user of filteredUsers()" class="project__participant-item">{{user.name || user.email}}</li>
       </ul>
 
       <ng-template #WithoutUsers>
         <div class="project__participant-list">
           <span class="project__participant-item">Только вы участник проекта</span>
+        </div>
+      </ng-template>
+    </div>
+
+    <div *ngIf="!isOwner" class="project__zone">
+      <mat-label class="form__label">Environments:</mat-label>
+      <ul *ngIf="project.environments?.length; else WithoutEnv" class="project__env-list">
+        <li *ngFor="let env of project.environments" class="project__env-item">{{env.name}}</li>
+      </ul>
+
+      <ng-template #WithoutEnv>
+        <div class="project__env-list">
+          <span class="project__env-item">-</span>
         </div>
       </ng-template>
     </div>

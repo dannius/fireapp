@@ -28,7 +28,7 @@
     <div class="project-list">
       <a
         *ngFor="let project of specialProjects"
-        [routerLink]="[project.id]"
+        [routerLink]="[project.id, 'management']"
         class="project-item"
       >
         <app-project-item class="project-item__outer" [special]="true" [project]="project"></app-project-item>
@@ -46,7 +46,7 @@
     <div class="project-list">
       <a
         *ngFor="let project of commonProjects"
-        [routerLink]="[project.id]"
+        [routerLink]="[project.id, 'management']"
         class="project-item"
       >
         <app-project-item class="project-item__outer" [project]="project"></app-project-item>
@@ -62,7 +62,7 @@
     <div class="project-list">
       <a
         *ngFor="let project of archivedProjects"
-        [routerLink]="[project.id]"
+        [routerLink]="[project.id, 'management']"
         class="project-item project-item_archived"
       >
         <app-project-item class="project-item__outer" [project]="project"></app-project-item>

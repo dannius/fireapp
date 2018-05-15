@@ -38,15 +38,7 @@
         >
           Пользователи
         </a>
-        <div *ngIf="!!project" class="header__nav_hidden">
-          <a mat-button
-            [routerLinkActiveOptions]="{exact: true}"
-            [routerLinkActive]="'header__link_active'"
-            [routerLink]="['/', 'account', 'projects', project.id]"
-          >
-            Доска
-          </a>
-  
+        <div *ngIf="!!project" class="header__nav_hidden">  
           <a mat-button
             [routerLinkActiveOptions]="{exact: true}"
             [routerLinkActive]="'header__link_active'"

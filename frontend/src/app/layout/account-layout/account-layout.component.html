@@ -1,8 +1,25 @@
 <app-header (toggleSidenav)="toggleSidenav()"></app-header>
 
 <mat-sidenav-container class="app-inner">
-  <mat-sidenav #sidenav *ngIf="!!project" mode="side" [opened]="true">
-    links to env
+  <mat-sidenav #sidenav *ngIf="!!project" class="sidenav" mode="side" [opened]="!project.archived">
+    <div *ngIf="project?.environments?.length" class="sidenav__environments">
+      <p class="form__label text-center">Environments:</p>
+      <div class="sidenav__environment-list">
+        <a
+          *ngFor="let env of project.environments"
+          mat-button
+          class="sidenav__environment-link"
+          [routerLinkActiveOptions]="{exact: true}"
+          [routerLinkActive]="'header__link_active'"
+          [routerLink]="['/', 'account', 'projects', project.id, 'environments', env.id]"
+        >
+        {{env.name | uppercase}}
+        </a>
+      </div>
+    </div>
+    <mat-divider></mat-divider>
+    <app-env-form *ngIf="isOwnership()" [project]="project"></app-env-form>
+    <p *ngIf="!isOwnership() && !project?.environments?.length" class="form__label text-center">Нет даннных</p>
   </mat-sidenav>
 
   <mat-sidenav-content>

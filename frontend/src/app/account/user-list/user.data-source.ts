@@ -50,6 +50,7 @@ export class UserDataSource extends DataSource<any> {
         users = users.map((user) => {
           this.userHelper[`${user.id}`] = {
             selectedIds: this.getCommonProjectIds(user.projects, this.projects),
+            user: User.fromJson(user),
             selectedNames: []
           };
 

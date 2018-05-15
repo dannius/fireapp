@@ -3,6 +3,50 @@
   <mat-card-content>
     <div *ngIf="isOwner; else NotOwner">
       <div class="project__zone">
+        <mat-label class="form__label">Environments:</mat-label>
+        <div *ngIf="project.environments?.length; else WithoutEnv" class="project__env-list">
+          <button
+            *ngFor="let env of project.environments"
+            class="project__env-item_editable"
+            (click)="currentEnv.next(env)"
+            mat-button
+            color="primary"
+          >
+          {{env.name}}
+          </button>
+        </div>
+  
+        <ng-template #WithoutEnv>
+          <div class="project__env-list">
+            <span class="project__env-item">-</span>
+          </div>
+        </ng-template>
+      </div>
+
+      <form *ngIf="editForm" [formGroup]="editForm" (ngSubmit)="updateEnv()" class="project__settings-env-form">
+        <mat-form-field class="project__settings-env-field">
+          <input formControlName="name" matInput placeholder="Название">
+          <mat-error 
+            *ngIf="editForm.controls.name?.errors?.existName"
+            class="form__error mat-text-warn">
+            Такое название уже есть
+          </mat-error>
+        </mat-form-field>
+
+        <div class="project__settings-env-controls">
+          <button mat-mini-fab (click)="showDeleteEnvDialog()" color="warn"
+            type="button" class="project__settings-env-control">
+            <mat-icon>delete</mat-icon>
+          </button>
+          <button mat-mini-fab color="primary"
+            type="submit" class="project__settings-env-control"
+            [disabled]="project.archived">
+            <mat-icon>save</mat-icon>
+          </button>
+        </div>
+      </form>
+
+      <div class="project__zone">
         <mat-card-subtitle class="project__zone-title">Warning zone</mat-card-subtitle>
         <button
           *ngIf="!project.archived; else RestoreBtn"

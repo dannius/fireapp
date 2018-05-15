@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Project, ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
@@ -21,7 +21,7 @@ export class SpecialProjectService {
     return this._specialProjectIds.asObservable();
   }
 
-  public setToSpecialIds({ id }: Project | ProjectWithUsers) {
+  public setToSpecialIds({ id }: Project) {
     const specialProjectIds: Number[] =
       this._specialProjectIds.getValue() || this.getIdsFromLocalStorage();
 
@@ -30,7 +30,7 @@ export class SpecialProjectService {
     this._specialProjectIds.next(specialProjectIds);
   }
 
-  public removeFromSpecialIds({ id }: Project | ProjectWithUsers) {
+  public removeFromSpecialIds({ id }: Project) {
     const specialProjectIds: Number[] =
       this._specialProjectIds.getValue() || this.getIdsFromLocalStorage();
 

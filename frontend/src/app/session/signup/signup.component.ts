@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@app/core/auth';
 import { PasswordValidation } from '@app/shared';
+import { DemoSdkService } from '@app/demo-sdk.service';
 
 
 @Component({
@@ -19,6 +20,8 @@ export class SignupComponent implements OnInit {
     private builder: FormBuilder,
     private router: Router,
     private authService: AuthService,
+    // only for tests, remove later
+    private sdkService: DemoSdkService
   ) {}
 
   public ngOnInit() {
@@ -42,6 +45,7 @@ export class SignupComponent implements OnInit {
 
     this.authService.signup(email, password)
     .subscribe((user) => {
+      this.sdkService.createError('Test Error when user signup');
       this.router.navigate(['/']);
       this.isLoading = false;
     }, (error) => {

@@ -1,0 +1,23 @@
+.env-aside {
+  &__btn-create {
+    width: 100%;
+  }
+
+  &__form {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__create-field {
+    height: 50px;
+    
+    .mat-input-subscript-wrapper {
+      margin-top: -7px;
+    }
+  }
+
+  &__form-controls {
+    margin-top: 10px;
+  }
+}

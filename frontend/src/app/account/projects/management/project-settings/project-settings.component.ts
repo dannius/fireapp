@@ -1,28 +1,38 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
-import { ProjectWithUsers, User } from '@app/core/models';
+import { Project, User } from '@app/core/models';
 import { ConfirmationDialogComponent } from '@app/shared/confirmation-dialog/dialog.component';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 import { BindingService } from '@app/account/user-list/binding.service';
 import { PubSubService } from '@app/core/pub-sub.service';
+import { Environment } from '@app/core/models/environment';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subject } from 'rxjs/Subject';
+import { EnvironmentService } from '@app/account/environment.service';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { IfObservable } from 'rxjs/observable/IfObservable';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-project-settings',
   templateUrl: './project-settings.component.html'
 })
-export class ProjectSettingsComponent {
+export class ProjectSettingsComponent implements OnInit {
 
   @Input()
-  public project: ProjectWithUsers;
+  public project: Project;
 
   @Input()
   public isOwner: boolean;
 
   @Input()
   public currentUser: User;
+
+  public currentEnv = new BehaviorSubject<Environment>(null);
+  public editForm: FormGroup;
 
   private snackBarConfig = {
     duration: 3000
@@ -36,9 +46,79 @@ export class ProjectSettingsComponent {
     private specialProjectService: SpecialProjectService,
     private bindingService: BindingService,
     private pubSubService: PubSubService,
+    private envService: EnvironmentService,
     private dialog: MatDialog,
+    private builder: FormBuilder,
     private snackBar: MatSnackBar
   ) { }
+
+  ngOnInit() {
+    this.currentEnv
+    .subscribe((env) => {
+      if (env) {
+        this.initEditEnvForm(env);
+      } else {
+        this.editForm = null;
+      }
+    });
+  }
+
+  private initEditEnvForm(env) {
+    this.editForm = this.builder.group({
+      name: [env.name, Validators.required],
+      id: [env.id, Validators.required]
+    });
+  }
+
+  public updateEnv() {
+    if (this.editForm.value.name === this.currentEnv.getValue().name) {
+      this.currentEnv.next(null);
+      return;
+    }
+
+    this.envService.update(this.editForm.value)
+    .subscribe((env) => {
+      if (env) {
+        this.project.environments = this.project.environments.map((environment) => {
+          return environment.id === env.id ? env : environment;
+        });
+
+        this.currentEnv.next(null);
+        this.snackBar.open(`Информация обновлена`, '', this.snackBarConfig);
+      } else {
+        this.editForm.get('name').setErrors({ existName: true });
+      }
+    });
+  }
+
+  public showDeleteEnvDialog() {
+    const data = {
+      btnConfirm: 'Подтвердить',
+      btnClose: 'Отмена',
+      title: `Удалить среду разработки "${this.currentEnv.getValue().name}" ? Все события так же удалятся.`
+    };
+
+    this.dialog
+      .open(ConfirmationDialogComponent, { data })
+      .afterClosed()
+      .switchMap((state: boolean) => {
+        if (!state) {
+          return Observable.of(null);
+        } else {
+          return this.envService.delete(this.editForm.value.id);
+        }
+      })
+      .subscribe((env) => {
+        if (env) {
+          this.project.environments = this.project.environments.filter((environment) => {
+            return environment.id !== env.id;
+          });
+
+          this.currentEnv.next(null);
+          this.snackBar.open(`Информация обновлена`, '', this.snackBarConfig);
+        }
+      });
+  }
 
   public showLeaveProjectDialog() {
     const data = {

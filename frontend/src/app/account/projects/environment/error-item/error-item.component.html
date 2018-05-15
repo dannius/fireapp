@@ -1,0 +1,19 @@
+<mat-card class="error-item__card">
+  <mat-card-title class="error-item__title">{{error.name}}</mat-card-title>
+
+  <mat-card-content class="error-item__card-content">
+    <div>
+      <span class="error-item__subtitle">Исполнитель: </span>
+      <span class="error-item__performer">{{performer?.name || performer?.email || '-'}}</span>
+    </div>
+
+    <div class="error-item__date">
+      <span>{{error.counter === 1 ? 'создано' : 'обновлено'}}:</span>
+      <span class="error-item__date-string">{{error.counter === 1 ? error.insertedAt : error.updatedAt}}</span>
+    </div>
+    <button (click)="showDialog()" class="error-item__edit-btn" color="primary" mat-mini-fab>
+      <mat-icon>edit</mat-icon>
+    </button>
+  </mat-card-content>
+  <span class="error-item__badge-counter">{{error.counter}}</span>
+</mat-card>

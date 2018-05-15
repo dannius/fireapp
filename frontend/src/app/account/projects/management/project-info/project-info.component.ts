@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ProjectWithUsers, User } from '@app/core/models';
+import { Project, User } from '@app/core/models';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -9,10 +9,13 @@ import { MatSnackBar } from '@angular/material';
 export class ProjectInfoComponent {
 
   @Input()
-  public project: ProjectWithUsers;
+  public project: Project;
 
   @Input()
   public isOwner: boolean;
+
+  @Input()
+  public user: User;
 
   constructor(private snackBar: MatSnackBar) { }
 
@@ -22,5 +25,9 @@ export class ProjectInfoComponent {
     };
 
     this.snackBar.open('Ключ скопирован', '', snackBarConfig);
+  }
+
+  public filteredUsers() {
+    return this.project.users.filter((u) => this.user && u.id !== this.user.id);
   }
 }

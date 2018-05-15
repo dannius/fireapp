@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectService } from '@app/account/projects/project.service';
 import { SpecialProjectService } from '@app/account/projects/special-project.service';
-import { ProjectWithUsers } from '@app/core/models';
+import { Project } from '@app/core/models';
 import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component';
 
 @Component({
@@ -12,13 +12,13 @@ import { InputDialogComponent } from '@app/shared/input-dialog/dialog.component'
 })
 export class ProjectListComponent implements OnInit {
 
-  public commonProjects: ProjectWithUsers[];
-  public archivedProjects: ProjectWithUsers[];
-  public specialProjects: ProjectWithUsers[];
+  public commonProjects: Project[];
+  public archivedProjects: Project[];
+  public specialProjects: Project[];
   public isLoading = false;
   public searchString = '';
 
-  private allProjects: ProjectWithUsers[];
+  private allProjects: Project[];
   private specialProjectIds: Number[];
   private onlyOwnership = false;
 
@@ -73,7 +73,7 @@ export class ProjectListComponent implements OnInit {
     this.projectService
     .list(this.searchString, true, this.onlyOwnership)
     .subscribe((projects) => {
-      this.allProjects = <ProjectWithUsers[]> projects;
+      this.allProjects = <Project[]> projects;
       this.sortProjects(this.allProjects);
       this.isLoading = false;
     });

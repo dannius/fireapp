@@ -1,5 +1,5 @@
 defmodule FireappWeb.ControllerTestHelper do
-  alias Fireapp.{User, Project, Repo}
+  alias Fireapp.{User, Project, Repo, Environment, Event}
 
   def login_params, do: %{email: "owner_email@test.com", password: "test_password"}
   def undefined_id, do: -1
@@ -37,5 +37,15 @@ defmodule FireappWeb.ControllerTestHelper do
     |> Repo.insert!()
 
     {:ok, current_user: current_user}
+  end
+
+  def create_environment(params) do
+    Environment.create_changeset(%Environment{}, params)
+    |> Repo.insert!()
+  end
+
+  def create_error(params) do
+    Event.Error.create_changeset(%Event.Error{}, params)
+    |> Repo.insert!()
   end
 end

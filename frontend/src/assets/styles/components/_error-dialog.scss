@@ -1,0 +1,54 @@
+.error-dialog {
+  width: 500px;
+
+  &__title {
+    margin-top: 0;
+    font-weight: 500;
+    font-size: 24px;
+  }
+
+  &__description {
+    position: relative;
+
+    &-btn {
+      position: absolute !important;
+      top: -10px;
+      right: 0;
+    }
+  }
+
+  &__description-field {
+    width: 100%;
+
+    .mat-form-field-infix {
+      padding: 0;
+      border-top: 0;
+    }
+
+    .mat-input-element {
+      height: 60px;
+    }
+  }
+
+  &__footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__error {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 0;
+  }
+
+  &__date {
+    font-style: italic;
+    margin: 5px 0;
+    font-size: 14px;
+
+    &-string {
+    font-weight: 600;
+    }
+  }
+}

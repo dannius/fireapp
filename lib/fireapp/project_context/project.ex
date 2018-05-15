@@ -2,7 +2,7 @@ defmodule Fireapp.Project do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Fireapp.{User, Repo}
+  alias Fireapp.{User, Repo, Environment, Event}
 
   schema "projects" do
     field :name, :string
@@ -11,6 +11,8 @@ defmodule Fireapp.Project do
 
     many_to_many :users, User, join_through: "users_projects", on_replace: :delete, on_delete: :delete_all
     belongs_to :owner, User, foreign_key: :owner_id
+    has_many :environments, Environment, on_delete: :delete_all
+    has_many :errors, Event.Error
 
     timestamps()
   end
@@ -78,7 +80,7 @@ defmodule Fireapp.Project do
     end
   end
 
-  defp uniq_project_name_for_user(changeset, field, options \\ []) do
+  defp uniq_project_name_for_user(changeset, field) do
     owner_id = if changeset.data.owner_id,
                     do: changeset.data.owner_id, else: changeset.changes.owner_id
 
