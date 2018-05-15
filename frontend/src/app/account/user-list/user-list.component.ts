@@ -30,6 +30,7 @@ export class UserListComponent implements OnInit, AfterViewInit {
   private filteredString = '';
   private page: number;
   private limit: number;
+  private currentProject: Project;
 
   constructor(
     private userService: UserService,
@@ -54,6 +55,12 @@ export class UserListComponent implements OnInit, AfterViewInit {
         );
 
         this.loadList();
+      });
+
+    this.pubSubService
+      .project
+      .subscribe((p) => {
+        this.currentProject = p;
       });
 
     this.pubSubService
@@ -112,18 +119,21 @@ export class UserListComponent implements OnInit, AfterViewInit {
         )
         .subscribe(([bindingIds, unbindingIds]) => {
           this.mergeAndRemoveIds(bindingIds, unbindingIds, userId);
+          this.toggleUsersForCurrentProject(bindingIds, unbindingIds, userId);
         });
 
     } else if (bindingProjectIds.length) {
       this.bindingService.bind(userId, bindingProjectIds)
       .subscribe((ids) => {
         this.mergeBindingsIds(ids, userId);
+        this.toggleUsersForCurrentProject(ids, null, userId);
       });
 
     } else if (unbindingProjectIds.length) {
       this.bindingService.unbind(userId, unbindingProjectIds)
       .subscribe((ids) => {
         this.removeUnbindingIds(ids, userId);
+        this.toggleUsersForCurrentProject(null, ids, userId);
       });
     }
 
@@ -183,6 +193,22 @@ export class UserListComponent implements OnInit, AfterViewInit {
   private setNamesToHelperByProjectIds(ids, userId) {
     if (this.userHelper[userId]) {
       this.userHelper[userId].selectedNames = this.getCommonProjectNamesByIds(ids, this.projectList);
+    }
+  }
+
+  private toggleUsersForCurrentProject(bindingIds, unbindingIds, userId) {
+    if (!this.currentProject || !(bindingIds || unbindingIds)) {
+      return;
+    }
+    const user = this.userHelper[userId] && this.userHelper[userId].user;
+    const isBinding = bindingIds && bindingIds.find((id) => id === this.currentProject.id);
+    const isUnbind = unbindingIds && unbindingIds.find((id) => id === this.currentProject.id);
+
+    if (isBinding) {
+      this.currentProject.users.push(user);
+    }
+    if (isUnbind) {
+      this.currentProject.users = this.currentProject.users.filter((u) => u.id !== userId);
     }
   }
 

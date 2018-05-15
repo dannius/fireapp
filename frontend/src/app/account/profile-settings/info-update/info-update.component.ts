@@ -3,7 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UserService } from '@app/account/user.service';
 import { AuthService } from '@app/core/auth';
-import { User } from '@app/core/models';
+import { User, Project } from '@app/core/models';
+import { PubSubService } from '@app/core/pub-sub.service';
 
 
 @Component({
@@ -16,6 +17,8 @@ export class InfoUpdateComponent implements OnInit {
   public isLoading: boolean;
   public user: User;
 
+  private currentProject: Project;
+
   private snackBarConfig = {
     duration: 2000
   };
@@ -24,10 +27,17 @@ export class InfoUpdateComponent implements OnInit {
     private builder: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private pubSubService: PubSubService
   ) { }
 
   ngOnInit() {
+    this.pubSubService
+      .project
+      .subscribe((p) => {
+        this.currentProject = p;
+      });
+
     this.authService.user.subscribe((user) => {
       this.user = user || User.empty();
 
@@ -51,6 +61,11 @@ export class InfoUpdateComponent implements OnInit {
       .subscribe((user) => {
         if (user) {
           this.authService.setUser(user);
+
+          if (this.currentProject) {
+            this.currentProject.users = this.currentProject.users.map((u) => u.id === user.id ? user : u);
+          }
+
           this.snackBar.open('Информация обновлена', '', this.snackBarConfig);
         } else {
           this.snackBar.open('Что то пошло не так', '', this.snackBarConfig);

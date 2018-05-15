@@ -23,7 +23,11 @@ export class ErrorItemComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.performer = this.error.user;
+    const mayBeUser = this.error.user;
+    const isExistInProject = mayBeUser && this.project.users &&
+                              this.project.users.some((u) => u.id === mayBeUser.id);
+
+    this.performer = isExistInProject ? mayBeUser : null;
   }
 
   public showDialog() {
