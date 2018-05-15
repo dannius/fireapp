@@ -21,6 +21,17 @@ defmodule Fireapp.ErrorControllerTest do
       assert response.status == Status.code(:ok)
     end
 
+    test "Unuccessful error creation if project archived", %{conn: conn, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+      env = create_environment(%{name: @env_name, project_id: project.id})
+      archive_project(project)
+
+      response = conn
+      |> post(error_path(conn, :create, error: %{name: @error_name, environment_name: env.name, sdk_key: project.sdk_key}))
+
+      assert response.status == Status.code(:conflict)
+    end
+
     test "Successful error update counter", %{conn: conn, current_user: current_user} do
       %{project: project} = create_project_with_owner(current_user)
       env = create_environment(%{name: @env_name, project_id: project.id})

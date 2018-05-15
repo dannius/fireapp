@@ -8,7 +8,7 @@ defmodule Fireapp.Environment do
     field :name, :string
 
     belongs_to :project, Project
-    has_many :errors, Event.Error
+    has_many :errors, Event.Error, on_delete: :delete_all
   end
 
   def create_changeset(model, params \\ %{}) do

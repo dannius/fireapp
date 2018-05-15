@@ -6,7 +6,7 @@ defmodule FireappWeb.ErrorController do
   plug :scrub_params, "error" when action in [:create, :update]
 
   def create(conn, %{"error" => error_params}) do
-    case Event.create_or_update_error(error_params) do
+    case Event.create_or_update_error_counter(error_params) do
       {:ok, _} ->
         conn
         |> put_status(:ok)

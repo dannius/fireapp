@@ -11,7 +11,7 @@ defmodule Fireapp.Project do
 
     many_to_many :users, User, join_through: "users_projects", on_replace: :delete, on_delete: :delete_all
     belongs_to :owner, User, foreign_key: :owner_id
-    has_many :environments, Environment
+    has_many :environments, Environment, on_delete: :delete_all
     has_many :errors, Event.Error
 
     timestamps()

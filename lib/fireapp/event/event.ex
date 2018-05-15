@@ -22,20 +22,28 @@ defmodule Fireapp.Event do
     end
   end
 
-  def create_or_update_error(params) do
+  def create_or_update_error_counter(params) do
     %{
       "name" => error_name,
       "environment_name" => env_name,
       "sdk_key" => sdk_key
     } = params
 
-    inserted_env = env_name 
-    |> String.downcase()
-    |> get_env_with_errors(sdk_key)
-
-    case check_error_exist_by_name(inserted_env && inserted_env.errors, error_name) do
+    case get_env_with_errors(String.downcase(env_name), sdk_key) do
       nil ->
-        inserted_params = %{name: error_name, project_id: inserted_env.project_id, environment_id: inserted_env.id}
+        :conflict
+
+      %{env: env, project: project} ->
+        if (project.archived), do: :conflict, else: make_error(env, error_name)
+    end
+  end
+
+  defp make_error(env, error_name) do
+    env = Repo.preload(env, :errors)
+
+    case check_error_exist_by_name(env.errors, error_name) do
+      nil ->
+        inserted_params = %{name: error_name, project_id: env.project_id, environment_id: env.id}
         %Event.Error{}
         |> Event.Error.create_changeset(inserted_params)
         |> Repo.insert()
@@ -114,10 +122,9 @@ defmodule Fireapp.Event do
         from project in Project,
         where: (project.sdk_key == ^sdk_key),
         join: env in Environment, where: env.name == ^env_name,
-        select: env
+        select: %{env: env, project: project}
       )
       |> Repo.one()
-      |> Repo.preload(:errors)
     else
       nil
     end

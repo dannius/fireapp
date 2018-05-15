@@ -25,8 +25,6 @@ export class SignupComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.sdkService.setup('X8D0nYyGl/IEQFL8cpCR0apuKuORNfql', 'dino_test');
-
     this.form = this.builder.group ({
       email: [null , Validators.compose ( [ Validators.required, Validators.email ] )],
       password: [null , Validators.compose ( [ Validators.required, Validators.minLength(6) ] )],
