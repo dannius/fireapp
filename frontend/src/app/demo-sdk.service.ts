@@ -18,6 +18,11 @@ export class DemoSdkService {
   }
 
   public createError(name: string) {
+
+    if (!this.sdkKey || ! this.environmentName) {
+      return;
+    }
+
     const errorParams = {
       name: name,
       environment_name: this.environmentName,

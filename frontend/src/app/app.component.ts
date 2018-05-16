@@ -12,6 +12,10 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.sdkService.setup('4VDTs5wF8SE2Uhw80qeLWFnf915B/zBS', 'dino_test');
+    // put here sdkKey and environment name for tests.
+    // test errors will come when signin and signup
+    // note that you must create environment in accout before use it here
+
+    // this.sdkService.setup('sdkKey', 'EnvName');
   }
 }
