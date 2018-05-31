@@ -101,6 +101,30 @@ defmodule Fireapp.ErrorControllerTest do
     end
   end
 
+  describe "solve" do
+    setup [:create_user, :create_guest_user, :login_user]
+
+    test "Successful solve error as user in project", %{conn_with_token: conn_with_token, current_user: current_user} do
+      %{project: project} = create_project_with_owner(current_user)
+      env = create_environment(%{name: @env_name, project_id: project.id})
+      error = create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
+
+      response = conn_with_token
+      |> get(error_path(conn_with_token, :solve, error.id))
+      assert response.status == Status.code(:ok)
+    end
+
+    test "Unsuccessful solve error with as unexist login-user in project", %{conn_with_token: conn_with_token, guest: guest} do
+      %{project: project} = create_project_with_owner(guest)
+      env = create_environment(%{name: @env_name, project_id: project.id})
+      error = create_error(%{name: @error_name, project_id: project.id, environment_id: env.id})
+
+      response = conn_with_token
+      |> get(error_path(conn_with_token, :solve, error.id))
+      assert response.status == Status.code(:conflict)
+    end
+  end
+
   describe "delete" do
     setup [:create_user, :login_user, :create_guest_user]
 

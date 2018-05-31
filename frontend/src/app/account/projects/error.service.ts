@@ -2,7 +2,6 @@ import '@app/shared/rxjs-operators';
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Project } from '@app/core/models';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs/Observable';
 import { Error } from '@app/core/models/error';
@@ -14,7 +13,7 @@ export class ErrorService {
     private http: HttpClient
   ) { }
 
-  public update(id: number, { description, userId }: any): Observable<Project> {
+  public update(id: number, { description, userId }: any): Observable<Error> {
     const errorParams = {
       description: description || '',
       user_id: userId || ''
@@ -27,11 +26,11 @@ export class ErrorService {
       .catch((_error) => Observable.of(null));
   }
 
-  public delete(id: number): Observable<Project> {
+  public solve(id: number): Observable<Error | Number> {
     return this
       .http
-      .delete<any>(`${environment.apiUrl}/api/projects/${id}`)
-      .map(({ success }: any) => success)
+      .get<any>(`${environment.apiUrl}/api/errors/${id}/solve`)
+      .map((response) => response)
       .catch((err) => Observable.of(err.status));
   }
 }

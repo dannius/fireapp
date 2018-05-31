@@ -16,6 +16,6 @@ export class AppComponent implements OnInit {
     // test errors will come when signin and signup
     // note that you must create environment in accout before use it here
 
-    // this.sdkService.setup('sdkKey', 'EnvName');
+    // this.sdkService.setup('PROJECT_SDK_KEY', 'ENV_NAME');
   }
 }

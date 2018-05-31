@@ -95,7 +95,7 @@ export class ProjectSettingsComponent implements OnInit {
     const data = {
       btnConfirm: 'Подтвердить',
       btnClose: 'Отмена',
-      title: `Удалить среду разработки "${this.currentEnv.getValue().name}" ? Все события так же удалятся.`
+      title: `Удалить среду разработки "${this.currentEnv.getValue().name}" ? Все события так же будут удалены.`
     };
 
     this.dialog

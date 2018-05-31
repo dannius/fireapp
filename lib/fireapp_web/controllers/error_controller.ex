@@ -35,6 +35,23 @@ defmodule FireappWeb.ErrorController do
     end
   end
 
+  def solve(conn, %{"id" => id}) do
+    current_user = Fireapp.Auth.Guardian.Plug.current_resource(conn)
+
+    case Event.solve_error(id, current_user) do
+      {:ok, error} ->
+        error = Repo.preload(error, :user)
+        conn
+        |> put_status(:ok)
+        |> render(FireappWeb.EventView, "show.json", %{error: error})
+
+      _ ->
+        conn
+        |> put_status(:conflict)
+        |> render("error.json")
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     current_user = Fireapp.Auth.Guardian.Plug.current_resource(conn)
     error = Repo.get(Event.Error, id) |> Repo.preload(:project)

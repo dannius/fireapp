@@ -2,13 +2,14 @@ import { User } from '@app/core/models/user';
 
 export class Error {
 
-  public static fromJson({ id, name, user, description, counter, updated_at, inserted_at }): Error {
+  public static fromJson({ id, name, user, description, counter, solved, updated_at, inserted_at }): Error {
     return new Error(
       +id,
       name,
       description,
       counter,
       user ? User.fromJson(user) : null,
+      solved,
       updated_at,
       inserted_at
     );
@@ -20,6 +21,7 @@ export class Error {
     public description: string,
     public counter: number,
     public user: User,
+    public solved: Boolean,
     public updatedAt: string,
     public insertedAt: string
   ) {

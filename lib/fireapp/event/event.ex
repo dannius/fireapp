@@ -57,6 +57,21 @@ defmodule Fireapp.Event do
     end
   end
 
+  def solve_error(id, current_user) do
+    error = Repo.get(Event.Error, id) |> Repo.preload(:project)
+
+    case check_user_exist_in_project(error, current_user) do
+      :conflict ->
+        :conflict
+
+      nil ->
+        :conflict
+
+      _ ->
+        Event.Error.solve_changeset(error) |> Repo.update()
+    end
+  end
+
   def update_error(id, params, current_user) do
     error = Repo.get(Event.Error, id) |> Repo.preload(:project)
     inserted_user = get_inserted_user_by_params(params)

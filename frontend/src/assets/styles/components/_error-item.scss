@@ -27,11 +27,18 @@
     margin-left: 5px;
   }
 
-  &__edit-btn {
-    position: absolute !important;
-    transform: scale(0.9) !important;
+  &__controls {
+    position: absolute;
     top: -18px;
     right: 50px;
+  }
+
+  &__btn {
+    transform: scale(0.9);
+    
+    &:first-child {
+      margin-right: 10px;
+    }
   }
 
   &__badge-counter {
