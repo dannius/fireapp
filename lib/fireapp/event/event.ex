@@ -15,7 +15,8 @@ defmodule Fireapp.Event do
       _ ->
         (
           from error in Event.Error,
-          where: (error.environment_id == ^env_id)
+          where: (error.environment_id == ^env_id),
+          where: (error.solved == false)
         )
         |> order_by(desc: :counter)
         |> Repo.all()

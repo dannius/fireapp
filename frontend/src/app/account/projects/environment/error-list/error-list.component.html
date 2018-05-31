@@ -1,7 +1,7 @@
 <div class="section section_lg">
   <ul *ngIf="errors?.length; else EmptyErrors" class="error-list">
     <li *ngFor="let error of errors" class="error-item">
-      <app-error-item [project]="project" [error]="error"></app-error-item>
+      <app-error-item [project]="project" [error]="error" (solve)="removeSolvedError($event)"></app-error-item>
     </li>
   </ul>
 

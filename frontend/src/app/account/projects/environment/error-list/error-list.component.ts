@@ -30,4 +30,8 @@ export class ErrorListComponent implements OnInit {
       this.pubSubService.setProject(this.project);
     });
   }
+
+  public removeSolvedError(id: number) {
+    this.errors = this.errors.filter((error) => error.id !== id);
+  }
 }
