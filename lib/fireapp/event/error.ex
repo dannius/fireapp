@@ -32,7 +32,30 @@ defmodule Fireapp.Event.Error do
   def counter_changeset(model, params \\ %{}) do
     model
     |> cast(params, ~w())
+    |> set_unsolved()
     |> set_counter()
+  end
+
+  def solve_changeset(model, params \\ %{}) do
+    model
+    |> cast(params, ~w())
+    |> set_solved()
+  end
+
+  defp set_solved(changeset) do
+    if (changeset.valid?) do
+      force_change(changeset, :solved, true)
+    else
+      changeset
+    end
+  end
+
+  defp set_unsolved(changeset) do
+    if (changeset.valid? && changeset.data.solved) do
+      force_change(changeset, :solved, false)
+    else
+      changeset
+    end
   end
 
   defp set_counter(changeset) do
