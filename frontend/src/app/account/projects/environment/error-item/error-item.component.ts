@@ -77,7 +77,7 @@ export class ErrorItemComponent implements OnInit {
           .solve(errorId)
           .subscribe((status) => {
             if (status !== 400) {
-              this.snackbar.open('Ошибка помечена как завершенная', '',  snackBarConfig);
+              this.snackbar.open('Ошибка помечена как решенная', '',  snackBarConfig);
               this.solve.emit(errorId);
             } else {
               this.snackbar.open('Что то пошло не так', '',  snackBarConfig);

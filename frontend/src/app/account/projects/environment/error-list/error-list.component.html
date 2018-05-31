@@ -1,13 +1,31 @@
 <div class="section section_lg">
-  <ul *ngIf="errors?.length; else EmptyErrors" class="error-list">
-    <li *ngFor="let error of errors" class="error-item">
-      <app-error-item [project]="project" [error]="error" (solve)="removeSolvedError($event)"></app-error-item>
-    </li>
-  </ul>
+  <div *ngIf="unsolvedErrors?.length">
+    <div class="headline">
+      <h1 class="headline__title headline__lines headline_transparent">Нерешенные ошибки</h1>
+    </div>
+  
+    <ul class="error-list">
+      <li *ngFor="let error of unsolvedErrors" class="error-item">
+        <app-error-item [project]="project" [error]="error" (solve)="removeSolvedError($event)"></app-error-item>
+      </li>
+    </ul>
+  </div>
 
-  <ng-template #EmptyErrors>
+  <div *ngIf="solvedErrors?.length">
+    <div class="headline">
+      <h1 class="headline__title headline__lines headline_transparent">Решенные ошибки</h1>
+    </div>
+  
+    <ul class="error-list error-list_solved">
+      <li *ngFor="let error of solvedErrors" class="error-item">
+        <app-error-item [project]="project" [error]="error"></app-error-item>
+      </li>
+    </ul>
+  </div>
+
+  <div *ngIf="!solvedErrors.length && !unsolvedErrors.length">
     <div class="headline headline_absolute-center">
       <h1 class="headline__title text-center headline_transparent">Список ошибок пуст</h1>
     </div>
-  </ng-template>
+  </div>
 </div>

@@ -1,4 +1,8 @@
 .error-list {
   list-style: none;
   padding: 0;
+
+  &_solved {
+    opacity: 0.5;
+  }
 }

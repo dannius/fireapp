@@ -10,7 +10,10 @@ import { Error } from '@app/core/models/error';
 })
 export class ErrorListComponent implements OnInit {
 
-  public errors: Error[];
+  public solvedErrors: Error[];
+  public unsolvedErrors: Error[];
+
+  private errors: Error[];
   private project: Project;
 
   constructor(
@@ -21,17 +24,38 @@ export class ErrorListComponent implements OnInit {
   ngOnInit() {
     this.route.data
     .subscribe(({ env }) => {
+      this.solvedErrors = [];
+      this.unsolvedErrors = [];
       const [project, errors] = env;
+
       if (!this.project || this.project.id !== project.id) {
         this.project = project;
       }
 
-      this.errors = errors;
+      errors.forEach((error: Error) => {
+        if (error.solved) {
+          this.solvedErrors.push(error);
+        } else {
+          this.unsolvedErrors.push(error);
+        }
+      });
+
       this.pubSubService.setProject(this.project);
     });
   }
 
   public removeSolvedError(id: number) {
-    this.errors = this.errors.filter((error) => error.id !== id);
+    let solvedError: Error;
+
+    this.unsolvedErrors = this.unsolvedErrors.filter((error) => {
+      if (error.id === id) {
+        solvedError = error;
+        return false;
+      } else {
+        return true;
+      }
+    });
+
+    this.solvedErrors.push(solvedError);
   }
 }

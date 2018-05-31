@@ -11,7 +11,7 @@
       <span>{{error.counter === 1 ? 'создано' : 'обновлено'}}:</span>
       <span class="error-item__date-string">{{error.counter === 1 ? error.insertedAt : error.updatedAt}}</span>
     </div>
-    <div class="error-item__controls">
+    <div *ngIf="!error.solved" class="error-item__controls">
       <button (click)="showDoneDialog(error.id)" class="error-item__btn" color="primary" mat-mini-fab>
         <mat-icon>done</mat-icon>
       </button>
