@@ -8,6 +8,7 @@ defmodule Fireapp.Event.Error do
     field :name, :string
     field :description, :string
     field :counter, :integer, default: 0
+    field :solved, :boolean, default: false
 
     belongs_to :project, Project
     belongs_to :environment, Environment
