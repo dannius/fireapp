@@ -9,7 +9,7 @@ defmodule Fireapp.Repo.Migrations.AddErrorsToProjectsAndEnvironments do
 
       add :user_id, references(:users)
       add :project_id, references(:projects, on_delete: :delete_all)
-      add :environment_id, references(:projects, on_delete: :delete_all)
+      add :environment_id, references(:environments, on_delete: :delete_all)
       timestamps()
     end
 
